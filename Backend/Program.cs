@@ -1,7 +1,4 @@
 
-
-using Microsoft.VisualBasic;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -43,8 +40,7 @@ app.MapGet("/weatherforecast", () =>
 
 
 app.MapGet("/", () =>
-    "Ciao scemo"
-    
+    "ciao scemo"
 
 );
 
