@@ -7,6 +7,9 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -38,12 +41,15 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 
 
-
+// Loca: Test
 app.MapGet("/", () =>
-    "ciao scemo"
+{
+    string test1 = "Ciao scemo";
+    return test1;
+});
 
-);
 
+app.MapGet("/Transactions", () => Results.Redirect("/index.html"));
 
 
 
