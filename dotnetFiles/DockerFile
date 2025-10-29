@@ -1,6 +1,6 @@
 # Step 1: Build
-# Step 2: Publish
-# Step 3: Run
+# Step 1.5: Publish
+# Step 2: Run
 
 # STEP 1: BUILD
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -19,7 +19,7 @@ RUN dotnet build -c Release -o out
 # STEP 2: PUBLISH
 # Using build output directly for simplicity; for production, use dotnet publish
 
-# STEP 3: RUN
+# STEP 2: RUN
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
