@@ -51,7 +51,6 @@ app.MapGet("/scemo", () =>
 
 app.MapGet("/", () => Results.Redirect("/index.html"));
 
-app.MapPost("/", () => async);
 
 app.Run();
 
