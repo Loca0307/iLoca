@@ -3,7 +3,7 @@
 # Step 2: Run
 
 # STEP 1: BUILD
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 # This can change in case of internal additional folder
 WORKDIR /app
@@ -12,15 +12,16 @@ WORKDIR /app
 COPY dotnetFiles.csproj ./
 RUN dotnet restore 
 
-# Copy the rest of the project and build it (use "RUN dotnet publish" for production)
+
+# Copy the rest of the project and build it 
+# STEP 1.5: use "RUN dotnet publish" for production
 COPY . ./
 RUN dotnet build -c Release -o out
 
-# STEP 2: PUBLISH
-# Using build output directly for simplicity; for production, use dotnet publish
+
 
 # STEP 2: RUN
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 
 # Copy built files from build stage
