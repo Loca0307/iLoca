@@ -11,4 +11,5 @@
 
 # How to run
 
-in the "Backend" terminal write: "dotnet run"
+in the "dotnet" folder terminal write: "dotnet run"
+and open the localhost written on the terminal
