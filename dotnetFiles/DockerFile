@@ -2,27 +2,32 @@
 # Step 2: Publish
 # Step 3: Run
 
-
-# Step 1: Build
+# STEP 1: BUILD
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
+# This can change in case of internal additional folder
 WORKDIR /app
 
-# Copy project file and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+# Copy .csproj file into working directory and "restoring" the dependencies
+COPY dotnetFiles.csproj ./
+RUN dotnet restore 
 
-# Copy the rest of the project and publish it
+# Copy the rest of the project and build it (use "RUN dotnet publish" for production)
 COPY . ./
-RUN dotnet publish -c Release -o out
+RUN dotnet build -c Release -o out
 
-# --- Runtime stage ---
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# STEP 2: PUBLISH
+# Using build output directly for simplicity; for production, use dotnet publish
+
+# STEP 3: RUN
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/out .
 
-# Expose port (change if your app uses a different one)
-EXPOSE 5027
+# Copy built files from build stage
+COPY --from=build /app/out .
 
 # Start the app
 ENTRYPOINT ["dotnet", "dotnetFiles.dll"]
+
+# Expose port (change if your app uses a different one)
+EXPOSE 5027
