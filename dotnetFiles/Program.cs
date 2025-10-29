@@ -42,16 +42,16 @@ app.MapGet("/weatherforecast", () =>
 
 
 // Loca: Test
-app.MapGet("/", () =>
+app.MapGet("/scemo", () =>
 {
     string test1 = "Ciao scemo";
     return test1;
 });
 
 
-app.MapGet("/Transactions", () => Results.Redirect("/index.html"));
+app.MapGet("/", () => Results.Redirect("/index.html"));
 
-
+app.MapPost("/", () => async);
 
 app.Run();
 
