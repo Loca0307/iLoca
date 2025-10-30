@@ -1,10 +1,10 @@
-# LocaBonniProject
+# BanKuum Tubo
 
 # Technologies
 
 - Frontend: HTML, CSS
 - Backend: .NET
-- Database: PostgreSQL | Microsoft SQL Developer edition
+- Database: PostgreSQL 
 - Security: JWT (JSON Web Tokens) and more
 - Testing: xUnit | NUnit
 - Secondary: Docker
