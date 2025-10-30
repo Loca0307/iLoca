@@ -6,6 +6,7 @@
 - Backend: asp.NET
 - Database: PostgreSQL/ Microsoft SQL Developer edition
 - Security: JWT (JSON Web Tokens) and more
+- Testing: xUnit, NUnit
 - Secondary: Docker
 
 # Notes
@@ -25,7 +26,7 @@ To build the docker image:
 - docker build -t "image name"
 
 To run the image and create a container:
-- docker run -p "port":"port" "image name"
+- docker run -p "host port":"container port" "image name"
 
 
 
