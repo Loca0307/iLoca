@@ -7,6 +7,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+
+// Loca: needed to run our static HTML file
 app.UseStaticFiles();
 
 
