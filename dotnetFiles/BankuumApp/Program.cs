@@ -30,9 +30,9 @@ class Program
                     "INSERT INTO clients (first_name, last_name, email, phone) VALUES (@first, @last, @email, @phone)", conn))
                 {
                     
-                    cmd.Parameters.AddWithValue("first", "Alice");
-                    cmd.Parameters.AddWithValue("last", "Smith");
-                    cmd.Parameters.AddWithValue("email", "alice.smith@example.com");
+                    cmd.Parameters.AddWithValue("first", "Federico");
+                    cmd.Parameters.AddWithValue("last", "Bonezzi");
+                    cmd.Parameters.AddWithValue("email", "bonni.smith@example.com");
                     cmd.Parameters.AddWithValue("phone", "+41 79 123 45 67");
 
                     int rowsAffected = cmd.ExecuteNonQuery();
