@@ -22,11 +22,11 @@ and open the localhost written on the terminal
 
 # Docker
 
-To build the docker image:
+1) To build the docker image:
 - docker build -t "image name" .
 
-To run the image and create a container:
+2) To run the image and create a container:
 - docker run --name "container name" -p "host port":"container port" "image name"
-So in this case: docker run -p 5027:8080 "image name"
+So in this case: docker run -p 5027:5027 "image name"
 
-
+3) Go to link "http://localhost:5027/" to see the build
