@@ -17,10 +17,10 @@ public class ClientController : ControllerBase
     public ClientController(ClientService clientService)
     {
         _clientService = clientService;
-    }                                   
+    }
 
     // this line defines which CRUD method to execute 
-    [HttpGet]
+    [HttpGet("{showClients}")]
     public ActionResult<List<Client>> GetAllClients()
     {       
         // From the controller you call the service methods that use database and logic
@@ -28,7 +28,7 @@ public class ClientController : ControllerBase
         return Ok(clients);
     }
 
-    [HttpPost]
+    [HttpPost("{addClient}")]
     public IActionResult AddClient([FromBody] Client client)
     {
         _clientService.AddClient(client);

@@ -34,6 +34,17 @@
                 </tbody>
             </table>
         </section>
+        <section class="add-client">
+            <h2>Add New Client</h2>
+            <form id="addClientForm">
+                <input type="text" id="firstName" placeholder="First Name" required>
+                <input type="text" id="lastName" placeholder="Last Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="phone" placeholder="Phone" required>
+                <button type="submit">Add Client</button>
+            </form>
+        </section>
+
     </main>
 
     <footer>
@@ -41,12 +52,14 @@
     </footer>
 
     <script>
+
+// SHOW ALL CLIENTS
 const tbody = document.getElementById('clientsBody');
 
 // Load all clients from backend
 async function loadClients() {
     try {
-        const response = await fetch('http://localhost:5027/api/client'); // your controller endpoint
+        const response = await fetch('http://localhost:5027/api/client/showClients'); // Controller endpoint
         if (!response.ok) {
             throw new Error('Failed to fetch clients');
         }
@@ -55,13 +68,13 @@ async function loadClients() {
         tbody.innerHTML = ''; // clear table
         clients.forEach(c => {
             const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${c.clientId}</td>
-                <td>${c.firstName}</td>
-                <td>${c.lastName}</td>
-                <td>${c.email}</td>
-                <td>${c.phone}</td>
-            `;
+                row.innerHTML = `
+                    <td>${c.clientId}</td>
+                    <td>${c.firstName}</td>
+                    <td>${c.lastName}</td>
+                    <td>${c.email}</td>
+                    <td>${c.phone}</td>
+                `;
             tbody.appendChild(row);
         });
     } catch (error) {
@@ -72,6 +85,45 @@ async function loadClients() {
 
 // Initial load
 loadClients();
+
+
+// POST NEW CLIENT
+
+const form = document.getElementById('addClientForm');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // prevent page reload
+
+    const newClient = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value
+    };
+
+    try {
+        const response = await fetch('http://localhost:5027/api/addClient', {
+            method: 'POST', // call your addClient endpoint
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newClient) // creates the actual JSON to send to the backend can read
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add client');
+        }
+
+        // Clear form
+        form.reset();
+
+        // Reload clients in table
+        loadClients();
+    } catch (error) {
+        console.error(error);
+        alert('Error adding client');
+    }
+});
 
 </script>
 
