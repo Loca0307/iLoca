@@ -19,19 +19,32 @@ public class ClientController : ControllerBase
         _clientService = clientService;
     }
 
+
+    // RETRIEVE ALL CLIENTS FROM THE DATABASE
     // this line defines which CRUD method to execute 
-    [HttpGet("{showClients}")]
-    public ActionResult<List<Client>> GetAllClients()
-    {       
+    [HttpGet("ShowClients")]
+    public ActionResult<List<Client>> GetAllClients() {
         // From the controller you call the service methods that use database and logic
         var clients = _clientService.GetAllClients();
         return Ok(clients);
     }
 
-    [HttpPost("{addClient}")]
-    public IActionResult AddClient([FromBody] Client client)
+
+    // ADD A CLIENT TO THE DATABASE
+    [HttpPost("InsertClient")]
+    public IActionResult InsertClient([FromBody] Client client)
     {
-        _clientService.AddClient(client);
+        _clientService.InsertClient(client);
         return Ok(new { message = "Client added successfully" });
     }
+
+
+    // REMOVE A CLIENT FROM THE DATABASE
+    [HttpDelete("DeleteClient")]
+    public ActionResult DeleteClient(Client client)
+    {
+        _clientService.DeleteClient(client);
+        return Ok(new { message = "Client has been removed"});
+    }
+    
 }

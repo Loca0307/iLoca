@@ -14,6 +14,8 @@ public class ClientRepository
         _dbService = dbService;
     }
 
+
+    // RETRIEVE ALL CLIENTS FROM THE DATABASE
     public List<Client> GetAllClients()
     {
         var clients = new List<Client>();
@@ -39,6 +41,7 @@ public class ClientRepository
         return clients;
     }
 
+    // INSERT A NEW CLIENT IN THE DATABASE
     public void InsertClient(Client client)
     {
         using var conn = _dbService.GetConnection();
@@ -56,4 +59,20 @@ public class ClientRepository
 
         cmd.ExecuteNonQuery();
     }
+
+    // DELETE A CLIENT FROM THE DATABASE
+    public void DeleteClient(Client client)
+    {
+        using var conn = _dbService.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"DELETE FROM clients
+            WHERE client_id = @id", conn);
+
+        cmd.Parameters.AddWithValue("id", client.ClientId);
+        cmd.ExecuteNonQuery();
+    }
+
+    
 }

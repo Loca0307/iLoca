@@ -27,6 +27,7 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Delete</th> 
                     </tr>
                 </thead>
                 <tbody id="clientsBody">
@@ -34,6 +35,7 @@
                 </tbody>
             </table>
         </section>
+
         <section class="add-client">
             <h2>Add New Client</h2>
             <form id="addClientForm">
@@ -52,80 +54,105 @@
     </footer>
 
     <script>
+    // SHOW ALL CLIENTS
+    const tbody = document.getElementById('clientsBody');
 
-// SHOW ALL CLIENTS
-const tbody = document.getElementById('clientsBody');
+    // Load all clients from backend
+    async function loadClients() {
+        try {
+            const response = await fetch('http://localhost:5027/api/client/ShowClients'); // Controller endpoint
+            if (!response.ok) {
+                throw new Error('Failed to fetch clients');
+            }
+            const clients = await response.json();
 
-// Load all clients from backend
-async function loadClients() {
-    try {
-        const response = await fetch('http://localhost:5027/api/client/showClients'); // Controller endpoint
-        if (!response.ok) {
-            throw new Error('Failed to fetch clients');
-        }
-        const clients = await response.json();
-
-        tbody.innerHTML = ''; // clear table
-        clients.forEach(c => {
-            const row = document.createElement('tr');
+            tbody.innerHTML = ''; // clear table
+            clients.forEach(c => {
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${c.clientId}</td>
                     <td>${c.firstName}</td>
                     <td>${c.lastName}</td>
                     <td>${c.email}</td>
                     <td>${c.phone}</td>
+                    <td><button class="remove-btn" data-id="${c.clientId}">Remove</button></td>
                 `;
-            tbody.appendChild(row);
-        });
-    } catch (error) {
-        console.error(error);
-        tbody.innerHTML = '<tr><td colspan="5">Error loading clients</td></tr>';
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            console.error(error);
+            tbody.innerHTML = '<tr><td colspan="6">Error loading clients</td></tr>';
+        }
     }
-}
 
-// Initial load
-loadClients();
+    // Initial load
+    loadClients();
 
+    // POST NEW CLIENT
+    const form = document.getElementById('addClientForm');
 
-// POST NEW CLIENT
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // prevent page reload
 
-const form = document.getElementById('addClientForm');
+        const newClient = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value
+        };
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // prevent page reload
+        try {
+            const response = await fetch('http://localhost:5027/api/client/InsertClient', {
+                method: 'POST', // call your addClient endpoint
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newClient) // creates the actual JSON to send to the backend
+            });
 
-    const newClient = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value
-    };
+            if (!response.ok) {
+                throw new Error('Failed to add client');
+            }
 
-    try {
-        const response = await fetch('http://localhost:5027/api/addClient', {
-            method: 'POST', // call your addClient endpoint
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newClient) // creates the actual JSON to send to the backend can read
-        });
+            // Clear form
+            form.reset();
 
-        if (!response.ok) {
-            throw new Error('Failed to add client');
+            // Reload clients in table
+            loadClients();
+        } catch (error) {
+            console.error(error);
+            alert('Error adding client');
         }
 
-        // Clear form
-        form.reset();
+    });
 
-        // Reload clients in table
-        loadClients();
-    } catch (error) {
-        console.error(error);
-        alert('Error adding client');
-    }
-});
+    tbody.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('remove-btn')) {
+            const clientId = e.target.dataset.id;
 
-</script>
+            try {
+                const response = await fetch(`http://localhost:5027/api/client/DeleteClient`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clientId: parseInt(clientId) })
+                });
+
+                if (!response.ok) throw new Error('Failed to delete client');
+
+                // reload table
+                loadClients();
+            } catch (error) {
+                console.error(error);
+                alert('Error deleting client');
+            }
+        }
+    });
+
+
+    
+
+
+    </script>
 
 </body>
 </html>

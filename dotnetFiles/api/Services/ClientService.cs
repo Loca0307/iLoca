@@ -19,8 +19,14 @@ public class ClientService
         return _clientRepository.GetAllClients();
     }
 
-    public void AddClient(Client client)
+    public void InsertClient(Client client)
     {
         _clientRepository.InsertClient(client);
     }
+
+
+    public void DeleteClient(Client client)
+    {
+        _clientRepository.DeleteClient(client);
+    } 
 }
