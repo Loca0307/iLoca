@@ -20,9 +20,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 // Register DB context, repositories, services
-builder.Services.AddScoped<AppDBContext>();          // your DB connection handler
-builder.Services.AddScoped<ClientRepository>();      // repository layer
-builder.Services.AddScoped<ClientService>();         // service layer
+builder.Services.AddScoped<AppDBContext>();        
+builder.Services.AddScoped<ClientRepository>();    
+builder.Services.AddScoped<ClientService>();         
 
 var app = builder.Build();
 
