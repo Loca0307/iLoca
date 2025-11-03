@@ -19,9 +19,11 @@ public class ClientController : ControllerBase
         _clientService = clientService;
     }
 
+    // this line defines which CRUD method to execute 
     [HttpGet]
     public ActionResult<List<Client>> GetAllClients()
-    {
+    {   
+        // From the controller you call the service methods that use database and logic
         var clients = _clientService.GetAllClients();
         return Ok(clients);
     }
