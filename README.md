@@ -30,3 +30,8 @@ and open the localhost written on the terminal
 So in this case: docker run -p 5027:5027 "image name"
 
 3) Go to link "http://localhost:5027/" to see the build
+
+# Postgre
+
+1) Install postGre on your pc
+2) Install pgAdmin 4 for database GUI

@@ -23,3 +23,4 @@ public class AppDBContext
         return new NpgsqlConnection(_connectionString);
     }
 }
+    
