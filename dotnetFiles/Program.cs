@@ -47,6 +47,7 @@ app.MapGet("/", () => Results.Redirect("/index.html"));
 
 // Loca: GO TO THIS SUB-URL TO SEND THE DB REQUEST
 // PostgreSQL endpoint 
+/*
 app.MapGet("/clients", () =>
 {
     string host = "bankuumtubo-bankuumtubo.f.aivencloud.com";
@@ -102,6 +103,8 @@ app.MapGet("/clients", () =>
     return clients;
 });
 
+*/
+
 app.Run();
 
 // Models
@@ -110,11 +113,3 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-class Client
-{
-    public int ClientId { get; set; }
-    public string FirstName { get; set; } = "";
-    public string LastName { get; set; } = "";
-    public string Email { get; set; } = "";
-    public string Phone { get; set; } = "";
-}
