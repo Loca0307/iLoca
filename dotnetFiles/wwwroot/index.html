@@ -46,7 +46,7 @@ const tbody = document.getElementById('clientsBody');
 // Load all clients from backend
 async function loadClients() {
     try {
-        const response = await fetch('https://localhost:5027/api/c  lient'); // your controller endpoint
+        const response = await fetch('http://localhost:5027/api/client'); // your controller endpoint
         if (!response.ok) {
             throw new Error('Failed to fetch clients');
         }
@@ -72,6 +72,7 @@ async function loadClients() {
 
 // Initial load
 loadClients();
+
 </script>
 
 </body>
