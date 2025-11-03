@@ -34,11 +34,17 @@ app.MapControllers();
 
 
 
-
+///////////////////////////
+///  ROUTING MANAGING  ///
+///////////////////////////
 
 
 // Default route
 app.MapGet("/", () => Results.Redirect("/index.html"));
+
+// to redirect the default route to the one managed by the clientController 
+//app.MapGet("/", () => Results.Redirect("/api/client"));
+
 
 
 /*

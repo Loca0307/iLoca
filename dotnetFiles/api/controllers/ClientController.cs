@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Api.Controllers;
 
+
+// Defines this controller file in the "ApiController" group
+// it automatically defines "api/client" as the route to manage
 [ApiController]
 [Route("api/[controller]")]
 public class ClientController : ControllerBase
