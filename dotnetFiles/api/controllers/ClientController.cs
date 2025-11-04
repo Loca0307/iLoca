@@ -32,7 +32,7 @@ public class ClientController : ControllerBase
 
     // ADD A CLIENT TO THE DATABASE
     [HttpPost("InsertClient")]
-    public IActionResult InsertClient([FromBody] Client client)
+    public ActionResult InsertClient([FromBody] Client client)
     {
         _clientService.InsertClient(client);
         return Ok(new { message = "Client added successfully" });
