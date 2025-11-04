@@ -13,7 +13,7 @@ using Api.Services;
 // App builder creation
 var builder = WebApplication.CreateBuilder(args);
 
-// register controllers
+// add controllers to the builder
 builder.Services.AddControllers();
 
 // Add services to the builder
@@ -29,9 +29,9 @@ var app = builder.Build();
 // Serve static files (wwwroot/index.html)
 app.UseStaticFiles();
 
+
 // Enable controller routing 
 app.MapControllers();
-
 
 ///////////////////////////
 ///  ROUTING MANAGING  ///
@@ -45,31 +45,6 @@ app.MapGet("/", () => Results.Redirect("/index.html"));
 // to redirect the default route to the one managed by the clientController 
 //app.MapGet("/", () => Results.Redirect("/api/client"));
 
-
-
-/*
-// WeatherForecast endpoint
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast(
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        )).ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
-
-// Test endpoint
-app.MapGet("/scemo", () => "Ciao scemo");
-
-*/
 
 app.Run();
 
