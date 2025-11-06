@@ -4,16 +4,18 @@ using System.Collections.Generic;
 
 namespace Api.Services;
 
-public class ClientService
+public class ClientService : IClientService
 {
-    private readonly ClientRepository _clientRepository;
+    private readonly IClientRepository _clientRepository;
 
-    // Methods to use the repository methods conbined with logic here
-    public ClientService(ClientRepository clientRepository)
+    public ClientService(IClientRepository clientRepository)
     {
         _clientRepository = clientRepository;
     }
 
+    // Here it return a list of "Client" and not of
+    // "ClientDTO" because the DTO are only for 
+    // the frontend to be seen so in the controller
     public List<Client> GetAllClients()
     {   
         return _clientRepository.GetAllClients();
@@ -23,7 +25,6 @@ public class ClientService
     {
         _clientRepository.InsertClient(client);
     }
-
 
     public void DeleteClient(Client client)
     {

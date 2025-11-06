@@ -1,3 +1,4 @@
+
 using Api.Models;
 using Api.Data;
 using Npgsql;
@@ -5,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Api.Repositories;
 
-public class ClientRepository
+public class ClientRepository : IClientRepository
 {
     private readonly DbContext _dbContext;
 

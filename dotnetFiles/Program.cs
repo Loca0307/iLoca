@@ -9,7 +9,6 @@ using Api.Services;
 
 
 
-
 // App builder creation
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +18,12 @@ builder.Services.AddControllers();
 // Add services to the builder
 builder.Services.AddOpenApi();
 
-// Register DB context, repositories, services
-builder.Services.AddScoped<DbContext>();        
+// For now, register all layers here
 builder.Services.AddScoped<ClientRepository>();    
 builder.Services.AddScoped<ClientService>();         
+builder.Services.AddScoped<DbContext>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IClientService, ClientService>();
 
 var app = builder.Build();
 
