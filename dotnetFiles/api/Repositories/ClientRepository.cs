@@ -1,4 +1,3 @@
-
 using Api.Models;
 using Api.Data;
 using Npgsql;
@@ -44,7 +43,6 @@ public class ClientRepository : IClientRepository
         return clients;
     }
 
-    // INSERT A NEW CLIENT IN THE DATABASE
     public void InsertClient(Client client)
     {
         using var conn = _dbContext.GetConnection();
@@ -63,7 +61,6 @@ public class ClientRepository : IClientRepository
         cmd.ExecuteNonQuery();
     }
 
-    // DELETE A CLIENT FROM THE DATABASE
     public void DeleteClient(Client client)
     {
         using var conn = _dbContext.GetConnection();
