@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 
-using Api.DBContext;
+using Api.Data;
 using Api.Repositories;
 using Api.Services;
 
@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 // Register DB context, repositories, services
-builder.Services.AddScoped<AppDBContext>();        
+builder.Services.AddScoped<DbContext>();        
 builder.Services.AddScoped<ClientRepository>();    
 builder.Services.AddScoped<ClientService>();         
 
@@ -33,17 +33,9 @@ app.UseStaticFiles();
 // Enable controller routing 
 app.MapControllers();
 
-///////////////////////////
-///  ROUTING MANAGING  ///
-///////////////////////////
 
-
-// Default route
+// DEFAULT ROUTE
 app.MapGet("/", () => Results.Redirect("/index.html"));
-
-
-// to redirect the default route to the one managed by the clientController 
-//app.MapGet("/", () => Results.Redirect("/api/client"));
 
 
 app.Run();

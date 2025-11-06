@@ -1,5 +1,5 @@
 using Api.Models;
-using Api.DBContext;
+using Api.Data;
 using Npgsql;
 using System.Collections.Generic;
 
@@ -7,11 +7,11 @@ namespace Api.Repositories;
 
 public class ClientRepository
 {
-    private readonly AppDBContext _dbService;
+    private readonly DbContext _dbContext;
 
-    public ClientRepository(AppDBContext dbService)
+    public ClientRepository(DbContext dbContext)
     {
-        _dbService = dbService;
+        _dbContext = dbContext;
     }
 
 
@@ -21,7 +21,7 @@ public class ClientRepository
         var clients = new List<Client>();
 
         // "using" is used so that the object gets automatically disposed of after use
-        using var conn = _dbService.GetConnection();
+        using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone FROM clients", conn);
@@ -46,7 +46,7 @@ public class ClientRepository
     // INSERT A NEW CLIENT IN THE DATABASE
     public void InsertClient(Client client)
     {
-        using var conn = _dbService.GetConnection();
+        using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
@@ -65,7 +65,7 @@ public class ClientRepository
     // DELETE A CLIENT FROM THE DATABASE
     public void DeleteClient(Client client)
     {
-        using var conn = _dbService.GetConnection();
+        using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
