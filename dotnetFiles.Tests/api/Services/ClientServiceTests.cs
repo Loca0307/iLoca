@@ -18,12 +18,16 @@ public class ClientServiceTests
     [Fact] 
     public void GetAllClients_WhenCalled_ReturnsAllClients()
     {
-       
+       // Mocks the interface that concrete method calls for testing.
+       // It simulates a ClientRepository that returns a List<CLient> like
+       // the repository "GetAllClients()" method.
         var mockRepo = new Mock<IClientRepository>();
         mockRepo.Setup(r => r.GetAllClients()).Returns(new List<Client>
         {
             new Client { ClientId = 1, FirstName = "John", LastName = "Doe" }
         });
+
+        // Create instance of the actual class to test
         var service = new ClientService(mockRepo.Object);
 
         // ACTUAL TESTING METHOD

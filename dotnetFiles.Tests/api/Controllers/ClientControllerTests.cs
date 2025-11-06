@@ -22,19 +22,22 @@ public class ClientControllerTests
     [Fact]
     public void GetAllCLients_WhenCalled_ReturnsAllCLients()
     {
-        // mock the Interface that the concrete method calls for testing
+        // Mocks the Interface that the concrete method calls for testing.
+        // It simulates a ClientService that returns them a List<CLient> like
+        // the service "GetAllCLients()" method.
         var mockServ = new Mock<IClientService>();
         mockServ.Setup(s => s.GetAllClients()).Returns(new List<Client>
         {
             new Client { ClientId = 1, FirstName = "John", LastName = "Doe", Email = "j@x.com", Phone = "123" }
         });
 
+        // Create instance of the actual class to test
         var controller = new ClientController(mockServ.Object);
 
-        // Act
+        // ACTUAL TESTING METHOD
         ActionResult<List<ClientDTO>> actionResult = controller.GetAllClients();
 
-        // Assert
+        // ASSERT
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var dtos = Assert.IsType<List<ClientDTO>>(okResult.Value);
         Assert.Single(dtos);

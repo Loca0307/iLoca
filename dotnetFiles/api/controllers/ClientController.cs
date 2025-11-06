@@ -29,7 +29,7 @@ public class ClientController : ControllerBase
         // From the controller you call the service methods that use database and logic
         var clients = _clientService.GetAllClients();
         
-        // Map Client models to ClientDTOs
+        // Map Client model to ClientDTOs
         var clientDTOs = clients.Select(c => new ClientDTO
         {
             ClientId = c.ClientId,
