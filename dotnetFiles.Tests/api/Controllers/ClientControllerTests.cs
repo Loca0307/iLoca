@@ -22,7 +22,7 @@ public class ClientControllerTests
     [Fact]
     public void GetAllCLients_WhenCalled_ReturnsAllCLients()
     {
-        // Arrange
+        // mock the Interface that the concrete method calls for testing
         var mockServ = new Mock<IClientService>();
         mockServ.Setup(s => s.GetAllClients()).Returns(new List<Client>
         {
