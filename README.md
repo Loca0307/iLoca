@@ -11,30 +11,32 @@
 
 # Notes
 
-The frontend is in the "wwwroot" file as it is the 
-default root name for asp.NET to search for frontend
+The frontend is in the `"wwwroot"` file as it is the 
+default root name for asp.NET to search for `frontend`
 
 # .NET
 
-in the "dotnet" folder terminal write: "dotnet run"
+in the "dotnet" folder terminal write: `dotnet run`
 and open the localhost written on the terminal
 
 
 # Docker
 
 1) To build the docker image:
-- docker build -t "image name" .
+- docker build -t `"image name"` .
 
 2) To run the image and create a container:
-- docker run --name "container name" -p "host port":"container port" "image name"
+- docker run --name `"container name"` -p `"host port"`:`"container port"` `"image name"`
 So in this case: docker run -p 5027:5027 "image name"
 
 3) Go to link "http://localhost:5027/" to see the build
 
 # Postgre
 
-1) Install postGre on your pc
-2) Install pgAdmin 4 for database GUI
+1) Install `postGre` on your pc
+2) Install `pgAdmin 4` for database GUI
 
 # Test
 
+1) Change directory to the dotnetFiles.Tests
+2) write in terminal: `dotnet test`
