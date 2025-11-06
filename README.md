@@ -6,7 +6,7 @@
 - Backend: .NET
 - Database: PostgreSQL 
 - Security: JWT (JSON Web Tokens) and more
-- Testing: xUnit | NUnit
+- Testing: xUnit
 - Secondary: Docker
 
 # Notes
