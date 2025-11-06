@@ -20,12 +20,14 @@ public class ClientRepository
     {
         var clients = new List<Client>();
 
+        // "using" is used so that the object gets automatically disposed of after use
         using var conn = _dbService.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone FROM clients", conn);
         using var reader = cmd.ExecuteReader();
 
+        // to structure the read data
         while (reader.Read())
         {
             clients.Add(new Client

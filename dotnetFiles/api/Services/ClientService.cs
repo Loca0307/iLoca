@@ -15,7 +15,7 @@ public class ClientService
     }
 
     public List<Client> GetAllClients()
-    {
+    {   
         return _clientRepository.GetAllClients();
     }
 
