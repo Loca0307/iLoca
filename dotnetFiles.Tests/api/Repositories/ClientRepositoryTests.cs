@@ -9,7 +9,7 @@ using Api.Models;
 
 
 
-/*
+
 public class ClientRepositoryTests
 {
     //////////////
@@ -21,18 +21,30 @@ public class ClientRepositoryTests
     // void disregarding the actual method return type
 
     [Fact]
-    public void GetAllClients_WhenCalled_ReturnsAllClients()
+    public void ClientRepository_CanBeInstantiated_WithIDbContext()
     {
-        var mockDb = new Mock<DbContext>();
+        // Arrange
+        var mockDb = new Mock<IDbContext>();
 
-        mockDb.Setup(d => d.GetConnection()).Returns(
-        {
+        // Act
+        var repository = new ClientRepository(mockDb.Object);
 
-        })
-        
-        var repository = new ClientRepository(mockDb);
-
-        
+        // Assert
+        Assert.NotNull(repository);
     }
+
+    // NOTE: Testing GetAllClients() requires a real database connection
+    // because NpgsqlConnection cannot be mocked.
+    // For full repository testing, use integration tests with a test database.
+    
+    // Example integration test approach (requires test DB):
+    // [Fact]
+    // public void GetAllClients_WithTestDb_ReturnsClients()
+    // {
+    //     var dbContext = new DbContext(); // or test connection string
+    //     var repository = new ClientRepository(dbContext);
+    //     var result = repository.GetAllClients();
+    //     Assert.NotNull(result);
+    // }
+
 }
-*/

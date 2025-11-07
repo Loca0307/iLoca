@@ -7,9 +7,9 @@ namespace Api.Repositories;
 
 public class ClientRepository : IClientRepository
 {
-    private readonly DbContext _dbContext;
+    private readonly IDbContext _dbContext;
 
-    public ClientRepository(DbContext dbContext)
+    public ClientRepository(IDbContext dbContext)
     {
         _dbContext = dbContext;
     }

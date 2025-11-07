@@ -19,9 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 // For now, register all layers here
-builder.Services.AddScoped<ClientRepository>();    
-builder.Services.AddScoped<ClientService>();         
-builder.Services.AddScoped<DbContext>();
+builder.Services.AddScoped<IDbContext, DbContext>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 

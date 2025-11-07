@@ -1,13 +1,14 @@
 using Npgsql;
 using System;
 
+
 namespace Api.Data;
 
-public class DbContext
+public class DbContext : IDbContext
 {
     private readonly string _connectionString;
 
-    public DbContext()
+    public DbContext() 
     {
         string host = "bankuumtubo-bankuumtubo.f.aivencloud.com";
         int port = 28017;
