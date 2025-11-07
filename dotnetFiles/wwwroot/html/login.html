@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bankuum Tubo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+    <header>
+        <h1>Client Dashboard</h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="#" id="ClientsPage">Clients</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
+    </header>
+
+    <main>
+        <section style="display: flex; justify-content: center; align-items: flex-start; min-height: 60vh;">
+            <div class="login-container" style="margin-top: 40px; margin-bottom: 40px;">
+                <div class="login-header">
+                    <h1>Welcome Back</h1>
+                    <p>Login to your Bankuum Tubo account</p>
+                </div>
+
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember" id="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+
+                <div class="signup-link">
+                    Don't have an account? <a href="/html/signup.html">Sign up</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 LocaBonniProject. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-message');
+            const successMsg = document.getElementById('success-message');
+            
+            // Hide previous messages
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            // TODO: Replace with your actual API endpoint
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    successMsg.textContent = 'Login successful! Redirecting...';
+                    successMsg.style.display = 'block';
+                    
+                    // Store token if returned (JWT example)
+                    if (data.token) {
+                        localStorage.setItem('authToken', data.token);
+                    }
+                    
+                    // Redirect to dashboard or home
+                    setTimeout(() => {
+                        window.location.href = '/html/index.html';
+                    }, 1500);
+                } else {
+                    const error = await response.json();
+                    errorMsg.textContent = error.message || 'Invalid email or password';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                // For demo purposes - remove this when you have a real API
+                console.log('Login attempt:', { email, password });
+                successMsg.textContent = 'Demo mode: Login successful!';
+                successMsg.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = '/html/index.html';
+                }, 1500);
+                
+                // Uncomment when API is ready:
+                // errorMsg.textContent = 'Network error. Please try again.';
+                // errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

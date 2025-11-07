@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 // add controllers to the builder
 builder.Services.AddControllers();
 
+// Add Razor Pages support for Server Side Rendering
+//builder.Services.AddRazorPages();
+
 // Add services to the builder
 builder.Services.AddOpenApi();
 
@@ -32,9 +35,12 @@ app.UseStaticFiles();
 // Enable controller routing 
 app.MapControllers();
 
+// Enable Razor Pages routing for Server Side Rendering
+//app.MapRazorPages();
 
-// DEFAULT ROUTE
-app.MapGet("/", () => Results.Redirect("/index.html"));
+
+// DEFAULT ROUTE - redirect to static HTML "index.html" from the "wwwroot/html" folder
+app.MapGet("/", () => Results.Redirect("/html/index.html"));
 
 
 app.Run();

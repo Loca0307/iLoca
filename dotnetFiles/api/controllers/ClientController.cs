@@ -11,7 +11,7 @@ namespace Api.Controllers;
 // Defines this controller file in the "ApiController" group
 // it automatically defines "api/client" as the route to manage
 [ApiController]
-[Route("api/[controller]")]
+[Route("/[controller]")]
 public class ClientController : ControllerBase
 {
     private readonly IClientService _clientService;
