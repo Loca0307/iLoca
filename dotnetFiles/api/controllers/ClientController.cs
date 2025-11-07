@@ -23,8 +23,9 @@ public class ClientController : ControllerBase
 
 
     // RETRIEVE ALL CLIENTS FROM THE DATABASE
-    // this line defines which CRUD method to execute 
-    [HttpGet("ShowClients")]
+    // ActionResult is a specific type that is returned from 
+    // the controllers with request status and object
+    [HttpGet("ShowClients")] // this line defines which CRUD method to execute.
     public ActionResult<List<ClientDTO>> GetAllClients() {
         // From the controller you call the service methods that use database and logic
         var clients = _clientService.GetAllClients();

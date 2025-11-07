@@ -20,7 +20,7 @@ public class ClientRepository : IClientRepository
     {
         var clients = new List<Client>();
 
-        // "using" is used so that the object gets automatically disposed of after use
+        // "using" is used so that the object gets automatically deallocated after use
         using var conn = _dbContext.GetConnection();
         conn.Open();
 

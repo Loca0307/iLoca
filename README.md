@@ -7,7 +7,7 @@
 - Database: PostgreSQL 
 - Security: JWT (JSON Web Tokens) and more
 - Testing: xUnit
-- Secondary: Docker
+- Secondary: Docker, Postman
 
 # Notes
 

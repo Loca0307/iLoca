@@ -38,6 +38,8 @@ public class ClientControllerTests
         ActionResult<List<ClientDTO>> actionResult = controller.GetAllClients();
 
         // ASSERT
+        // "OkObjectResult" is a special type for controllers response 
+        // that check the reponse status and object.
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var dtos = Assert.IsType<List<ClientDTO>>(okResult.Value);
         Assert.Single(dtos);
