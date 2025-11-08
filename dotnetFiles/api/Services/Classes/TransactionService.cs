@@ -16,11 +16,12 @@ public class TransactionService : ITransactionService
     {
         return _transactionRepository.GetAllTransactions();
     }
-    /*
+
     public void InsertTransaction(Transaction transaction)
     {
         _transactionRepository.InsertTransaction(transaction);
     }
+    
     public void DeleteTransaction(Transaction transaction)
     {
         _transactionRepository.DeleteTransaction(transaction);
@@ -29,5 +30,4 @@ public class TransactionService : ITransactionService
     {
         _transactionRepository.DeleteAllTransactions();
     }
-    */
 }

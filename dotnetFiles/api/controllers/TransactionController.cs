@@ -21,7 +21,7 @@ public class TransactionController : ControllerBase
     public ActionResult<List<TransactionDTO>> GetAllTransactions()
     {
         var transactions = _transactionService.GetAllTransactions();
-        
+
         // Here get given what the controller 
         // will return to the frontend as DTO
         var transactionDTOs = transactions.Select(t => new TransactionDTO
@@ -35,5 +35,23 @@ public class TransactionController : ControllerBase
         }).ToList();
 
         return Ok(transactionDTOs);
+    }
+
+    // TO INSERT A TRANSACTION
+    [HttpPost("InsertTransaction")]
+    public ActionResult<TransactionDTO> InsertTransaction([FromBody]Transaction transaction)
+    {
+        _transactionService.InsertTransaction(transaction);
+        var transactionDTO = new TransactionDTO
+        {
+            TransactionId = transaction.TransactionId,
+            Sender = transaction.Sender,
+            Receiver = transaction.Receiver,
+            Amount = transaction.Amount,
+            DateTime = transaction.DateTime,
+            Reason = transaction.Reason
+        };
+
+        return Ok(transactionDTO);
     }
 }

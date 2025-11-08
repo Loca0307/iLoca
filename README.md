@@ -40,8 +40,7 @@ So in this case: docker run -p 5027:5027 "image name"
 
 # Postgre
 
-1) Install `postGre` on your pc
-2) Install `pgAdmin 4` for database GUI
+Install `postGre` on your pc
 
 # Test
 
