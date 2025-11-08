@@ -9,4 +9,6 @@ public interface ILoginRepository
     public void InsertLogin(Login login);
 
     public void DeleteLogin(Login login);
+
+    public Login? GetLoginByEmail(string email);
 }

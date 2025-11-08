@@ -62,11 +62,15 @@ public class LoginController : ControllerBase
         return Ok(new { message = "Login has been succesfully removed" });
     }
 
-    /*
+
+    // Authenticate Login attempt
     [HttpPost("Authenticate")]
-    public ActionResult<> Authenticate(Login login)
+    public ActionResult Authenticate(Login login)
     {
-        
+        var isValid = _loginService.Authenticate(login.Email, login.Password);
+        if (!isValid) {
+            return Unauthorized(new { message = "Invalid email or password" });
+        }
+        return Ok(new { message = "Login successful" });
     }
-    */
 }

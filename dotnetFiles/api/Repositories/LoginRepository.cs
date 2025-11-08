@@ -1,5 +1,6 @@
 using Api.Data;
 using Api.Models;
+using Api.Services;
 using Npgsql;
 
 
@@ -67,5 +68,33 @@ public class LoginRepository : ILoginRepository
 
         cmd.Parameters.AddWithValue("id", login.LoginId);
         cmd.ExecuteNonQuery();
+    }
+
+    public Login? GetLoginByEmail(string email)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"SELECT LoginId, Email, Password FROM logins
+            WHERE Email = @email", conn
+        );
+
+        cmd.Parameters.AddWithValue("email", email);
+
+        using var reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            return new Login
+            {
+                LoginId = reader.GetInt32(0),
+                Email = reader.GetString(1),
+                Password = reader.GetString(2)
+            };
+        }
+
+        return null;
+        
     }
 }

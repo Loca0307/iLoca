@@ -40,4 +40,19 @@ public class LoginService : ILoginService
     {
         _loginRepository.DeleteLogin(login);
     }
+
+
+    // Method to autenticate a login attempt
+    public bool Authenticate(string email, string password)
+    {
+        // Get the Login by email from the repository
+        var Login = _loginRepository.GetLoginByEmail(email);
+        if (Login == null)
+            return false; // Login not found
+
+        // Verify the password using BCrypt
+        bool isValid = BCrypt.Net.BCrypt.Verify(password, Login.Password);
+        return isValid;
+    }
+    
 }
