@@ -30,7 +30,8 @@ public class LoginService : ILoginService
         {
             LoginId = login.LoginId,
             Email = login.Email,
-            Password = hashedPassword
+            Password = hashedPassword,
+            Username = login.Username
         };
         
         _loginRepository.InsertLogin(loginToSave);

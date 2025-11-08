@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction - BankuumTubo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>BankuumTubo</h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
+    </header>
+    <main>
+        <section class="transaction-form">
+            <h2>Add New Transaction</h2>
+            <form id="addTransactionForm">
+                <label for="receiver">Receiver</label>
+                <input type="text" id="receiver" placeholder="Receiver" required>
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+                <label for="reason">Reason</label>
+                <input type="text" id="reason" placeholder="Reason" required>
+                <button type="submit">Add Transaction</button>
+            </form>
+            <div id="transaction-message"></div>
+        </section>
+        <section class="transaction-table">
+            <h2>All Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sender</th>
+                        <th>Receiver</th>
+                        <th>Amount</th>
+                        <th>Date/Time</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody">
+                    <!-- Transactions will appear here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 BankuumTubo. All rights reserved.</p>
+    </footer>
+    <script>
+    // Load all transactions from backend
+    async function loadTransactions() {
+        try {
+            const response = await fetch('/Transaction/ShowTransactions');
+            if (!response.ok) throw new Error('Failed to fetch transactions');
+            const transactions = await response.json();
+            const tbody = document.getElementById('transactionsBody');
+            tbody.innerHTML = '';
+            transactions.forEach(t => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${t.transactionId}</td>
+                    <td>${t.sender}</td>
+                    <td>${t.receiver}</td>
+                    <td>${t.amount}</td>
+                    <td>${new Date(t.dateTime).toLocaleString()}</td>
+                    <td>${t.reason}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            document.getElementById('transactionsBody').innerHTML = '<tr><td colspan="6">Error loading transactions</td></tr>';
+        }
+    }
+    // Initial load
+    loadTransactions();
+
+    // POST NEW TRANSACTION
+    const form = document.getElementById('addTransactionForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Sender email for now extracted from the localStorage
+        const sender = localStorage.getItem('loggedInEmail') || '';
+        const receiver = document.getElementById('receiver').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const reason = document.getElementById('reason').value;
+        const messageDiv = document.getElementById('transaction-message');
+        if (!sender) {
+            messageDiv.textContent = 'Error: No logged-in user found.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+        const transaction = {
+            sender,
+            receiver,
+            amount,
+            reason
+        };
+        try {
+            const response = await fetch('/Transaction/InsertTransaction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transaction)
+            });
+            if (!response.ok) throw new Error('Failed to add transaction');
+            let timestampMsg = '';
+            try {
+                const data = await response.json();
+                if (data && data.dateTime) {
+                    timestampMsg = ` (Timestamp: ${new Date(data.dateTime).toLocaleString()})`;
+                }
+            } catch {}
+            messageDiv.textContent = 'Transaction added successfully!' + timestampMsg;
+            messageDiv.style.color = 'green';
+            form.reset();
+            loadTransactions();
+        } catch (error) {
+            messageDiv.textContent = 'Error adding transaction';
+            messageDiv.style.color = 'red';
+        }
+    });
+    </script>
+</body>
+</html>

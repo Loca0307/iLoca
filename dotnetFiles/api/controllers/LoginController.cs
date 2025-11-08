@@ -31,6 +31,7 @@ public class LoginController : ControllerBase
         {
             LoginId = l.LoginId,
             Email = l.Email,
+            Username = l.Username
         }
         );
 
@@ -49,6 +50,7 @@ public class LoginController : ControllerBase
         {
             LoginId = login.LoginId,
             Email = login.Email,
+            Username = login.Username
         };
 
 

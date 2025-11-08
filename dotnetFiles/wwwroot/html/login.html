@@ -12,6 +12,7 @@
         <nav>
             <a href="/html/index.html">Home</a>
             <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
             <a href="/html/login.html">Login</a>
         </nav>
     </header>
@@ -68,16 +69,18 @@
         // Handle login form submission
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('error-message');
             const successMsg = document.getElementById('success-message');
-            
+
             // Hide previous messages
             errorMsg.style.display = 'none';
+            errorMsg.textContent = '';
             successMsg.style.display = 'none';
-            
+            successMsg.textContent = '';
+
             try {
                 const response = await fetch('/login/authenticate', {
                     method: 'POST',
@@ -86,17 +89,23 @@
                     },
                     body: JSON.stringify({ email, password })
                 });
-                
+
                 if (response.ok) {
                     const data = await response.json();
                     successMsg.textContent = 'Login successful! Redirecting...';
                     successMsg.style.display = 'block';
-                    // Store email in localStorage for session display
-                    localStorage.setItem('loggedInEmail', email);
-                    // Store token if returned (JWT example)
-                    if (data.token) {
-                        localStorage.setItem('authToken', data.token);
-                    }
+                    errorMsg.style.display = 'none';
+                    errorMsg.textContent = '';
+                    try {
+                        const usersResp = await fetch('/Login/ShowLogins');
+                        if (usersResp.ok) {
+                            const users = await usersResp.json();
+                            const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
+                            if (found && found.username) {
+                                localStorage.setItem('loggedInUsername', found.username);
+                            }
+                        }
+                    } catch {}
                     // Redirect to dashboard or home
                     setTimeout(() => {
                         window.location.href = '/html/index.html';
@@ -105,10 +114,14 @@
                     const error = await response.json();
                     errorMsg.textContent = error.message || 'Invalid email or password';
                     errorMsg.style.display = 'block';
+                    successMsg.style.display = 'none';
+                    successMsg.textContent = '';
                 }
             } catch (error) {
                 errorMsg.textContent = 'Network error. Please try again.';
                 errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                successMsg.textContent = '';
             }
         });
     </script>

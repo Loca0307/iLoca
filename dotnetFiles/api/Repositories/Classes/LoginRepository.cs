@@ -23,7 +23,7 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-        @"SELECT LoginID, Email, Password FROM logins", conn
+        @"SELECT LoginID, Email, Password, Username FROM logins", conn
         );
         using var reader = cmd.ExecuteReader();
 
@@ -33,7 +33,8 @@ public class LoginRepository : ILoginRepository
             {
                 LoginId = reader.GetInt32(0),
                 Email = reader.GetString(1),
-                Password = reader.GetString(2)
+                Password = reader.GetString(2),
+                Username = reader.IsDBNull(3) ? "" : reader.GetString(3)
             });
         }
 
@@ -46,12 +47,13 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO logins (Email, Password)
-            VALUES (@email, @password)
+            @"INSERT INTO logins (Email, Password, Username)
+            VALUES (@email, @password, @username)
             ON CONFLICT (Email) DO NOTHING", conn);
 
         cmd.Parameters.AddWithValue("email", login.Email);
         cmd.Parameters.AddWithValue("password", login.Password); // Password should already be hashed
+        cmd.Parameters.AddWithValue("username", login.Username);
 
         cmd.ExecuteNonQuery();
     }
@@ -69,13 +71,14 @@ public class LoginRepository : ILoginRepository
         cmd.ExecuteNonQuery();
     }
 
+    //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
     public Login? GetLoginByEmail(string email)
     {
-         using var conn = _dbContext.GetConnection();
+        using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT LoginId, Email, Password FROM logins
+            @"SELECT LoginId, Email, Password, Username FROM logins
             WHERE Email = @email", conn
         );
 
@@ -89,7 +92,8 @@ public class LoginRepository : ILoginRepository
             {
                 LoginId = reader.GetInt32(0),
                 Email = reader.GetString(1),
-                Password = reader.GetString(2)
+                Password = reader.GetString(2),
+                Username = reader.GetString(3)
             };
         }
 

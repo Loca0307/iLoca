@@ -27,31 +27,42 @@
 				<div id="error-message" class="error-message"></div>
 				<div id="success-message" class="success-message"></div>
 
-				<form id="register-form">
-					<div class="form-group">
-						<label for="email">Email Address</label>
-						<input 
-							type="email" 
-							id="email" 
-							name="email" 
-							placeholder="Enter your email"
-							required
-						>
-					</div>
+					   <form id="register-form">
+						   <div class="form-group">
+							   <label for="email">Email Address</label>
+							   <input 
+								   type="email" 
+								   id="email" 
+								   name="email" 
+								   placeholder="Enter your email"
+								   required
+							   >
+						   </div>
 
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input 
-							type="password" 
-							id="password" 
-							name="password" 
-							placeholder="Create a password"
-							required
-						>
-					</div>
+						   <div class="form-group">
+							   <label for="username">Username</label>
+							   <input 
+								   type="text" 
+								   id="username" 
+								   name="username" 
+								   placeholder="Choose a username"
+								   required
+							   >
+						   </div>
 
-					<button type="submit" class="btn-login">Register</button>
-				</form>
+						   <div class="form-group">
+							   <label for="password">Password</label>
+							   <input 
+								   type="password" 
+								   id="password" 
+								   name="password" 
+								   placeholder="Create a password"
+								   required
+							   >
+						   </div>
+
+						   <button type="submit" class="btn-login">Register</button>
+					   </form>
 
 				<div class="signup-link">
 					Already have an account? <a href="/html/login.html">Login</a>
@@ -69,8 +80,9 @@
 		document.getElementById('register-form').addEventListener('submit', async function(e) {
 			e.preventDefault();
             
-			const email = document.getElementById('email').value;
-			const password = document.getElementById('password').value;
+			   const username = document.getElementById('username').value;
+			   const email = document.getElementById('email').value;
+			   const password = document.getElementById('password').value;
 			const errorMsg = document.getElementById('error-message');
 			const successMsg = document.getElementById('success-message');
             
@@ -78,26 +90,26 @@
 			errorMsg.style.display = 'none';
 			successMsg.style.display = 'none';
             
-			try {
-				const response = await fetch('/login/InsertLogin', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ email, password })
-				});
+			   try {
+				   const response = await fetch('/login/InsertLogin', {
+					   method: 'POST',
+					   headers: {
+						   'Content-Type': 'application/json',
+					   },
+					   body: JSON.stringify({ email, password, username })
+				   });
                 
-				if (response.ok) {
-					successMsg.textContent = 'Registration successful! You can now log in.';
-					successMsg.style.display = 'block';
-					setTimeout(() => {
-						window.location.href = '/html/login.html';
-					}, 1500);
-				} else {
-					const error = await response.json();
-					errorMsg.textContent = error.message || 'Registration failed.';
-					errorMsg.style.display = 'block';
-				}
+				   if (response.ok) {
+					   successMsg.textContent = 'Registration successful! Redirecting to login...';
+					   successMsg.style.display = 'block';
+					   setTimeout(() => {
+						   window.location.href = '/html/login.html';
+					   }, 1500);
+				   } else {
+					   const error = await response.json();
+					   errorMsg.textContent = error.message || 'Registration failed.';
+					   errorMsg.style.display = 'block';
+				   }
 			} catch (error) {
 				errorMsg.textContent = 'Network error. Please try again.';
 				errorMsg.style.display = 'block';
