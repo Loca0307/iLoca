@@ -72,7 +72,7 @@ public class LoginRepository : ILoginRepository
 
     public Login? GetLoginByEmail(string email)
     {
-        using var conn = _dbContext.GetConnection();
+         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
@@ -95,6 +95,18 @@ public class LoginRepository : ILoginRepository
         }
 
         return null;
-        
+
+    }
+    
+    public void DeleteAllLogins(){
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"DELETE FROM logins",
+            conn
+        );
+
+        cmd.ExecuteNonQuery();
     }
 }

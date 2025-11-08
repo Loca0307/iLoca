@@ -18,13 +18,14 @@
     </header>
 
     <main>
-        <section style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;">
+        <section id="home-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;">
             <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); max-width: 500px; width: 100%; text-align: center;">
                 <h2 style="color: #4CAF50; margin-bottom: 1rem;">Welcome to Bankuum Tubo</h2>
+                <div id="user-info"></div>
                 <p style="font-size: 1.1rem; color: #333; margin-bottom: 2rem;">Your secure, modern banking dashboard.</p>
-                <div style="margin-bottom: 2rem;">
-                    <a href="/html/client.html" class="btn-login" style="display: inline-block; margin: 0 10px;">View Clients</a>
-                    <a href="/html/login.html" class="btn-login" style="display: inline-block; margin: 0 10px;">Login</a>
+                <div id="home-links" class="home-actions">
+                    <a href="/html/client.html" class="main-action-btn">View Clients</a>
+                    <a href="/html/login.html" class="main-action-btn">Login</a>
                 </div>
                 <p style="color: #666; font-size: 0.95rem;">Manage your clients, view transactions, and more.</p>
             </div>
@@ -34,5 +35,51 @@
     <footer>
         <p>&copy; 2025 LocaBonniProject. All rights reserved.</p>
     </footer>
+<style>
+    .home-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .main-action-btn {
+        display: inline-block;
+        padding: 0.75em 2em;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #4CAF50 60%, #43a047 100%);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        border: none;
+    }
+    .main-action-btn:hover, .main-action-btn:focus {
+        background: linear-gradient(90deg, #43a047 60%, #388e3c 100%);
+        box-shadow: 0 4px 16px rgba(76,175,80,0.15);
+        transform: translateY(-2px) scale(1.03);
+        color: #fff;
+    }
+</style>
 </body>
+<script>
+// Check if user is logged in (by localStorage)
+document.addEventListener('DOMContentLoaded', function() {
+    const userInfoDiv = document.getElementById('user-info');
+    const homeLinks = document.getElementById('home-links');
+    // We'll use localStorage to store the email after login
+    const loggedInEmail = localStorage.getItem('loggedInEmail');
+    if (loggedInEmail) {
+        userInfoDiv.innerHTML = `<p style="color: #333; font-size: 1.1rem; margin-bottom: 1rem;">Logged in as <strong>${loggedInEmail}</strong></p>`;
+        // Optionally, hide the login link if logged in
+        if (homeLinks) {
+            const loginLink = homeLinks.querySelector('a[href="/html/login.html"]');
+            if (loginLink) loginLink.style.display = 'none';
+        }
+    } else {
+        userInfoDiv.innerHTML = '';
+    }
+});
+</script>
 </html>

@@ -58,5 +58,10 @@ public class LoginService : ILoginService
         bool isValid = BCrypt.Net.BCrypt.Verify(password, Login.Password);
         return isValid;
     }
+
+    public void DeleteAllLogins()
+    {
+        _loginRepository.DeleteAllLogins();
+    }
     
 }

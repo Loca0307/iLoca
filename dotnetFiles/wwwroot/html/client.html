@@ -64,11 +64,13 @@
 			if (!response.ok) {
 				throw new Error('Failed to fetch clients');
 			}
+			// Extract the JSON from the response
 			const clients = await response.json();
 
 			tbody.innerHTML = ''; // clear table
 			clients.forEach(c => {
 				const row = document.createElement('tr');
+				// For every client in the list create a HTML object
 				row.innerHTML = `
 					<td>${c.clientId}</td>
 					<td>${c.firstName}</td>
@@ -88,9 +90,11 @@
 	// Initial load
 	loadClients();
 
+
 	// POST NEW CLIENT
 	const form = document.getElementById('addClientForm');
 
+	//  the "submit" type 
 	form.addEventListener('submit', async (e) => {
 		e.preventDefault(); // prevent page reload
 

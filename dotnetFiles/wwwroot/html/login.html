@@ -91,12 +91,12 @@
                     const data = await response.json();
                     successMsg.textContent = 'Login successful! Redirecting...';
                     successMsg.style.display = 'block';
-                    
+                    // Store email in localStorage for session display
+                    localStorage.setItem('loggedInEmail', email);
                     // Store token if returned (JWT example)
                     if (data.token) {
                         localStorage.setItem('authToken', data.token);
                     }
-                    
                     // Redirect to dashboard or home
                     setTimeout(() => {
                         window.location.href = '/html/index.html';

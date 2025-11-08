@@ -68,9 +68,18 @@ public class LoginController : ControllerBase
     public ActionResult Authenticate(Login login)
     {
         var isValid = _loginService.Authenticate(login.Email, login.Password);
-        if (!isValid) {
+        if (!isValid)
+        {
             return Unauthorized(new { message = "Invalid email or password" });
         }
         return Ok(new { message = "Login successful" });
+    }
+
+    [HttpDelete("DeleteAllLogins")]
+    public ActionResult DeleteAllLogins()
+    {
+        _loginService.DeleteAllLogins();
+
+        return Ok(new { message = "All logins have been deleted from the Database" });
     }
 }

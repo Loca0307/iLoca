@@ -8,4 +8,6 @@ public interface ILoginService
     public void InsertLogin(Login login);
     public void DeleteLogin(Login login);
     public bool Authenticate(string email, string password);
+
+    public void DeleteAllLogins();
 }
