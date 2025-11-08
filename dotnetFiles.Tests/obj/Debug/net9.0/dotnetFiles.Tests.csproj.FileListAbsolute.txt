@@ -118,3 +118,4 @@
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/Debug/net9.0/dotnetFiles.Tests.pdb
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/Debug/net9.0/dotnetFiles.Tests.genruntimeconfig.cache
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/Debug/net9.0/ref/dotnetFiles.Tests.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/BCrypt.Net-Next.dll

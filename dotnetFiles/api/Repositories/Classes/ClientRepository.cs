@@ -52,8 +52,9 @@ public class ClientRepository : IClientRepository
         
         // Define the SQL query
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO clients (first_name, last_name, email, phone)
-              VALUES (@first, @last, @email, @phone)
+            @"INSERT INTO clients (first_name, last_name, email, phone,
+            balance)
+              VALUES (@first, @last, @email, @phone, @balance)
               ON CONFLICT (email) DO NOTHING", conn);
 
         // Define actual parameters
@@ -61,6 +62,7 @@ public class ClientRepository : IClientRepository
         cmd.Parameters.AddWithValue("last", client.LastName);
         cmd.Parameters.AddWithValue("email", client.Email);
         cmd.Parameters.AddWithValue("phone", client.Phone);
+        cmd.Parameters.AddWithValue("balance", client.Balance);
 
         // To actually run the query 
         cmd.ExecuteNonQuery();

@@ -59,7 +59,8 @@ public class ClientController : ControllerBase
             FirstName = client.FirstName,
             LastName = client.LastName,
             Email = client.Email,
-            Phone = client.Phone
+            Phone = client.Phone,
+            Balance = client.Balance
         };
         
         return Ok(clientDTO);
