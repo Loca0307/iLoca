@@ -71,7 +71,7 @@ public class ClientController : ControllerBase
     public ActionResult DeleteClient(Client client)
     {
         _clientService.DeleteClient(client);
-        return Ok(new { message = "Client has been removed"});
+        return Ok(new { message = "Client has been successfully removed"});
     }
     
 }

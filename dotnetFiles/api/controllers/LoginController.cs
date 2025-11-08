@@ -54,6 +54,14 @@ public class LoginController : ControllerBase
         return Ok(loginDTO);
     }
 
+
+    [HttpDelete("DeleteLogin")]
+    public ActionResult DeleteLogin(Login login)
+    {
+        _loginService.DeleteLogin(login);
+        return Ok(new { message = "Login has been succesfully removed" });
+    }
+
     /*
     [HttpPost("Authenticate")]
     public ActionResult<> Authenticate(Login login)

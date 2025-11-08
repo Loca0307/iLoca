@@ -23,4 +23,9 @@ public class LoginService : ILoginService
     {
         _loginRepository.InsertLogin(login);
     }
+
+    public void DeleteLogin(Login login)
+    {
+        _loginRepository.DeleteLogin(login);
+    }
 }

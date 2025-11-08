@@ -6,5 +6,6 @@ public interface ILoginService
 {
     public List<Login> GetAllLogins();
     public void InsertLogin(Login login);
+    public void DeleteLogin(Login login);
 
 }
