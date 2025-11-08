@@ -79,5 +79,17 @@ public class ClientRepository : IClientRepository
         cmd.ExecuteNonQuery();
     }
 
+
+    public void DeleteAllClients() 
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+                @"DELETE FROM clients", conn
+        );
+
+        cmd.ExecuteNonQuery();
+    }
     
 }

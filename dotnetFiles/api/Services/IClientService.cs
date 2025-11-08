@@ -15,4 +15,6 @@ public interface IClientService
 
     public void DeleteClient(Client client);
 
+    public void DeleteAllClients();
+
 }

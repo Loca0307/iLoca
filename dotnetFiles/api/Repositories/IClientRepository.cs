@@ -5,7 +5,9 @@ namespace Api.Repositories;
 
 public interface IClientRepository
 {
-    List<Client> GetAllClients();
-    void InsertClient(Client client);
-    void DeleteClient(Client client);
+    public List<Client> GetAllClients();
+    public void InsertClient(Client client);
+    public void DeleteClient(Client client);
+
+    public void DeleteAllClients();
 }

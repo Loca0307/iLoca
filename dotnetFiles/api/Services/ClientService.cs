@@ -32,4 +32,9 @@ public class ClientService : IClientService
     {
         _clientRepository.DeleteClient(client);
     } 
+
+    public void DeleteAllClients() {
+        _clientRepository.DeleteAllClients();
+    }
+
 }
