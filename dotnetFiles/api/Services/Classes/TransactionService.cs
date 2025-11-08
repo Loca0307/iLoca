@@ -19,6 +19,10 @@ public class TransactionService : ITransactionService
 
     public void InsertTransaction(Transaction transaction)
     {
+        var localTime = DateTime.Now;
+
+        // To have the time taken in local time
+        transaction.DateTime = DateTime.SpecifyKind(localTime, DateTimeKind.Local);
         _transactionRepository.InsertTransaction(transaction);
     }
     

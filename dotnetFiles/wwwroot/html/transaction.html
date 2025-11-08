@@ -56,7 +56,8 @@
     // Load all transactions from backend
     async function loadTransactions() {
         try {
-            const response = await fetch('/Transaction/ShowTransactions');
+            // Use absolute URL and disable caching to ensure fresh data
+            const response = await fetch('http://localhost:5027/Transaction/ShowTransactions', { cache: 'no-store' });
             if (!response.ok) throw new Error('Failed to fetch transactions');
             const transactions = await response.json();
             const tbody = document.getElementById('transactionsBody');
@@ -103,7 +104,7 @@
             reason
         };
         try {
-            const response = await fetch('/Transaction/InsertTransaction', {
+            const response = await fetch('http://localhost:5027/Transaction/InsertTransaction', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(transaction)
@@ -113,13 +114,15 @@
             try {
                 const data = await response.json();
                 if (data && data.dateTime) {
+                    // Show server time reflected by API
                     timestampMsg = ` (Timestamp: ${new Date(data.dateTime).toLocaleString()})`;
                 }
             } catch {}
             messageDiv.textContent = 'Transaction added successfully!' + timestampMsg;
             messageDiv.style.color = 'green';
             form.reset();
-            loadTransactions();
+            // Await reload to ensure table updates immediately
+            await loadTransactions();
         } catch (error) {
             messageDiv.textContent = 'Error adding transaction';
             messageDiv.style.color = 'red';
