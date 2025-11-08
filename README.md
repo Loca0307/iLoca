@@ -9,7 +9,7 @@
 - Secondary: Docker, Postman
 - Security: 
     - BCrypt.Net-Next for password hashing
-    - JSON Web Token
+    - (JSON Web Token)
 
 
 # Notes

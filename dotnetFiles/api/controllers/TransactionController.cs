@@ -39,7 +39,7 @@ public class TransactionController : ControllerBase
 
     // TO INSERT A TRANSACTION
     [HttpPost("InsertTransaction")]
-    public ActionResult<TransactionDTO> InsertTransaction([FromBody]Transaction transaction)
+    public ActionResult<TransactionDTO> InsertTransaction([FromBody] Transaction transaction)
     {
         _transactionService.InsertTransaction(transaction);
         var transactionDTO = new TransactionDTO
@@ -53,5 +53,20 @@ public class TransactionController : ControllerBase
         };
 
         return Ok(transactionDTO);
+    }
+
+    // TO DELETE A TRANSACTION
+    [HttpDelete("DeleteTransaction")]
+    public ActionResult DeleteTrasaction(Transaction transaction)
+    {
+        _transactionService.DeleteTransaction(transaction);
+        return Ok(new { message = "The transaction has been deleted from the Database" });
+    }
+
+    // TO DELETE EVERY TRANSACTION
+    [HttpDelete("DeleteAllTransactions")]
+    public ActionResult DeleteAllTransactions(){
+        _transactionService.DeleteAllTransactions();
+        return Ok(new { message = "All the transactions has been deleted from the Database" });
     }
 }
