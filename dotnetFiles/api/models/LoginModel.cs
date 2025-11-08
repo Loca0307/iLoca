@@ -1,5 +1,6 @@
 namespace Api.Models;
 
+
 public class Login
 {   
     public int LoginId{ get; set; }

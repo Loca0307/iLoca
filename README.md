@@ -5,9 +5,11 @@
 - Frontend: HTML, CSS
 - Backend: .NET
 - Database: PostgreSQL 
-- Security: JWT (JSON Web Tokens) and more
 - Testing: xUnit
 - Secondary: Docker, Postman
+- Security: 
+    - BCrypt.Net-Next for password hashing
+
 
 # Notes
 

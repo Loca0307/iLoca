@@ -1,5 +1,6 @@
 using Api.Data;
 using Api.Models;
+using BCrypt.Net;
 using Npgsql;
 
 
@@ -50,9 +51,11 @@ public class LoginRepository : ILoginRepository
             VALUES (@email, @password)
             ON CONFLICT (Email) DO NOTHING", conn);
 
-    
+        // Define the Hashed version of the password to be saved in the database
+        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(login.Password);
+
         cmd.Parameters.AddWithValue("email", login.Email);
-        cmd.Parameters.AddWithValue("password", login.Password);
+        cmd.Parameters.AddWithValue("password", hashedPassword);
 
         // Actually execute the query
         cmd.ExecuteNonQuery();

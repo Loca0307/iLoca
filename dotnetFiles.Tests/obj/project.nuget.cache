@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "PDUNpBsHous=",
+  "dgSpecHash": "MWMgtwKkCxo=",
   "success": true,
   "projectFilePath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/dotnetFiles.Tests.csproj",
   "expectedPackageFiles": [
+    "/Users/luca/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/luca/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",
     "/Users/luca/.nuget/packages/coverlet.collector/6.0.2/coverlet.collector.6.0.2.nupkg.sha512",
     "/Users/luca/.nuget/packages/microsoft.aspnetcore.openapi/9.0.10/microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
