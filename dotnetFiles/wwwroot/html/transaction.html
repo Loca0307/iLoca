@@ -86,7 +86,7 @@
         e.preventDefault();
 
         // Sender email for now extracted from the localStorage
-        const sender = localStorage.getItem('loggedInEmail') || '';
+        const sender = localStorage.getItem('loggedInUsername') || '';
         const receiver = document.getElementById('receiver').value;
         const amount = parseFloat(document.getElementById('amount').value);
         const reason = document.getElementById('reason').value;

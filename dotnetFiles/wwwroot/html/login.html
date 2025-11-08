@@ -106,6 +106,13 @@
                             }
                         }
                     } catch {}
+                    // Fallback: if username not set (older rows without username), derive from email local-part
+                    if (!localStorage.getItem('loggedInUsername')) {
+                        const fallback = (email || '').split('@')[0];
+                        if (fallback) {
+                            localStorage.setItem('loggedInUsername', fallback);
+                        }
+                    }
                     // Redirect to dashboard or home
                     setTimeout(() => {
                         window.location.href = '/html/index.html';
