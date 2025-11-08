@@ -4,5 +4,7 @@ using Api.Models;
 namespace Api.Repositories;
 
 public interface ILoginRepository
-{    public void InsertLogin(Login login);
+{
+    public List<Login> GetAllLogins();
+    public void InsertLogin(Login login);
 }

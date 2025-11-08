@@ -18,6 +18,8 @@ public class ClientService : IClientService
     // the frontend to be seen so in the controller
     public List<Client> GetAllClients()
     {   
+        // For the "GET" request when you 
+        // return something put keyword "return"
         return _clientRepository.GetAllClients();
     }
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register - Bankuum Tubo</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+	<header>
+		<h1>Client Dashboard</h1>
+		<nav>
+			<a href="/html/index.html">Home</a>
+			<a href="#" id="ClientsPage">Clients</a>
+			<a href="/html/login.html">Profile</a>
+		</nav>
+	</header>
+
+	<main>
+		<section style="display: flex; justify-content: center; align-items: flex-start; min-height: 60vh;">
+			<div class="login-container" style="margin-top: 40px; margin-bottom: 40px;">
+				<div class="login-header">
+					<h1>Create Account</h1>
+					<p>Register for a new Bankuum Tubo account</p>
+				</div>
+
+				<div id="error-message" class="error-message"></div>
+				<div id="success-message" class="success-message"></div>
+
+				<form id="register-form">
+					<div class="form-group">
+						<label for="email">Email Address</label>
+						<input 
+							type="email" 
+							id="email" 
+							name="email" 
+							placeholder="Enter your email"
+							required
+						>
+					</div>
+
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input 
+							type="password" 
+							id="password" 
+							name="password" 
+							placeholder="Create a password"
+							required
+						>
+					</div>
+
+					<button type="submit" class="btn-login">Register</button>
+				</form>
+
+				<div class="signup-link">
+					Already have an account? <a href="/html/login.html">Login</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer>
+		<p>&copy; 2025 LocaBonniProject. All rights reserved.</p>
+	</footer>
+
+	<script>
+		// Handle registration form submission
+		document.getElementById('register-form').addEventListener('submit', async function(e) {
+			e.preventDefault();
+            
+			const email = document.getElementById('email').value;
+			const password = document.getElementById('password').value;
+			const errorMsg = document.getElementById('error-message');
+			const successMsg = document.getElementById('success-message');
+            
+			// Hide previous messages
+			errorMsg.style.display = 'none';
+			successMsg.style.display = 'none';
+            
+			try {
+				const response = await fetch('/login/InsertLogin', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email, password })
+				});
+                
+				if (response.ok) {
+					successMsg.textContent = 'Registration successful! You can now log in.';
+					successMsg.style.display = 'block';
+					setTimeout(() => {
+						window.location.href = '/html/login.html';
+					}, 1500);
+				} else {
+					const error = await response.json();
+					errorMsg.textContent = error.message || 'Registration failed.';
+					errorMsg.style.display = 'block';
+				}
+			} catch (error) {
+				errorMsg.textContent = 'Network error. Please try again.';
+				errorMsg.style.display = 'block';
+			}
+		});
+	</script>
+</body>
+</html>

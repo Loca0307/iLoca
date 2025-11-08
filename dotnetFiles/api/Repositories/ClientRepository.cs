@@ -24,6 +24,7 @@ public class ClientRepository : IClientRepository
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
+        // For "Get" returning request you need to "Read" 
         using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone FROM clients", conn);
         using var reader = cmd.ExecuteReader();
 
@@ -32,6 +33,7 @@ public class ClientRepository : IClientRepository
         {
             clients.Add(new Client
             {
+                // To trasform the data from the actual DB return to a JSON
                 ClientId = reader.GetInt32(0),
                 FirstName = reader.GetString(1),
                 LastName = reader.GetString(2),

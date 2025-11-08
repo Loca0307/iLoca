@@ -16,6 +16,30 @@ public class LoginRepository : ILoginRepository
     }
 
 
+    public List<Login> GetAllLogins()
+    {
+        var logins = new List<Login>();
+        using var conn = _dbcontext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+        @"SELECT LoginID, Email, Password FROM logins", conn
+        );
+        using var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+        {
+            logins.Add(new Login
+            {
+                LoginId = reader.GetInt32(0),
+                Email = reader.GetString(1),
+                Password = reader.GetString(2)
+            });
+        }
+
+        return logins;
+    }
+
     public void InsertLogin(Login login)
     {
         using var conn = _dbcontext.GetConnection();

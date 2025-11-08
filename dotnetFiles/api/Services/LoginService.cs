@@ -13,6 +13,12 @@ public class LoginService : ILoginService
     {
         _loginRepository = loginRepository;
     }
+    
+    public List<Login> GetAllLogins()
+    {
+       return _loginRepository.GetAllLogins();
+    }
+
     public void InsertLogin(Login login)
     {
         _loginRepository.InsertLogin(login);

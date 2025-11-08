@@ -18,12 +18,30 @@ public class LoginController : ControllerBase
     {
         _loginService = loginService;
     }
-    
-    
+
+
+    // RETURN ALL THE LOGINS(Only for Postman testing)
+    [HttpGet("ShowLogins")]
+    public ActionResult<List<LoginDTO>> GetAllLogins()
+    {
+        var logins = _loginService.GetAllLogins();
+
+        var loginDTOs = logins.Select(l => new LoginDTO
+        {
+            LoginId = l.LoginId,
+            Email = l.Email,
+            Password = l.Password
+        }
+        );
+
+        return Ok(loginDTOs);
+    }
+
+
 
     // ADD LOGIN TO THE DATABASE
     [HttpPost("InsertLogin")]
-    public ActionResult<LoginDTO> InsertLogin([FromBody]Login login)
+    public ActionResult<LoginDTO> InsertLogin([FromBody] Login login)
     {
         _loginService.InsertLogin(login);
 
@@ -37,4 +55,12 @@ public class LoginController : ControllerBase
 
         return Ok(loginDTO);
     }
+
+    /*
+    [HttpPost("Authenticate")]
+    public ActionResult<> Authenticate(Login login)
+    {
+        
+    }
+    */
 }
