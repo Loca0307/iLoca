@@ -1,5 +1,6 @@
 using Api.Models;
 using Api.Repositories;
+using BCrypt.Net;
 
 namespace Api.Services;
 
@@ -21,7 +22,18 @@ public class LoginService : ILoginService
 
     public void InsertLogin(Login login)
     {
-        _loginRepository.InsertLogin(login);
+        // Hash the password before saving to database
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(login.Password);
+        
+        // Create a new login object with hashed password
+        var loginToSave = new Login
+        {
+            LoginId = login.LoginId,
+            Email = login.Email,
+            Password = hashedPassword
+        };
+        
+        _loginRepository.InsertLogin(loginToSave);
     }
 
     public void DeleteLogin(Login login)
