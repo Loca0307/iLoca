@@ -47,17 +47,20 @@ public class ClientRepository : IClientRepository
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
-
+        
+        // Define the SQL query
         using var cmd = new NpgsqlCommand(
             @"INSERT INTO clients (first_name, last_name, email, phone)
               VALUES (@first, @last, @email, @phone)
               ON CONFLICT (email) DO NOTHING", conn);
 
+        // Define actual parameters
         cmd.Parameters.AddWithValue("first", client.FirstName);
         cmd.Parameters.AddWithValue("last", client.LastName);
         cmd.Parameters.AddWithValue("email", client.Email);
         cmd.Parameters.AddWithValue("phone", client.Phone);
 
+        // To actually run the query 
         cmd.ExecuteNonQuery();
     }
 

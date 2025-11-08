@@ -14,6 +14,10 @@
 The frontend is in the `"wwwroot"` file as it is the 
 default root name for asp.NET to search for `frontend`
 
+### Tecnical notes to solve ###
+
+- For now the DTOs classes contain all the fileds of the models classes, we should decide which field to show and which to hid. 
+
 # .NET
 
 in the "dotnet" folder terminal write: `dotnet run`

@@ -21,10 +21,17 @@ builder.Services.AddControllers();
 // Add services to the builder
 builder.Services.AddOpenApi();
 
-// For now, register all layers here
+// Register the layers to be used in the controllers
+// DB ACCESS
 builder.Services.AddScoped<IDbContext, DbContext>();
+
+// CLIENT LAYERS
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
+
+// LOGIN LAYERS
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 var app = builder.Build();
 

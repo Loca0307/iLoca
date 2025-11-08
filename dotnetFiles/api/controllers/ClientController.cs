@@ -14,6 +14,7 @@ namespace Api.Controllers;
 [Route("/[controller]")]
 public class ClientController : ControllerBase
 {
+    // Define the clientService to use for the controller
     private readonly IClientService _clientService;
 
     public ClientController(IClientService clientService)
