@@ -50,6 +50,10 @@ public class LoginService : ILoginService
         if (Login == null)
             return false; // Login not found
 
+        // Check for null or empty password hash
+        if (string.IsNullOrEmpty(Login.Password))
+            return false; // Invalid stored hash
+
         // Verify the password using BCrypt
         bool isValid = BCrypt.Net.BCrypt.Verify(password, Login.Password);
         return isValid;

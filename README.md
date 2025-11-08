@@ -45,4 +45,4 @@ So in this case: docker run -p 5027:5027 "image name"
 # Test
 
 1) Change directory to the dotnetFiles.Tests
-2) write in terminal: `dotnet test`
+2) Write in terminal: `dotnet test`
