@@ -1,6 +1,6 @@
 namespace Api.Models;
 
-public class TransactionModel{
+public class Transaction{
     
     public int TransactionId { get; set; }
     public string Sender { get; set; } = "";

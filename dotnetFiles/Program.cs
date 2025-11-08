@@ -33,6 +33,13 @@ builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
+// TRANSACTION LAYERS
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<TransactionRepository>();
+
+
+
+
 var app = builder.Build();
 
 // Serve static files (wwwroot/index.html)

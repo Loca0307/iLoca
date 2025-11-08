@@ -26,6 +26,7 @@ public class LoginController : ControllerBase
     {
         var logins = _loginService.GetAllLogins();
 
+        // Here get given what the controller will return to the frontend
         var loginDTOs = logins.Select(l => new LoginDTO
         {
             LoginId = l.LoginId,
