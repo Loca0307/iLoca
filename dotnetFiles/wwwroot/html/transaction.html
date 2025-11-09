@@ -83,6 +83,7 @@
 
     // POST NEW TRANSACTION
     const form = document.getElementById('addTransactionForm');
+    
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -92,6 +93,9 @@
         const amount = parseFloat(document.getElementById('amount').value);
         const reason = document.getElementById('reason').value;
         const messageDiv = document.getElementById('transaction-message');
+        // Server will validate receiver existence; just show pending message
+        messageDiv.textContent = 'Submitting transaction...';
+        messageDiv.style.color = 'black';
         if (!sender) {
             messageDiv.textContent = 'Error: No logged-in user found.';
             messageDiv.style.color = 'red';
