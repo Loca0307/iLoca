@@ -20,7 +20,7 @@ public class LoginController : ControllerBase
     }
 
 
-    // RETURN ALL THE LOGINS(Only for Postman testing)
+    // RETURN ALL THE LOGINS
     [HttpGet("ShowLogins")]
     public ActionResult<List<LoginDTO>> GetAllLogins()
     {
@@ -66,16 +66,23 @@ public class LoginController : ControllerBase
     }
 
 
-    // Authenticate Login attempt
+    // AUTHENTICATE LOGIN ATTEMPT
     [HttpPost("Authenticate")]
-    public ActionResult Authenticate(Login login)
+    public ActionResult<LoginDTO> Authenticate(Login login)
     {
         var isValid = _loginService.Authenticate(login.Email, login.Password);
         if (!isValid)
         {
             return Unauthorized(new { message = "Invalid email or password" });
         }
-        return Ok(new { message = "Login successful" });
+
+        var loginDTO = new LoginDTO
+        {
+            LoginId = login.LoginId,
+            Email = login.Email,
+            Username = login.Username
+        };
+        return Ok(loginDTO);
     }
 
     [HttpDelete("DeleteAllLogins")]

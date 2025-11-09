@@ -83,15 +83,22 @@
 		document.getElementById('register-form').addEventListener('submit', async function(e) {
 			e.preventDefault();
             
-			   const username = document.getElementById('username').value;
-			   const email = document.getElementById('email').value;
-			   const password = document.getElementById('password').value;
+			// Read and trim fields
+			const username = (document.getElementById('username').value || '').trim();
+			const email = (document.getElementById('email').value || '').trim();
+			const password = (document.getElementById('password').value || '').trim();
 			const errorMsg = document.getElementById('error-message');
 			const successMsg = document.getElementById('success-message');
             
 			// Hide previous messages
 			errorMsg.style.display = 'none';
 			successMsg.style.display = 'none';
+			// Client-side validation: ensure required fields are provided
+			if (!username || !email || !password) {
+				errorMsg.textContent = 'Please fill in username, email and password.';
+				errorMsg.style.display = 'block';
+				return;
+			}
             
 			   try {
 				   const response = await fetch('/login/InsertLogin', {

@@ -43,14 +43,22 @@ public class TransactionController : ControllerBase
     [HttpPost("InsertTransaction")]
     public ActionResult<TransactionDTO> InsertTransaction([FromBody] Transaction transaction)
     {
-        // Server-side receiver existence check to prevent invalid receivers
-        var receiver = (transaction.Receiver ?? string.Empty).Trim();
+        // Server-side receiver existence check and capture matched login
+        var receiver = (transaction.Receiver ?? string.Empty).Trim().ToLower();
         var logins = _loginService.GetAllLogins();
-        var exists = logins.Any(l => (l.Username ?? string.Empty) == receiver);
-        if (!exists)
+        var found = logins.FirstOrDefault(l => ((l.Username ?? string.Empty).ToLower() == receiver)
+                                            || ((l.Email ?? string.Empty).ToLower() == receiver));
+
+        if (found == null)
         {
             return BadRequest(new { message = "Receiver not found" });
         }
+
+        // MODIFY THE BALANCES OF BOTH CLIENTS
+        var sender = transaction.Sender;
+
+        
+
 
         _transactionService.InsertTransaction(transaction);
         var transactionDTO = new TransactionDTO
