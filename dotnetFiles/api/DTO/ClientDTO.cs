@@ -11,5 +11,6 @@ public class ClientDTO
     public string LastName { get; set; } = "";
     public string Email { get; set; } = "";
     public string Phone { get; set; } = "";
+    public string Iban { get; set; } = "";
     public decimal Balance { get; set; } = 0;
 }

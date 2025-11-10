@@ -20,8 +20,8 @@
         <section class="transaction-form">
             <h2>Add New Transaction</h2>
             <form id="addTransactionForm">
-                <label for="receiver">Receiver</label>
-                <input type="text" id="receiver" placeholder="Receiver" required>
+                <label for="receiverIban">Receiver IBAN</label>
+                <input type="text" id="receiverIban" placeholder="Receiver IBAN" required>
                 <label for="amount">Amount</label>
                 <input type="number" id="amount" placeholder="Amount" step="0.01" required>
                 <label for="reason">Reason</label>
@@ -37,7 +37,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Sender</th>
-                        <th>Receiver</th>
+                        <th>Receiver IBAN</th>
                         <th>Amount</th>
                         <th>Date/Time</th>
                         <th>Reason</th>
@@ -89,7 +89,8 @@
 
         // Sender email for now extracted from the localStorage
         const sender = localStorage.getItem('loggedInUsername') || '';
-        const receiver = document.getElementById('receiver').value;
+    // collect receiver IBAN but keep the JSON property name 'receiver' so backend maps to Transaction.Receiver
+    const receiver = document.getElementById('receiverIban').value;
         const amount = parseFloat(document.getElementById('amount').value);
         const reason = document.getElementById('reason').value;
         const messageDiv = document.getElementById('transaction-message');

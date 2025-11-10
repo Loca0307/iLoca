@@ -22,9 +22,9 @@ public class LoginRepository : ILoginRepository
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
-        using var cmd = new NpgsqlCommand(
-        @"SELECT LoginID, Email, Password, Username FROM logins", conn
-        );
+    using var cmd = new NpgsqlCommand(
+    @"SELECT LoginId, Email, Password, Username, ClientId FROM logins", conn
+    );
         using var reader = cmd.ExecuteReader();
 
         while (reader.Read())
@@ -34,7 +34,8 @@ public class LoginRepository : ILoginRepository
                 LoginId = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.GetString(2),
-                Username = reader.IsDBNull(3) ? "" : reader.GetString(3)
+                Username = reader.IsDBNull(3) ? "" : reader.GetString(3),
+                ClientId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
             });
         }
 
@@ -47,13 +48,15 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO logins (Email, Password, Username)
-            VALUES (@email, @password, @username)
+            @"INSERT INTO logins (Email, Password, Username, ClientId)
+            VALUES (@email, @password, @username, @clientId)
             ON CONFLICT (Email) DO NOTHING", conn);
 
         cmd.Parameters.AddWithValue("email", login.Email);
         cmd.Parameters.AddWithValue("password", login.Password); // Password should already be hashed
         cmd.Parameters.AddWithValue("username", login.Username);
+        cmd.Parameters.AddWithValue("clientId", login.ClientId);
+        
 
         cmd.ExecuteNonQuery();
     }
@@ -78,7 +81,7 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT LoginId, Email, Password, Username FROM logins
+            @"SELECT LoginId, Email, Password, Username, ClientId FROM logins
             WHERE Email = @email", conn
         );
 
@@ -93,12 +96,12 @@ public class LoginRepository : ILoginRepository
                 LoginId = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.GetString(2),
-                Username = reader.GetString(3)
+                Username = reader.GetString(3),
+                ClientId = reader.GetInt32(4)
             };
         }
 
         return null;
-
     }
     
     public void DeleteAllLogins(){

@@ -31,7 +31,8 @@ public class LoginService : ILoginService
             LoginId = login.LoginId,
             Email = login.Email,
             Password = hashedPassword,
-            Username = login.Username
+            Username = login.Username,
+            ClientId = login.ClientId
         };
         
         _loginRepository.InsertLogin(loginToSave);
@@ -42,6 +43,10 @@ public class LoginService : ILoginService
         _loginRepository.DeleteLogin(login);
     }
 
+    public void DeleteAllLogins()
+    {
+        _loginRepository.DeleteAllLogins();
+    }
 
     // Method to autenticate a login attempt
     public bool Authenticate(string email, string password)
@@ -60,9 +65,6 @@ public class LoginService : ILoginService
         return isValid;
     }
 
-    public void DeleteAllLogins()
-    {
-        _loginRepository.DeleteAllLogins();
-    }
+
     
 }

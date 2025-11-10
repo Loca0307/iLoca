@@ -38,7 +38,8 @@ public class ClientController : ControllerBase
             FirstName = c.FirstName,
             LastName = c.LastName,
             Email = c.Email,
-            Phone = c.Phone
+            Phone = c.Phone,
+            Iban = c.Iban
         }).ToList();
         
         return Ok(clientDTOs);
@@ -60,6 +61,7 @@ public class ClientController : ControllerBase
             LastName = client.LastName,
             Email = client.Email,
             Phone = client.Phone,
+            Iban = client.Iban,
             Balance = client.Balance
         };
         
@@ -82,5 +84,10 @@ public class ClientController : ControllerBase
     {
         _clientService.DeleteAllClients();
         return Ok(new { message = "All clients have been deleted from the Database" });
+    }
+
+    [HttpGet("GetClientByEmail")]
+    public ActionResult<Client?> GetClientByEmail([FromQuery] string email) {
+        return _clientService.GetClientByEmail(email);
     }
 }

@@ -17,4 +17,6 @@ public interface IClientService
 
     public void DeleteAllClients();
 
+    public Client? GetClientByEmail(string email);
+
 }

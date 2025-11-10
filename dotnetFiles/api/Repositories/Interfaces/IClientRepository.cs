@@ -8,6 +8,6 @@ public interface IClientRepository
     public List<Client> GetAllClients();
     public void InsertClient(Client client);
     public void DeleteClient(Client client);
-
     public void DeleteAllClients();
+    public Client? GetClientByEmail(string email);
 }

@@ -28,6 +28,7 @@
 						<th>Last Name</th>
 						<th>Email</th>
 						<th>Phone</th>
+						<th>IBAN</th>
 						<th>Delete</th> 
 					</tr>
 				</thead>
@@ -44,7 +45,10 @@
 				<input type="text" id="lastName" placeholder="Last Name" required>
 				<input type="email" id="email" placeholder="Email" required>
 				<input type="text" id="phone" placeholder="Phone" required>
-				<button type="submit" >Add Client</button>
+					<label for="iban">IBAN <small style="color:darkred">(required)</small></label>
+					<input type="text" id="iban" placeholder="IBAN" required>
+					<div id="ibanError" style="color: red; display: none; font-size: 0.9em;">IBAN is required to create a client.</div>
+					<button type="submit" >Add Client</button>
 			</form>
 		</section>
 
@@ -78,6 +82,7 @@
 					<td>${c.lastName}</td>
 					<td>${c.email}</td>
 					<td>${c.phone}</td>
+					<td>${c.iban || ''}</td>
 					<td><button class="remove-btn" data-id="${c.clientId}">Remove</button></td>
 				`;
 				tbody.appendChild(row);
@@ -99,11 +104,22 @@
 	form.addEventListener('submit', async (e) => {
 		e.preventDefault(); // prevent page reload
 
+			// IBAN validation: show error and stop if empty
+			const ibanInput = document.getElementById('iban');
+			const ibanError = document.getElementById('ibanError');
+			if (!ibanInput.value || ibanInput.value.trim() === '') {
+				ibanError.style.display = 'block';
+				return;
+			} else {
+				ibanError.style.display = 'none';
+			}
+
 		const newClient = {
 			firstName: document.getElementById('firstName').value,
 			lastName: document.getElementById('lastName').value,
 			email: document.getElementById('email').value,
-			phone: document.getElementById('phone').value
+					phone: document.getElementById('phone').value,
+					iban: document.getElementById('iban').value
 		};
 
 		try {

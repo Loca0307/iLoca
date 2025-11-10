@@ -13,10 +13,12 @@ namespace Api.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly ILoginService _loginService;
+    private readonly IClientService _clientService;
 
-    public LoginController(ILoginService loginService)
+    public LoginController(ILoginService loginService, IClientService clientService)
     {
         _loginService = loginService;
+        _clientService = clientService;
     }
 
 
@@ -31,7 +33,8 @@ public class LoginController : ControllerBase
         {
             LoginId = l.LoginId,
             Email = l.Email,
-            Username = l.Username
+            Username = l.Username,
+            ClientId = l.ClientId
         }
         );
 
@@ -46,11 +49,13 @@ public class LoginController : ControllerBase
     {
         _loginService.InsertLogin(login);
 
+
         var loginDTO = new LoginDTO
         {
             LoginId = login.LoginId,
             Email = login.Email,
-            Username = login.Username
+            Username = login.Username,
+            ClientId = login.ClientId
         };
 
 
@@ -80,7 +85,8 @@ public class LoginController : ControllerBase
         {
             LoginId = login.LoginId,
             Email = login.Email,
-            Username = login.Username
+            Username = login.Username,
+            ClientId = login.ClientId
         };
         return Ok(loginDTO);
     }

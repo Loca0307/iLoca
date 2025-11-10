@@ -31,10 +31,15 @@ public class ClientService : IClientService
     public void DeleteClient(Client client)
     {
         _clientRepository.DeleteClient(client);
-    } 
-
-    public void DeleteAllClients() {
-        _clientRepository.DeleteAllClients();
     }
 
+    public void DeleteAllClients()
+    {
+        _clientRepository.DeleteAllClients();
+    }
+    
+    public Client? GetClientByEmail(string email)
+    {
+        return _clientRepository.GetClientByEmail(email);
+    }
 }

@@ -25,7 +25,7 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         // For "Get" returning request you need to "Read" 
-        using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone FROM clients", conn);
+        using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone, iban, balance FROM clients", conn);
         using var reader = cmd.ExecuteReader();
 
         // to structure the read data
@@ -38,7 +38,9 @@ public class ClientRepository : IClientRepository
                 FirstName = reader.GetString(1),
                 LastName = reader.GetString(2),
                 Email = reader.GetString(3),
-                Phone = reader.GetString(4)
+                Phone = reader.GetString(4),
+                Iban = reader.GetString(5),
+                Balance = reader.GetDecimal(6)
             });
         }
 
@@ -50,19 +52,19 @@ public class ClientRepository : IClientRepository
         using var conn = _dbContext.GetConnection();
         conn.Open();
         
-        // Define the SQL query
+
+        // Define the SQL query (include iban and balance)
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO clients (first_name, last_name, email, phone,
-            balance)
-              VALUES (@first, @last, @email, @phone, @balance)
-              ON CONFLICT (email) DO NOTHING", conn);
+            "INSERT INTO clients (first_name, last_name, email, phone, iban, balance) VALUES (@first, @last, @email, @phone, @iban, @balance) ON CONFLICT (email) DO NOTHING",
+            conn);
 
         // Define actual parameters
         cmd.Parameters.AddWithValue("first", client.FirstName);
         cmd.Parameters.AddWithValue("last", client.LastName);
         cmd.Parameters.AddWithValue("email", client.Email);
         cmd.Parameters.AddWithValue("phone", client.Phone);
-        cmd.Parameters.AddWithValue("balance", client.Balance);
+        cmd.Parameters.AddWithValue("iban", client.Iban);
+        cmd.Parameters.AddWithValue("balance", 0);
 
         // To actually run the query 
         cmd.ExecuteNonQuery();
@@ -82,7 +84,7 @@ public class ClientRepository : IClientRepository
     }
 
 
-    public void DeleteAllClients() 
+    public void DeleteAllClients()
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
@@ -92,6 +94,38 @@ public class ClientRepository : IClientRepository
         );
 
         cmd.ExecuteNonQuery();
+    }
+    
+        //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
+    public Client? GetClientByEmail(string email)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"SELECT ClientId, FirstName, LastName, Email, Phone, Iban, Balance FROM clients
+            WHERE Email = @email", conn
+        );
+
+        cmd.Parameters.AddWithValue("email", email);
+
+        using var reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+                return new Client
+                {
+                    ClientId = reader.GetInt32(0),
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Email = reader.GetString(3),
+                    Phone = reader.GetString(4),
+                    Iban = reader.GetString(5),
+                    Balance = reader.GetDecimal(6)
+                };
+        }
+
+        return null;
     }
     
 }
