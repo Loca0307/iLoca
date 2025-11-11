@@ -95,8 +95,8 @@ public class ClientRepository : IClientRepository
 
         cmd.ExecuteNonQuery();
     }
-    
-        //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
+
+    //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
     public Client? GetClientByEmail(string email)
     {
         using var conn = _dbContext.GetConnection();
@@ -113,16 +113,49 @@ public class ClientRepository : IClientRepository
 
         if (reader.Read())
         {
-                return new Client
-                {
-                    ClientId = reader.GetInt32(0),
-                    FirstName = reader.GetString(1),
-                    LastName = reader.GetString(2),
-                    Email = reader.GetString(3),
-                    Phone = reader.GetString(4),
-                    Iban = reader.GetString(5),
-                    Balance = reader.GetDecimal(6)
-                };
+            return new Client
+            {
+                ClientId = reader.GetInt32(0),
+                FirstName = reader.GetString(1),
+                LastName = reader.GetString(2),
+                Email = reader.GetString(3),
+                Phone = reader.GetString(4),
+                Iban = reader.GetString(5),
+                Balance = reader.GetDecimal(6)
+            };
+        }
+
+        return null;
+    }
+    
+    // RETURN A CLIENT(if found) THAT MATCHES WITH THE GIVEN IBAN
+    public Client? GetClientByIban(string iban)
+    {
+        
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"SELECT client_id, first_name, last_name, email, phone, iban, balance 
+            FROM clients WHERE Iban = @iban",
+            conn);
+
+        cmd.Parameters.AddWithValue("iban", iban);
+
+        using var reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            return new Client
+            {
+                ClientId = reader.GetInt32(0),
+                FirstName = reader.GetString(1),
+                LastName = reader.GetString(2),
+                Email = reader.GetString(3),
+                Phone = reader.GetString(4),
+                Iban = reader.GetString(5),
+                Balance = reader.GetDecimal(6)
+            };
         }
 
         return null;

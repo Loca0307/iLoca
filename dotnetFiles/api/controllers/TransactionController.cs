@@ -28,7 +28,7 @@ public class TransactionController : ControllerBase
         {
             TransactionId = t.TransactionId,
             Sender = t.Sender,
-            Receiver = t.Receiver,
+            ReceiverIban = t.ReceiverIban,
             Amount = t.Amount,
             DateTime = t.DateTime,
             Reason = t.Reason ?? string.Empty
@@ -48,7 +48,7 @@ public class TransactionController : ControllerBase
         {
             TransactionId = transaction.TransactionId,
             Sender = transaction.Sender,
-            Receiver = transaction.Receiver,
+            ReceiverIban = transaction.ReceiverIban,
             Amount = transaction.Amount,
             DateTime = transaction.DateTime,
             Reason = transaction.Reason ?? string.Empty,

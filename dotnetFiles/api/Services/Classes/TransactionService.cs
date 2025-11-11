@@ -7,14 +7,12 @@ public class TransactionService : ITransactionService
 {
     private readonly ITransactionRepository _transactionRepository;
     private readonly IClientRepository _clientRepository;
-    private readonly ILoginRepository _loginRepository;
 
     public TransactionService(ITransactionRepository transactionRepository,
     IClientRepository clientRepository, ILoginRepository loginRepository)
     {
         _transactionRepository = transactionRepository;
         _clientRepository = clientRepository;
-        _loginRepository = loginRepository;
     }
 
     public List<Transaction> GetAllTransactions()
@@ -28,10 +26,26 @@ public class TransactionService : ITransactionService
         var localTime = DateTime.Now;
         transaction.DateTime = DateTime.SpecifyKind(localTime, DateTimeKind.Local);
 
-        /* - Check for existing Iban
-           - Check if logged in client has the sent amount 
-           - Update the sender and receiver clients' amounts
+        /* 
+           1) Check for existing Iban
+           2) Check if logged in client has the sent amount 
+           3) Update the sender and receiver clients' amounts
         */
+        var sender = transaction.Sender;
+
+        // 1)
+        var receiverIban = transaction.ReceiverIban;
+
+        // Lookup receiver by IBAN using clientRepository
+        var receiver = _clientRepository.GetClientByIban(receiverIban);
+        
+        if (receiver == null)
+        {
+            throw new InvalidOperationException("Receiver with provided IBAN not found.");
+        }
+        
+        // 2) 
+
 
         _transactionRepository.InsertTransaction(transaction);
     }

@@ -35,7 +35,7 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 // TRANSACTION LAYERS
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<TransactionRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 
 

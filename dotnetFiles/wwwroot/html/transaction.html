@@ -66,8 +66,8 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${t.transactionId}</td>
-                    <td>${t.sender}</td>
-                    <td>${t.receiver}</td>
+                        <td>${t.sender}</td>
+                        <td>${t.receiverIban}</td>
                     <td>${t.amount}</td>
                     <td>${new Date(t.dateTime).toLocaleString()}</td>
                     <td>${t.reason}</td>
@@ -87,10 +87,11 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Sender email for now extracted from the localStorage
+        // Sender identifier extracted from localStorage (email or iban depending on your login flow)
         const sender = localStorage.getItem('loggedInUsername') || '';
-    // collect receiver IBAN but keep the JSON property name 'receiver' so backend maps to Transaction.Receiver
-    const receiver = document.getElementById('receiverIban').value;
+        const senderClientId = localStorage.getItem('loggedInClientId') || null;
+            // collect receiver IBAN
+            const receiverIban = document.getElementById('receiverIban').value;
         const amount = parseFloat(document.getElementById('amount').value);
         const reason = document.getElementById('reason').value;
         const messageDiv = document.getElementById('transaction-message');
@@ -104,7 +105,8 @@
         }
         const transaction = {
             sender,
-            receiver,
+            senderClientId,
+            receiverIban,
             amount,
             reason
         };

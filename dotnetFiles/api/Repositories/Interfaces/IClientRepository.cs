@@ -10,4 +10,5 @@ public interface IClientRepository
     public void DeleteClient(Client client);
     public void DeleteAllClients();
     public Client? GetClientByEmail(string email);
+    public Client? GetClientByIban(string iban);
 }

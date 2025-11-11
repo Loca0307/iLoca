@@ -5,7 +5,7 @@ using Npgsql;
 namespace Api.Repositories;
 
 
-public class TransactionRepository
+public class TransactionRepository : ITransactionRepository
 {
     private readonly IDbContext _dbContext;
 
@@ -36,7 +36,7 @@ public class TransactionRepository
                 {
                     TransactionId = reader.GetInt32(0),
                     Sender = reader.GetString(1),
-                    Receiver = reader.GetString(2),
+                    ReceiverIban = reader.GetString(2),
                     Amount = reader.GetInt32(3),
                     DateTime = reader.GetDateTime(4),
                     Reason = reader.GetString(5)
@@ -60,13 +60,12 @@ public class TransactionRepository
 
         // Define the Transaction values
         cmd.Parameters.AddWithValue("sender", transaction.Sender);
-        cmd.Parameters.AddWithValue("receiver", transaction.Receiver);
+        cmd.Parameters.AddWithValue("receiver", transaction.ReceiverIban);
         cmd.Parameters.AddWithValue("amount", transaction.Amount);
         cmd.Parameters.AddWithValue("dateTime", transaction.DateTime);
         cmd.Parameters.AddWithValue("Reason", transaction.Reason);
 
         cmd.ExecuteNonQuery();
-
     }
 
     public void DeleteTransaction(Transaction transaction)
@@ -82,8 +81,9 @@ public class TransactionRepository
         cmd.Parameters.AddWithValue("id", transaction.TransactionId);
         cmd.ExecuteNonQuery();
     }
-    
-    public void DeleteAllTransactions(){
+
+    public void DeleteAllTransactions()
+    {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
@@ -93,5 +93,6 @@ public class TransactionRepository
 
         cmd.ExecuteNonQuery();
     }
+    
 
 }

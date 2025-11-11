@@ -9,12 +9,6 @@
 <body>
     <header>
         <h1>Bankuum Tubo</h1>
-        <nav>
-            <a href="/html/index.html">Home</a>
-            <a href="/html/client.html">Clients</a>
-            <a href="/html/transaction.html">Transactions</a>
-            <a href="/html/login.html">Login</a>
-        </nav>
     </header>
 
     <main>
@@ -24,7 +18,6 @@
                     <h2>Welcome Back</h2>
                     <p>Login to your Bankuum Tubo account</p>
                 </div>
-
                 <div id="error-message" class="error-message"></div>
                 <div id="success-message" class="success-message"></div>
 
@@ -93,11 +86,11 @@
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
+                    // Successful auth; store a username and client info in localStorage
                     successMsg.textContent = 'Login successful! Redirecting...';
                     successMsg.style.display = 'block';
-                    errorMsg.style.display = 'none';
-                    errorMsg.textContent = '';
+
+                    // Try to resolve username from Login/ShowLogins
                     try {
                         const usersResp = await fetch('/Login/ShowLogins');
                         if (usersResp.ok) {
@@ -107,33 +100,43 @@
                                 localStorage.setItem('loggedInUsername', found.username);
                             }
                         }
-                    } catch {}
-                    // Fallback: if username not set (older rows without username), derive from email local-part
+                    } catch (err) {
+                        // ignore
+                    }
+
+                    // Fetch client by email to get clientId and iban
+                    try {
+                        const clientResp = await fetch(`/Client/GetClientByEmail?email=${encodeURIComponent(email)}`);
+                        if (clientResp.ok) {
+                            const client = await clientResp.json();
+                            if (client) {
+                                if (client.clientId !== undefined && client.clientId !== null) localStorage.setItem('loggedInClientId', String(client.clientId));
+                                if (client.iban) localStorage.setItem('loggedInClientIban', client.iban);
+                                if (!localStorage.getItem('loggedInUsername') && client.firstName) localStorage.setItem('loggedInUsername', client.firstName);
+                            }
+                        }
+                    } catch (err) {
+                        // ignore
+                    }
+
+                    // Fallback username
                     if (!localStorage.getItem('loggedInUsername')) {
                         const fallback = (email || '').split('@')[0];
-                        if (fallback) {
-                            localStorage.setItem('loggedInUsername', fallback);
-                        }
+                        if (fallback) localStorage.setItem('loggedInUsername', fallback);
                     }
-                    // Redirect to dashboard or home
-                    setTimeout(() => {
-                        window.location.href = '/html/index.html';
-                    }, 1500);
+
+                    // Redirect to home
+                    setTimeout(() => window.location.href = '/html/index.html', 1200);
                 } else {
                     const error = await response.json();
                     errorMsg.textContent = error.message || 'Invalid email or password';
                     errorMsg.style.display = 'block';
-                    successMsg.style.display = 'none';
-                    successMsg.textContent = '';
                 }
             } catch (error) {
                 errorMsg.textContent = 'Network error. Please try again.';
                 errorMsg.style.display = 'block';
-                successMsg.style.display = 'none';
-                successMsg.textContent = '';
             }
         });
-
     </script>
 </body>
 </html>
