@@ -10,12 +10,10 @@ namespace Api.Controllers;
 public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
-    private readonly ILoginService _loginService;
 
     public TransactionController(ITransactionService transactionService, ILoginService loginService)
     {
         _transactionService = transactionService;
-        _loginService = loginService;
     }
 
     // GET ALL THE TRANSACTION
@@ -29,8 +27,8 @@ public class TransactionController : ControllerBase
         var transactionDTOs = transactions.Select(t => new TransactionDTO
         {
             TransactionId = t.TransactionId,
-            Sender = t.Sender ?? string.Empty,
-            Receiver = t.Receiver ?? string.Empty,
+            Sender = t.Sender,
+            Receiver = t.Receiver,
             Amount = t.Amount,
             DateTime = t.DateTime,
             Reason = t.Reason ?? string.Empty
@@ -43,32 +41,18 @@ public class TransactionController : ControllerBase
     [HttpPost("InsertTransaction")]
     public ActionResult<TransactionDTO> InsertTransaction([FromBody] Transaction transaction)
     {
-        // Server-side receiver existence check and capture matched login
-        var receiver = (transaction.Receiver ?? string.Empty).Trim().ToLower();
-        var logins = _loginService.GetAllLogins();
-        var found = logins.FirstOrDefault(l => ((l.Username ?? string.Empty).ToLower() == receiver)
-                                            || ((l.Email ?? string.Empty).ToLower() == receiver));
-
-        if (found == null)
-        {
-            return BadRequest(new { message = "Receiver not found" });
-        }
-
-        // MODIFY THE BALANCES OF BOTH CLIENTS
-        var sender = transaction.Sender;
-
-        
-
 
         _transactionService.InsertTransaction(transaction);
+
         var transactionDTO = new TransactionDTO
         {
             TransactionId = transaction.TransactionId,
-            Sender = transaction.Sender ?? string.Empty,
-            Receiver = transaction.Receiver ?? string.Empty,
+            Sender = transaction.Sender,
+            Receiver = transaction.Receiver,
             Amount = transaction.Amount,
             DateTime = transaction.DateTime,
-            Reason = transaction.Reason ?? string.Empty
+            Reason = transaction.Reason ?? string.Empty,
+
         };
 
         return Ok(transactionDTO);

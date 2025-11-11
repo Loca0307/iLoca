@@ -5,11 +5,16 @@ namespace Api.Services;
 
 public class TransactionService : ITransactionService
 {
-    private readonly TransactionRepository _transactionRepository;
+    private readonly ITransactionRepository _transactionRepository;
+    private readonly IClientRepository _clientRepository;
+    private readonly ILoginRepository _loginRepository;
 
-    public TransactionService(TransactionRepository transactionRepository)
+    public TransactionService(ITransactionRepository transactionRepository,
+    IClientRepository clientRepository, ILoginRepository loginRepository)
     {
         _transactionRepository = transactionRepository;
+        _clientRepository = clientRepository;
+        _loginRepository = loginRepository;
     }
 
     public List<Transaction> GetAllTransactions()
@@ -19,10 +24,15 @@ public class TransactionService : ITransactionService
 
     public void InsertTransaction(Transaction transaction)
     {
-        var localTime = DateTime.Now;
-
         // To have the time taken in local time
+        var localTime = DateTime.Now;
         transaction.DateTime = DateTime.SpecifyKind(localTime, DateTimeKind.Local);
+
+        /* - Check for existing Iban
+           - Check if logged in client has the sent amount 
+           - Update the sender and receiver clients' amounts
+        */
+
         _transactionRepository.InsertTransaction(transaction);
     }
     
