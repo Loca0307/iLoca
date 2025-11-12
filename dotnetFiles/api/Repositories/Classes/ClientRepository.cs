@@ -103,7 +103,8 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT ClientId, FirstName, LastName, Email, Phone, Iban, Balance FROM clients
+            @"SELECT client_id, first_name, last_name, email, phone, iban, balance 
+            FROM clients
             WHERE Email = @email", conn
         );
 
@@ -137,7 +138,8 @@ public class ClientRepository : IClientRepository
 
         using var cmd = new NpgsqlCommand(
             @"SELECT client_id, first_name, last_name, email, phone, iban, balance 
-            FROM clients WHERE Iban = @iban",
+            FROM clients 
+            WHERE Iban = @iban",
             conn);
 
         cmd.Parameters.AddWithValue("iban", iban);
