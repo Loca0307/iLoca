@@ -73,16 +73,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const homeLinks = document.getElementById('home-links');
     // We'll use localStorage to store the username after login/registration
     const loggedInUsername = localStorage.getItem('loggedInUsername');
+    // There are two anchors that point to /html/login.html in the home-actions:
+    // the first is the "Login" button, the second is the "Profile" button.
+    let loginLink = null;
+    let profileLink = null;
+    if (homeLinks) {
+        const loginAnchors = homeLinks.querySelectorAll('a[href="/html/login.html"]');
+        if (loginAnchors && loginAnchors.length > 0) {
+            loginLink = loginAnchors[0];
+            if (loginAnchors.length > 1) profileLink = loginAnchors[1];
+        }
+    }
+
     if (loggedInUsername) {
+        // Show username and show Profile button, hide Login button
         let infoHtml = `<p style="color: #333; font-size: 1.1rem; margin-bottom: 1rem;">Logged in as <strong>${loggedInUsername}</strong></p>`;
         userInfoDiv.innerHTML = infoHtml;
-        // Optionally, hide the login link if logged in
-        if (homeLinks) {
-            const loginLink = homeLinks.querySelector('a[href="/html/login.html"]');
-            if (loginLink) loginLink.style.display = 'none';
-        }
+        if (loginLink) loginLink.style.display = 'none';
+        if (profileLink) profileLink.style.display = '';
     } else {
+        // Not logged in: hide Profile button (if present) and ensure Login is visible
         userInfoDiv.innerHTML = '';
+        if (profileLink) profileLink.style.display = 'none';
+        if (loginLink) loginLink.style.display = '';
     }
 });
 </script>
