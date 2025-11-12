@@ -23,6 +23,32 @@ header h1 {
     font-size: 1.8rem;
 }
 
+header h1 a#site-logo {
+    color: white;
+    text-decoration: none;
+}
+
+/* ensure site-logo heading doesn't disrupt header layout */
+header h1.site-logo {
+    margin: 0;
+}
+header h1.site-logo a#site-logo {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8rem;
+}
+
+/* Force site-title link to be white and remove underline in all states */
+header h1.site-logo a#site-logo,
+header h1.site-logo a#site-logo:link,
+header h1.site-logo a#site-logo:visited,
+header h1.site-logo a#site-logo:hover,
+header h1.site-logo a#site-logo:active,
+header h1.site-logo a#site-logo:focus {
+    color: white !important;
+    text-decoration: none !important;
+}
+
 header nav a {
     color: white;
     text-decoration: none;
@@ -30,8 +56,55 @@ header nav a {
     transition: 0.3s;
 }
 
-header nav a:hover {
-    text-decoration: underline;
+/* Force header nav links to be white and remove underline in all states
+   This prevents browser default visited color (purple) or underlines */
+header nav a,
+header nav a:link,
+header nav a:visited,
+header nav a:hover,
+header nav a:active,
+header nav a:focus {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Logo image in header: keep same visual style as text logo (no underline) */
+header .site-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header .site-logo img {
+    height: 36px;
+    display: block;
+}
+
+header .site-logo a {
+    color: white;
+    text-decoration: none; /* ensure no underline */
+}
+
+/* Use the .site-logo class to style the top-left logo link across all pages */
+.site-logo a,
+.site-logo a:link,
+.site-logo a:visited,
+.site-logo a:hover,
+.site-logo a:active,
+.site-logo a:focus {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Highest-specificity override for the single logo anchor id to eliminate purple/underline */
+#site-logo,
+#site-logo:link,
+#site-logo:visited,
+#site-logo:hover,
+#site-logo:active,
+#site-logo:focus {
+    color: white !important;
+    text-decoration: none !important;
 }
 
 main {
