@@ -32,6 +32,30 @@ public class TransactionService : ITransactionService
            3) Update the sender and receiver clients' amounts
         */
 
+        // Select clients
+        var sender = _clientRepository.GetClientByEmail(transaction.SenderEmail);
+        var receiver = _clientRepository.GetClientByIban(transaction.ReceiverIban);
+        if (receiver == null)
+        {
+            throw new InvalidOperationException($"Receiver with IBAN '{transaction.ReceiverIban}' not found.");
+        }
+
+        if (sender == null)
+        {
+            throw new InvalidOperationException($"Sender not found.");
+        }
+
+        // Check if the sender has minimum amount
+        var senderBalanceMin = _clientRepository.CheckBalance(sender, transaction.Amount);
+        if (@senderBalanceMin) {
+            throw new InvalidOperationException($"You don't have enough credit on your account for this transaction.");
+        }
+
+
+        // Edit the balance of both clients (subtractor for the sender)
+
+        _clientRepository.EditBalance(sender, transaction.Amount * -1);
+        _clientRepository.EditBalance(receiver, transaction.Amount);
 
         _transactionRepository.InsertTransaction(transaction);
     }

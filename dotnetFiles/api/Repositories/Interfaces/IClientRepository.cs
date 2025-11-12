@@ -11,4 +11,7 @@ public interface IClientRepository
     public void DeleteAllClients();
     public Client? GetClientByEmail(string email);
     public Client? GetClientByIban(string iban);
+    public Boolean CheckBalance(Client client, decimal amount);
+    void EditBalance(Client client, decimal amount);
+
 }

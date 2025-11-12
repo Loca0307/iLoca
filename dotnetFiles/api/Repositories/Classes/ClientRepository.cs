@@ -128,11 +128,11 @@ public class ClientRepository : IClientRepository
 
         return null;
     }
-    
+
     // RETURN A CLIENT(if found) THAT MATCHES WITH THE GIVEN IBAN
     public Client? GetClientByIban(string iban)
     {
-        
+
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
@@ -162,5 +162,44 @@ public class ClientRepository : IClientRepository
 
         return null;
     }
+
+    public Boolean CheckBalance(Client client, decimal amount)
+    {
+        // Null client => cannot check
+        if (client == null)
+            return false;
+
+
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"SELECT balance FROM clients WHERE client_id = @id", conn);
+
+        cmd.Parameters.AddWithValue("id", client.ClientId);
+
+        var result = cmd.ExecuteScalar();
+
+        if (result == null || result == DBNull.Value)
+            return false;
+
+        var balance = Convert.ToDecimal(result);
+        return balance >= amount;
+    }
     
+        public void EditBalance(Client client, decimal amount)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+        @"UPDATE clients
+        SET balance = balance + @amount
+        WHERE client_id = @clientId;"
+        , conn);
+
+        cmd.Parameters.AddWithValue("clientId", client.ClientId);
+        cmd.Parameters.AddWithValue("amount", amount);
+        cmd.ExecuteNonQuery();
+    }
 }
