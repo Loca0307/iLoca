@@ -9,10 +9,12 @@ public class LoginService : ILoginService
 {
 
     public readonly ILoginRepository _loginRepository;
+    public readonly IClientRepository _clientRepository;
 
-    public LoginService(ILoginRepository loginRepository)
+    public LoginService(ILoginRepository loginRepository, IClientRepository clientRepository)
     {
         _loginRepository = loginRepository;
+        _clientRepository = clientRepository;
     }
     
     public List<Login> GetAllLogins()
@@ -22,6 +24,12 @@ public class LoginService : ILoginService
 
     public void InsertLogin(Login login)
     {
+        var clientCheck = _clientRepository.GetClientByEmail(login.Email);
+        if (clientCheck == null)
+        {
+            // Do not allow creating a Login without an associated Client
+            throw new InvalidOperationException("A client with the provided email must exist before creating a login.");
+        }
         // Hash the password before saving to database
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(login.Password);
         
@@ -64,7 +72,6 @@ public class LoginService : ILoginService
         bool isValid = BCrypt.Net.BCrypt.Verify(password, Login.Password);
         return isValid;
     }
-
 
     
 }

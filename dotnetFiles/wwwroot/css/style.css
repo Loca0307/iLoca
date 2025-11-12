@@ -4,7 +4,14 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f4f6f8;
     color: #333;
@@ -111,6 +118,7 @@ main {
     max-width: 900px;
     margin: 2rem auto;
     padding: 0 1rem;
+    flex: 1 0 auto; /* allow main to grow so footer is pushed to bottom */
 }
 
 .transaction-form, .transaction-table {
@@ -183,9 +191,75 @@ footer {
     padding: 1rem;
     background: #333;
     color: white;
-    margin-top: 2rem;
+    margin-top: 0; /* footer stays at bottom via flex layout */
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+}
+
+/* Home page large card styles */
+.home-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.home-card {
+    background: white;
+    padding: 64px 64px 72px 64px; /* larger top/bottom padding */
+    border-radius: 14px;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.08);
+    max-width: 860px;
+    width: 100%;
+    text-align: center;
+}
+
+.home-title {
+    color: #4CAF50;
+    margin-bottom: 1.25rem;
+    font-size: 2.4rem;
+    line-height: 1.1;
+}
+
+.home-subtitle {
+    font-size: 1.35rem;
+    color: #333;
+    margin-bottom: 2.25rem;
+}
+
+.home-user-info {
+    color: #333;
+    font-size: 1.18rem;
+    margin-bottom: 1rem;
+}
+
+.home-footer-note {
+    color: #666;
+    font-size: 1.05rem;
+    margin-top: 1.5rem;
+}
+
+.main-action-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #4CAF50 60%, #43a047 100%);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(76,175,80,0.09);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    border: none;
+    margin: 0.35rem; /* small gap between buttons */
+}
+
+.main-action-btn:hover, .main-action-btn:focus {
+    background: linear-gradient(90deg, #43a047 60%, #388e3c 100%);
+    box-shadow: 0 6px 20px rgba(76,175,80,0.15);
+    transform: translateY(-2px) scale(1.03);
+    color: #fff;
 }
 
 /* ========================================
