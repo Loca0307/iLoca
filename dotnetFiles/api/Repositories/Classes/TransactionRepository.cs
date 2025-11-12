@@ -54,8 +54,8 @@ public class TransactionRepository : ITransactionRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO transactions (Sender, Receiver,
-            Amount, DateTime, Reason)
+            @"INSERT INTO transactions (sender_email, receiver_iban,
+            amount, dateTime, reason)
             VALUES (@sender, @receiver, @amount, @dateTime, @reason)", conn);
 
         // Define the Transaction values
