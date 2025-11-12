@@ -27,7 +27,7 @@ public class TransactionController : ControllerBase
         var transactionDTOs = transactions.Select(t => new TransactionDTO
         {
             TransactionId = t.TransactionId,
-            Sender = t.Sender,
+            SenderEmail = t.SenderEmail,
             ReceiverIban = t.ReceiverIban,
             Amount = t.Amount,
             DateTime = t.DateTime,
@@ -47,7 +47,7 @@ public class TransactionController : ControllerBase
         var transactionDTO = new TransactionDTO
         {
             TransactionId = transaction.TransactionId,
-            Sender = transaction.Sender,
+            SenderEmail = transaction.SenderEmail,
             ReceiverIban = transaction.ReceiverIban,
             Amount = transaction.Amount,
             DateTime = transaction.DateTime,

@@ -35,7 +35,7 @@ public class TransactionRepository : ITransactionRepository
                 new Transaction
                 {
                     TransactionId = reader.GetInt32(0),
-                    Sender = reader.GetString(1),
+                    SenderEmail = reader.GetString(1),
                     ReceiverIban = reader.GetString(2),
                     Amount = reader.GetInt32(3),
                     DateTime = reader.GetDateTime(4),
@@ -59,7 +59,7 @@ public class TransactionRepository : ITransactionRepository
             VALUES (@sender, @receiver, @amount, @dateTime, @reason)", conn);
 
         // Define the Transaction values
-        cmd.Parameters.AddWithValue("sender", transaction.Sender);
+        cmd.Parameters.AddWithValue("sender", transaction.SenderEmail);
         cmd.Parameters.AddWithValue("receiver", transaction.ReceiverIban);
         cmd.Parameters.AddWithValue("amount", transaction.Amount);
         cmd.Parameters.AddWithValue("dateTime", transaction.DateTime);

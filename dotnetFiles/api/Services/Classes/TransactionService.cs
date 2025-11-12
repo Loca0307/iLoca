@@ -31,12 +31,13 @@ public class TransactionService : ITransactionService
            2) Check if logged in client has the sent amount 
            3) Update the sender and receiver clients' amounts
         */
-        var sender = transaction.Sender;
+        var SenderEmail = transaction.SenderEmail;
 
         // 1)
         var receiverIban = transaction.ReceiverIban;
 
-        // Lookup receiver by IBAN using clientRepository
+        // Lookup receiver and sender using clientRepository
+        var sender = _clientRepository.GetClientByEmail(SenderEmail);
         var receiver = _clientRepository.GetClientByIban(receiverIban);
         
         if (receiver == null)
