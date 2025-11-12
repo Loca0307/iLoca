@@ -64,7 +64,7 @@ public class ClientRepository : IClientRepository
         cmd.Parameters.AddWithValue("email", client.Email);
         cmd.Parameters.AddWithValue("phone", client.Phone);
         cmd.Parameters.AddWithValue("iban", client.Iban);
-    cmd.Parameters.AddWithValue("balance", 100);
+        cmd.Parameters.AddWithValue("balance", 1000);
 
         // To actually run the query 
         cmd.ExecuteNonQuery();

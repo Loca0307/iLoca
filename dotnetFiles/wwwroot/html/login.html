@@ -5,10 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Bankuum Tubo</title>
     <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        /* Profile card styles for logged-in user (bigger, centered) */
+        #profile-section {
+            display: none;
+            margin: 1.5rem auto 0 auto;
+            text-align: center;
+            max-width: 620px;
+            background: #f8fafb;
+            padding: 24px 28px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
+
+        #profile-username {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        #profile-email {
+            color: #555;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+        }
+
+        #profile-iban {
+            color: #333;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 6px 0;
+        }
+
+        #profile-balance {
+            color: #1b6e22;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 6px 0 12px 0;
+        }
+
+        #logout-btn {
+            margin-top: 12px;
+            padding: 0.9rem 1.6rem;
+            font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h1>Bankuum Tubo</h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
     </header>
 
     <main>
@@ -53,10 +106,12 @@
                 <div id="profile-section" style="display: none; margin-top: 1rem; text-align: center;">
                     <p id="profile-username" style="font-weight:600; color:#333; margin-bottom:0.5rem;"></p>
                     <p id="profile-email" style="color:#666; font-size:0.95rem; margin-top:0; margin-bottom:1rem;"></p>
+                    <p id="profile-iban" style="color:#333; font-size:1.1rem; font-weight:600; margin:0.2rem 0;"></p>
+                    <p id="profile-balance" style="color:#2b7a0b; font-size:1.3rem; font-weight:700; margin:0.2rem 0;"></p>
                     <button id="logout-btn" class="btn-login" style="background:#e53935; border:none; padding:0.6rem 1.2rem; color:#fff; cursor:pointer; border-radius:6px;">Logout</button>
                 </div>
 
-                <div class="signup-link">
+                <div id="signup-link" class="signup-link">
                     Don't have an account? <a href="/html/register.html">Register</a>
                 </div>
             </div>
@@ -143,6 +198,8 @@
             const username = localStorage.getItem('loggedInUsername');
             const email = localStorage.getItem('loggedInEmail');
 
+            const signupLink = document.getElementById('signup-link');
+
             if (username) {
                 // Hide login form and show profile info
                 const form = document.getElementById('login-form');
@@ -150,7 +207,30 @@
                 profileUsername.textContent = `Logged in as ${username}`;
                 // Show email in profile; do not expose clientId or IBAN in localStorage
                 profileEmail.textContent = email ? `Email: ${email}` : '';
+                // Hide the signup link when logged in
+                if (signupLink) signupLink.style.display = 'none';
+                // Fetch client details from the backend to show iban and balance
+                (async () => {
+                    try {
+                        const resp = await fetch(`/client/GetClientByEmail?email=${encodeURIComponent(email)}`);
+                        if (resp.ok) {
+                            const client = await resp.json();
+                            if (client) {
+                                const ibanEl = document.getElementById('profile-iban');
+                                const balEl = document.getElementById('profile-balance');
+                                ibanEl.textContent = client.iban ? `IBAN: ${client.iban}` : '';
+                                balEl.textContent = `Balance: ${Number(client.balance).toFixed(2)} €`;
+                            }
+                        }
+                    } catch (err) {
+                        // ignore silently
+                    }
+                })();
                 profileSection.style.display = 'block';
+            }
+            else {
+                // Ensure signup link is visible when logged out
+                if (signupLink) signupLink.style.display = '';
             }
 
             if (logoutBtn) {

@@ -42,7 +42,15 @@ public class TransactionController : ControllerBase
     public ActionResult<TransactionDTO> InsertTransaction([FromBody] Transaction transaction)
     {
 
-        _transactionService.InsertTransaction(transaction);
+        try
+        {
+            _transactionService.InsertTransaction(transaction);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Known business errors (e.g., insufficient funds) -> return 400 so frontend can show a popup
+            return BadRequest(new { message = ex.Message });
+        }
 
         var transactionDTO = new TransactionDTO
         {
