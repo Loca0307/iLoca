@@ -72,10 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const homeLinks = document.getElementById('home-links');
     // We'll use localStorage to store the username after login/registration
     const loggedInUsername = localStorage.getItem('loggedInUsername');
-    const loggedInClientIban = localStorage.getItem('loggedInClientIban');
     if (loggedInUsername) {
         let infoHtml = `<p style="color: #333; font-size: 1.1rem; margin-bottom: 1rem;">Logged in as <strong>${loggedInUsername}</strong></p>`;
-        if (loggedInClientIban) infoHtml += `<p style="color:#666; font-size:0.95rem; margin-bottom:1rem;">IBAN: <strong>${loggedInClientIban}</strong></p>`;
         userInfoDiv.innerHTML = infoHtml;
         // Optionally, hide the login link if logged in
         if (homeLinks) {

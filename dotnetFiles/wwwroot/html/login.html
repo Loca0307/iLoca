@@ -49,6 +49,13 @@
                     <button type="submit" class="btn-login">Login</button>
                 </form>
 
+                <!-- Profile section (shown when user is already logged in) -->
+                <div id="profile-section" style="display: none; margin-top: 1rem; text-align: center;">
+                    <p id="profile-username" style="font-weight:600; color:#333; margin-bottom:0.5rem;"></p>
+                    <p id="profile-email" style="color:#666; font-size:0.95rem; margin-top:0; margin-bottom:1rem;"></p>
+                    <button id="logout-btn" class="btn-login" style="background:#e53935; border:none; padding:0.6rem 1.2rem; color:#fff; cursor:pointer; border-radius:6px;">Logout</button>
+                </div>
+
                 <div class="signup-link">
                     Don't have an account? <a href="/html/register.html">Register</a>
                 </div>
@@ -104,14 +111,14 @@
                         // ignore
                     }
 
-                    // Fetch client by email to get clientId and iban
+                    // Fetch client by email to get clientId and iban (we'll store email for transactions and username for homepage)
                     try {
                         const clientResp = await fetch(`/Client/GetClientByEmail?email=${encodeURIComponent(email)}`);
                         if (clientResp.ok) {
                             const client = await clientResp.json();
                             if (client) {
-                                if (client.clientId !== undefined && client.clientId !== null) localStorage.setItem('loggedInClientId', String(client.clientId));
-                                if (client.iban) localStorage.setItem('loggedInClientIban', client.iban);
+                                // Save the authenticated email for transaction sender
+                                localStorage.setItem('loggedInEmail', email);
                                 if (!localStorage.getItem('loggedInUsername') && client.firstName) localStorage.setItem('loggedInUsername', client.firstName);
                             }
                         }
@@ -135,6 +142,41 @@
             } catch (error) {
                 errorMsg.textContent = 'Network error. Please try again.';
                 errorMsg.style.display = 'block';
+            }
+        });
+        
+        // Profile display & logout handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileSection = document.getElementById('profile-section');
+            const profileUsername = document.getElementById('profile-username');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            const username = localStorage.getItem('loggedInUsername');
+            const email = localStorage.getItem('loggedInEmail');
+            const clientId = localStorage.getItem('loggedInClientId');
+
+            if (username) {
+                // Hide login form and show profile info
+                const form = document.getElementById('login-form');
+                if (form) form.style.display = 'none';
+                profileUsername.textContent = `Logged in as ${username}`;
+                // Show email in profile; do not expose clientId or IBAN in localStorage
+                profileEmail.textContent = email ? `Email: ${email}` : '';
+                profileSection.style.display = 'block';
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    // Clear the specific localStorage keys used by the app
+                    localStorage.removeItem('loggedInUsername');
+                    localStorage.removeItem('loggedInEmail');
+                    // We didn't save clientId/IBAN; only clear username/email/authToken
+                    // Optionally clear any other auth keys if present
+                    try { localStorage.removeItem('authToken'); } catch (e) {}
+                    // Redirect to home page
+                    window.location.href = '/html/index.html';
+                });
             }
         });
     </script>

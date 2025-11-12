@@ -87,9 +87,8 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Sender identifier extracted from localStorage (email or iban depending on your login flow)
-        const sender = localStorage.getItem('loggedInUsername') || '';
-        const senderClientId = localStorage.getItem('loggedInClientId') || null;
+    // Sender identifier extracted from localStorage: prefer email for transactions, fallback to username
+    const sender = localStorage.getItem('loggedInEmail') || localStorage.getItem('loggedInUsername') || '';
             // collect receiver IBAN
             const receiverIban = document.getElementById('receiverIban').value;
         const amount = parseFloat(document.getElementById('amount').value);
