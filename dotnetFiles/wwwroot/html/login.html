@@ -111,20 +111,8 @@
                         // ignore
                     }
 
-                    // Fetch client by email to get clientId and iban (we'll store email for transactions and username for homepage)
-                    try {
-                        const clientResp = await fetch(`/Client/GetClientByEmail?email=${encodeURIComponent(email)}`);
-                        if (clientResp.ok) {
-                            const client = await clientResp.json();
-                            if (client) {
-                                // Save the authenticated email for transaction sender
-                                localStorage.setItem('loggedInEmail', email);
-                                if (!localStorage.getItem('loggedInUsername') && client.firstName) localStorage.setItem('loggedInUsername', client.firstName);
-                            }
-                        }
-                    } catch (err) {
-                        // ignore
-                    }
+                    // Save authenticated email for transactions (no other client data saved)
+                    localStorage.setItem('loggedInEmail', email);
 
                     // Fallback username
                     if (!localStorage.getItem('loggedInUsername')) {
@@ -154,7 +142,6 @@
 
             const username = localStorage.getItem('loggedInUsername');
             const email = localStorage.getItem('loggedInEmail');
-            const clientId = localStorage.getItem('loggedInClientId');
 
             if (username) {
                 // Hide login form and show profile info
@@ -168,12 +155,9 @@
 
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
-                    // Clear the specific localStorage keys used by the app
+                    // Clear only the username and email from localStorage
                     localStorage.removeItem('loggedInUsername');
                     localStorage.removeItem('loggedInEmail');
-                    // We didn't save clientId/IBAN; only clear username/email/authToken
-                    // Optionally clear any other auth keys if present
-                    try { localStorage.removeItem('authToken'); } catch (e) {}
                     // Redirect to home page
                     window.location.href = '/html/index.html';
                 });

@@ -63,15 +63,23 @@
             const tbody = document.getElementById('transactionsBody');
             tbody.innerHTML = '';
             transactions.forEach(t => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${t.transactionId}</td>
-                        <td>${t.sender}</td>
-                        <td>${t.receiverIban}</td>
-                    <td>${t.amount}</td>
-                    <td>${new Date(t.dateTime).toLocaleString()}</td>
-                    <td>${t.reason}</td>
-                `;
+                    const row = document.createElement('tr');
+                    // tolerate different JSON property names (camelCase or PascalCase)
+                    const idVal = t.transactionId || t.transactionID || t.TransactionId || t.TransactionID || '';
+                    const senderVal = t.sender || t.senderEmail || t.Sender || t.SenderEmail || '';
+                    const receiverVal = t.receiverIban || t.receiverIBAN || t.ReceiverIban || t.ReceiverIBAN || '';
+                    const amountVal = t.amount || t.Amount || 0;
+                    const dateVal = t.dateTime || t.DateTime || null;
+                    const reasonVal = t.reason || t.Reason || '';
+
+                    row.innerHTML = `
+                        <td>${idVal}</td>
+                        <td>${senderVal}</td>
+                        <td>${receiverVal}</td>
+                        <td>${amountVal}</td>
+                        <td>${dateVal ? new Date(dateVal).toLocaleString() : ''}</td>
+                        <td>${reasonVal}</td>
+                    `;
                 tbody.appendChild(row);
             });
         } catch (error) {
@@ -87,50 +95,74 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-    // Sender identifier extracted from localStorage: prefer email for transactions, fallback to username
-    const sender = localStorage.getItem('loggedInEmail') || localStorage.getItem('loggedInUsername') || '';
-            // collect receiver IBAN
-            const receiverIban = document.getElementById('receiverIban').value;
+        // Sender identifier extracted from localStorage: require loggedInEmail for transactions
+        const senderEmail = localStorage.getItem('loggedInEmail') || '';
+
+        // collect receiver IBAN
+        const receiverIban = document.getElementById('receiverIban').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
-        const reason = document.getElementById('reason').value;
+        const reason = document.getElementById('reason').value.trim();
         const messageDiv = document.getElementById('transaction-message');
         // Server will validate receiver existence; just show pending message
         messageDiv.textContent = 'Submitting transaction...';
         messageDiv.style.color = 'black';
-        if (!sender) {
-            messageDiv.textContent = 'Error: No logged-in user found.';
+
+        if (!senderEmail) {
+            messageDiv.textContent = 'Error: No logged-in email found. Please log in.';
             messageDiv.style.color = 'red';
             return;
         }
+
+        if (!receiverIban) {
+            messageDiv.textContent = 'Error: Receiver IBAN is required.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+
+        if (Number.isNaN(amount) || amount <= 0) {
+            messageDiv.textContent = 'Error: Amount must be a positive number.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+
+        // Build payload; only send SenderEmail (backend will resolve the sender client)
         const transaction = {
-            sender,
-            senderClientId,
-            receiverIban,
-            amount,
-            reason
+            SenderEmail: senderEmail,
+            ReceiverIban: receiverIban,
+            Amount: Math.round(amount),
+            Reason: reason
         };
+
         try {
             const response = await fetch('http://localhost:5027/Transaction/InsertTransaction', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(transaction)
             });
-            if (!response.ok) throw new Error('Failed to add transaction');
+
+            if (!response.ok) {
+                let errMsg = 'Failed to add transaction';
+                try { const err = await response.json(); if (err && err.message) errMsg = err.message; } catch {}
+                throw new Error(errMsg);
+            }
+
             let timestampMsg = '';
             try {
                 const data = await response.json();
-                if (data && data.dateTime) {
-                    // Show server time reflected by API
-                    timestampMsg = ` (Timestamp: ${new Date(data.dateTime).toLocaleString()})`;
+                if (data && (data.dateTime || data.DateTime)) {
+                    const dt = data.dateTime || data.DateTime;
+                    timestampMsg = ` (Timestamp: ${new Date(dt).toLocaleString()})`;
                 }
-            } catch {}
+            } catch(e){}
+
             messageDiv.textContent = 'Transaction added successfully!' + timestampMsg;
             messageDiv.style.color = 'green';
             form.reset();
             // Await reload to ensure table updates immediately
             await loadTransactions();
         } catch (error) {
-            messageDiv.textContent = 'Error adding transaction';
+            console.error('Transaction submission error:', error);
+            messageDiv.textContent = 'Error adding transaction: ' + (error && error.message ? error.message : 'Unknown error');
             messageDiv.style.color = 'red';
         }
     });
