@@ -64,7 +64,7 @@ public class ClientRepository : IClientRepository
         cmd.Parameters.AddWithValue("email", client.Email);
         cmd.Parameters.AddWithValue("phone", client.Phone);
         cmd.Parameters.AddWithValue("iban", client.Iban);
-        cmd.Parameters.AddWithValue("balance", 0);
+    cmd.Parameters.AddWithValue("balance", 100);
 
         // To actually run the query 
         cmd.ExecuteNonQuery();
@@ -186,8 +186,8 @@ public class ClientRepository : IClientRepository
         var balance = Convert.ToDecimal(result);
         return balance >= amount;
     }
-    
-        public void EditBalance(Client client, decimal amount)
+
+    public void EditBalance(Client client, decimal amount)
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
@@ -202,4 +202,5 @@ public class ClientRepository : IClientRepository
         cmd.Parameters.AddWithValue("amount", amount);
         cmd.ExecuteNonQuery();
     }
+    
 }

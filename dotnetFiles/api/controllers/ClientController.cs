@@ -87,7 +87,52 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("GetClientByEmail")]
-    public ActionResult<Client?> GetClientByEmail([FromQuery] string email) {
+    public ActionResult<Client?> GetClientByEmail([FromQuery] string email)
+    {
         return _clientService.GetClientByEmail(email);
     }
+
+    /*
+    // EDIT THE BALANCE OF A CLIENT
+    [HttpPost("EditBalance")]
+    public ActionResult EditBalance([FromBody] System.Text.Json.JsonElement body) // PARAMETER DEFINED TO TAKE A JSON FROM POSTMAN
+    {
+        if (body.ValueKind != System.Text.Json.JsonValueKind.Object)
+            return BadRequest(new { message = "Invalid body" });
+
+        if (!body.TryGetProperty("client", out var clientElem))
+            return BadRequest(new { message = "Missing 'client' object in body" });
+
+        if (!body.TryGetProperty("amount", out var amountElem))
+            return BadRequest(new { message = "Missing 'amount' in body" });
+
+        Api.Models.Client? client;
+        try
+        {
+            client = System.Text.Json.JsonSerializer.Deserialize<Api.Models.Client>(clientElem.GetRawText());
+        }
+        catch
+        {
+            return BadRequest(new { message = "Invalid 'client' object" });
+        }
+
+        if (client == null)
+            return BadRequest(new { message = "Invalid 'client' object" });
+
+        decimal amount;
+        try
+        {
+            amount = amountElem.GetDecimal();
+        }
+        catch
+        {
+            // fallback to double -> decimal
+            try { amount = Convert.ToDecimal(amountElem.GetDouble()); }
+            catch { return BadRequest(new { message = "Invalid 'amount' value" }); }
+        }
+
+        _clientService.EditBalance(client, amount);
+        return Ok(new { message = "Client's balance has been modified" });
+    }
+    */
 }

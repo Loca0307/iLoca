@@ -37,9 +37,15 @@ public class ClientService : IClientService
     {
         _clientRepository.DeleteAllClients();
     }
-    
+
     public Client? GetClientByEmail(string email)
     {
         return _clientRepository.GetClientByEmail(email);
     }
+    
+    public void EditBalance(Client client, decimal amount)
+    {
+        _clientRepository.EditBalance(client, amount);
+    }
+
 }

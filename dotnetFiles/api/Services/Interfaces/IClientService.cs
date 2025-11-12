@@ -8,15 +8,11 @@ namespace Api.Services;
 // Interface to be implemented by the CLientService class
 public interface IClientService
 {
-
     public List<Client> GetAllClients();
-
     public void InsertClient(Client client);
-
     public void DeleteClient(Client client);
-
     public void DeleteAllClients();
-
     public Client? GetClientByEmail(string email);
+    public void EditBalance(Client client, decimal amount);
 
 }

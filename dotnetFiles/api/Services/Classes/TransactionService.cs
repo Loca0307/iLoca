@@ -45,9 +45,10 @@ public class TransactionService : ITransactionService
             throw new InvalidOperationException($"Sender not found.");
         }
 
-        // Check if the sender has minimum amount
-        var senderBalanceMin = _clientRepository.CheckBalance(sender, transaction.Amount);
-        if (@senderBalanceMin) {
+        // Check if the sender has sufficient funds
+        var senderHasEnough = _clientRepository.CheckBalance(sender, transaction.Amount);
+        if (!senderHasEnough)
+        {
             throw new InvalidOperationException($"You don't have enough credit on your account for this transaction.");
         }
 

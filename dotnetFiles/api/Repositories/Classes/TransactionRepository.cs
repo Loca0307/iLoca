@@ -63,7 +63,7 @@ public class TransactionRepository : ITransactionRepository
         cmd.Parameters.AddWithValue("receiver", transaction.ReceiverIban);
         cmd.Parameters.AddWithValue("amount", transaction.Amount);
         cmd.Parameters.AddWithValue("dateTime", transaction.DateTime);
-        cmd.Parameters.AddWithValue("Reason", transaction.Reason);
+    cmd.Parameters.AddWithValue("reason", transaction.Reason);
 
         cmd.ExecuteNonQuery();
     }
