@@ -4,12 +4,12 @@
 
 - Frontend: HTML, CSS
 - Backend: .NET
-- Database: PostgreSQL 
+- Database: PostgreSQL, Dbeaver
 - Testing: xUnit
 - Secondary: Docker, Postman
 - Security: 
     - BCrypt.Net-Next for password hashing
-    - (JSON Web Token)
+    - (JSON Web Token) and more
 
 
 # Notes
@@ -40,7 +40,8 @@ So in this case: docker run -p 5027:5027 "image name"
 
 # Postgre
 
-Install `postGre` on your pc
+Install `PostGre` on your pc
+Install `Dbeaver` on your pc
 
 # Test
 
