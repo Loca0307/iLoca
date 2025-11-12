@@ -31,21 +31,6 @@ public class TransactionService : ITransactionService
            2) Check if logged in client has the sent amount 
            3) Update the sender and receiver clients' amounts
         */
-        var SenderEmail = transaction.SenderEmail;
-
-        // 1)
-        var receiverIban = transaction.ReceiverIban;
-
-        // Lookup receiver and sender using clientRepository
-        var sender = _clientRepository.GetClientByEmail(SenderEmail);
-        var receiver = _clientRepository.GetClientByIban(receiverIban);
-        
-        if (receiver == null)
-        {
-            throw new InvalidOperationException("Receiver with provided IBAN not found.");
-        }
-        
-        // 2) 
 
 
         _transactionRepository.InsertTransaction(transaction);
