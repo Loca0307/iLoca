@@ -115,18 +115,18 @@ header .site-logo a {
 }
 
 main {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    max-width: 1100px; /* increase overall content width */
+    margin: 2.25rem auto;
+    padding: 0 1.25rem;
     flex: 1 0 auto; /* allow main to grow so footer is pushed to bottom */
 }
 
 .transaction-form, .transaction-table {
     background: white;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 2.5rem; /* increased padding for larger boxes */
+    margin-bottom: 2.25rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
 }
 
 .transaction-form h2, .transaction-table h2 {
@@ -177,7 +177,7 @@ thead {
 }
 
 th, td {
-    padding: 0.8rem;
+    padding: 1rem; /* slightly larger cells */
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -207,10 +207,10 @@ footer {
 
 .home-card {
     background: white;
-    padding: 64px 64px 72px 64px; /* larger top/bottom padding */
+    padding: 72px 72px 80px 72px; /* slightly bigger card */
     border-radius: 14px;
-    box-shadow: 0 14px 36px rgba(0,0,0,0.08);
-    max-width: 860px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.09);
+    max-width: 980px; /* wider home card */
     width: 100%;
     text-align: center;
 }

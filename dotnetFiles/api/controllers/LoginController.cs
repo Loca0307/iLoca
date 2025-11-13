@@ -13,12 +13,10 @@ namespace Api.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly ILoginService _loginService;
-    private readonly IClientService _clientService;
 
-    public LoginController(ILoginService loginService, IClientService clientService)
+    public LoginController(ILoginService loginService)
     {
         _loginService = loginService;
-        _clientService = clientService;
     }
 
 
