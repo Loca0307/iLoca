@@ -48,6 +48,4 @@ public class ClientControllerTests
 
         mockServ.Verify(s => s.GetAllClients(), Times.Once);
     }
-    
-    
 }

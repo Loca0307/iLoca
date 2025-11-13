@@ -204,7 +204,7 @@ public class ClientRepository : IClientRepository
         cmd.ExecuteNonQuery();
     }
     
-    // Atomic transfer: lock sender and receiver rows, verify sender balance, update balances and insert transaction
+    // ATOMIC TRANSFER: lock sender and receiver rows, verify sender balance, update balances and insert transaction
     public void TransferAndRecordTransaction(Client sender, Client receiver, Transaction transaction)
     {
         using var conn = _dbContext.GetConnection();

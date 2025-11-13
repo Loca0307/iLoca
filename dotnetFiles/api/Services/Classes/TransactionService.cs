@@ -35,11 +35,14 @@ public class TransactionService : ITransactionService
         // Select clients
         var sender = _clientRepository.GetClientByEmail(transaction.SenderEmail);
         var receiver = _clientRepository.GetClientByIban(transaction.ReceiverIban);
+        
+        // Check receiver
         if (receiver == null)
         {
             throw new InvalidOperationException($"Receiver with IBAN '{transaction.ReceiverIban}' not found.");
         }
 
+        // Check sender
         if (sender == null)
         {
             throw new InvalidOperationException($"Sender with Email '{transaction.SenderEmail}' not found.");
@@ -59,7 +62,7 @@ public class TransactionService : ITransactionService
         }
 
 
-        // Perform an atomic transfer (will check balance again, update balances and insert transaction in a DB transaction)
+        // Perform an atomic transfer 
         _clientRepository.TransferAndRecordTransaction(sender, receiver, transaction);
     
     }
