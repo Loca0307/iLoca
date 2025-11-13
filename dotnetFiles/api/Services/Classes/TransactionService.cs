@@ -45,6 +45,12 @@ public class TransactionService : ITransactionService
             throw new InvalidOperationException($"Sender with Email '{transaction.SenderEmail}' not found.");
         }
 
+        // Prevent sender and receiver to be the same
+        if (sender.ClientId == receiver.ClientId)
+        {
+            throw new InvalidOperationException("Sender and receiver must be different clients.");
+        }
+
         // Check if the sender has sufficient funds
         var senderHasEnough = _clientRepository.CheckBalance(sender, transaction.Amount);
         if (!senderHasEnough)
@@ -53,12 +59,9 @@ public class TransactionService : ITransactionService
         }
 
 
-        // Edit the balance of both clients (subtract for the sender)
-
-        _clientRepository.EditBalance(sender, transaction.Amount * -1);
-        _clientRepository.EditBalance(receiver, transaction.Amount);
-
-        _transactionRepository.InsertTransaction(transaction);
+        // Perform an atomic transfer (will check balance again, update balances and insert transaction in a DB transaction)
+        _clientRepository.TransferAndRecordTransaction(sender, receiver, transaction);
+    
     }
     
     public void DeleteTransaction(Transaction transaction)

@@ -13,5 +13,10 @@ public interface IClientRepository
     public Client? GetClientByIban(string iban);
     public Boolean CheckBalance(Client client, decimal amount);
     void EditBalance(Client client, decimal amount);
+    
+    // Perform an atomic transfer between two clients and record the transaction
+    // This method should ensure both balance updates and recording the transaction
+    // happen inside a single DB transaction with proper row locking.
+    void TransferAndRecordTransaction(Client Sender, Client Receiver, Transaction transaction);
 
 }
