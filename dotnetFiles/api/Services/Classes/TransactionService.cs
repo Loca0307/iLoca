@@ -42,7 +42,7 @@ public class TransactionService : ITransactionService
 
         if (sender == null)
         {
-            throw new InvalidOperationException($"Sender not found.");
+            throw new InvalidOperationException($"Sender with Email '{transaction.SenderEmail}' not found.");
         }
 
         // Check if the sender has sufficient funds
@@ -53,7 +53,7 @@ public class TransactionService : ITransactionService
         }
 
 
-        // Edit the balance of both clients (subtractor for the sender)
+        // Edit the balance of both clients (subtract for the sender)
 
         _clientRepository.EditBalance(sender, transaction.Amount * -1);
         _clientRepository.EditBalance(receiver, transaction.Amount);

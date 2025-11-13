@@ -29,6 +29,7 @@
 						<th>Email</th>
 						<th>Phone</th>
 						<th>IBAN</th>
+						<th>Balance</th>
 						<th>Delete</th> 
 					</tr>
 				</thead>
@@ -80,14 +81,15 @@
 					<td>${c.lastName}</td>
 					<td>${c.email}</td>
 					<td>${c.phone}</td>
-					<td>${c.iban || ''}</td>
-					<td><button class="remove-btn" data-id="${c.clientId}">Remove</button></td>
+						<td>${c.iban || ''}</td>
+						<td>${c.balance != null ? Number(c.balance).toFixed(2) : '0.00'}</td>
+						<td><button class="remove-btn" data-id="${c.clientId}">Remove</button></td>
 				`;
 				tbody.appendChild(row);
 			});
 		} catch (error) {
 			console.error(error);
-			tbody.innerHTML = '<tr><td colspan="6">Error loading clients</td></tr>';
+				tbody.innerHTML = '<tr><td colspan="8">Error loading clients</td></tr>';
 		}
 	}
 

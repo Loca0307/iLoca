@@ -48,7 +48,7 @@ public class TransactionController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            // Known business errors (e.g., insufficient funds) -> return 400 so frontend can show a popup
+            // Thi catch shows to the client if the transaction failed because of insufficient credit
             return BadRequest(new { message = ex.Message });
         }
 

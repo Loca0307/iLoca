@@ -119,3 +119,11 @@
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/Debug/net9.0/dotnetFiles.Tests.genruntimeconfig.cache
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/Debug/net9.0/ref/dotnetFiles.Tests.dll
 /Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/BCrypt.Net-Next.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

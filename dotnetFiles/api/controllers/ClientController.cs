@@ -39,7 +39,8 @@ public class ClientController : ControllerBase
             LastName = c.LastName,
             Email = c.Email,
             Phone = c.Phone,
-            Iban = c.Iban
+            Iban = c.Iban,
+            Balance = c.Balance
         }).ToList();
         
         return Ok(clientDTOs);
