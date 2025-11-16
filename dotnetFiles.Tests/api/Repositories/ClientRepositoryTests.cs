@@ -47,4 +47,14 @@ public class ClientRepositoryTests
     //     Assert.NotNull(result);
     // }
 
+    [Fact]
+    public void InsertClient_WhenCalled_InsertsAClient()
+    {
+        var mockDb = new Mock<IDbContext>();
+
+        var repository = new ClientRepository(mockDb.Object);
+
+        
+    }
+
 }

@@ -37,4 +37,19 @@ public class ClientServiceTests
         Assert.Single(result);
         Assert.Equal("John", result[0].FirstName);
     }
+
+    [Fact]
+    public void InsertClient_WhenCalled_InsertAClient()
+    {
+        var mockRepo = new Mock<IClientRepository>();
+        
+        var client = new Client { ClientId = 1, FirstName = "John", LastName = "Doe" };
+
+        var service = new ClientService(mockRepo.Object);
+
+        service.InsertClient(client);
+
+        // Verify that the service forwarded the call to the repository
+        mockRepo.Verify(r => r.InsertClient(It.Is<Client>(c => c == client)), Times.Once);
+    }
 }
