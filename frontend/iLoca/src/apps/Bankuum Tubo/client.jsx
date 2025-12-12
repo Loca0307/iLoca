@@ -75,20 +75,17 @@ export default function Clients() {
     }
   }
 
-  // Handle form updates 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   }
 
   return (
     <div className="clients-page">
-     
       <main id="mainTransaction">
-        
-        
-        <section className="client-table">
-          <h2>Clients</h2>
 
+        {/* CLIENT TABLE BOX */}
+        <section className="transaction-table">
+          <h2>Clients</h2>
           <table>
             <thead>
               <tr>
@@ -102,7 +99,6 @@ export default function Clients() {
                 <th>Delete</th>
               </tr>
             </thead>
-
             <tbody>
               {clients.length === 0 ? (
                 <tr>
@@ -133,10 +129,9 @@ export default function Clients() {
           </table>
         </section>
 
-        {/* ADD CLIENT */}
-        <section className="add-client">
+        {/* ADD CLIENT BOX */}
+        <section className="transaction-form">
           <h2>Add New Client</h2>
-
           <form onSubmit={handleSubmit}>
             <input 
               type="text" 
@@ -146,7 +141,6 @@ export default function Clients() {
               onChange={handleChange}
               required 
             />
-
             <input 
               type="text" 
               id="lastName" 
@@ -155,7 +149,6 @@ export default function Clients() {
               onChange={handleChange}
               required 
             />
-
             <input 
               type="email" 
               id="email" 
@@ -164,7 +157,6 @@ export default function Clients() {
               onChange={handleChange}
               required 
             />
-
             <input 
               type="text" 
               id="phone" 
@@ -173,7 +165,6 @@ export default function Clients() {
               onChange={handleChange}
               required 
             />
-
             <input 
               type="text" 
               id="iban" 
@@ -182,14 +173,11 @@ export default function Clients() {
               onChange={handleChange}
               required 
             />
-
             <button type="submit">Add Client</button>
           </form>
         </section>
 
       </main>
-
-
     </div>
   );
 }

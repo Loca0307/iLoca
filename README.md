@@ -38,7 +38,7 @@ FOR BACKEND:
 - docker run --name `"container name"` -p `"host port"`:`"container port"` `"image name"`
 So in this case: docker run -p 5027:5027 "image name"
 
-3) Go to link "http://localhost:5027/" to see the build
+3) Go to link "http://localhost:5027" to see the build
 
 
 FOR FRONTEND:
@@ -47,6 +47,9 @@ FOR FRONTEND:
 
 2) To run the image and create a container:
 - docker run --name frontend -p 3000:80 my-frontend
+
+3) Go to link "http://localhost:3000" to see the build
+
 
 # Postgre
 
