@@ -2,20 +2,21 @@
 
 # Technologies
 
-- Frontend: HTML, CSS
-- Backend: .NET
+- Frontend: React
+- Backend: ASP.NET
 - Database: PostgreSQL, Dbeaver
 - Testing: xUnit
 - Secondary: Docker, Postman
 - Security: 
     - BCrypt.Net-Next for password hashing
+    - HTTPS
     - (JSON Web Token) and more
 
 
 # Notes
 
 The frontend is in the `"wwwroot"` file as it is the 
-default root name for asp.NET to search for `frontend`
+default root name for ASP.NET to search for `frontend`
 
 ### Tecnical notes to solve ###
 
@@ -40,10 +41,23 @@ So in this case: docker run -p 5027:5027 "image name"
 
 # Postgre
 
-Install `PostGre` on your pc
-Install `Dbeaver` on your pc
+1) Install `PostGre` on your pc
+2) Install `Dbeaver` on your pc
 
 # Test
 
 1) Change directory to the dotnetFiles.Tests
 2) Write in terminal: `dotnet test`
+
+
+## Frontend 
+
+
+dotnet run --launch-profile https
+```
+
+
+cp -r build/* ../dotnetFiles/wwwroot/
+```
+
+
