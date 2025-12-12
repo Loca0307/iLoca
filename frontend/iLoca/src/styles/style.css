@@ -131,14 +131,23 @@ main {
     justify-content: center;
 }
 
-#mainTransaction, #mainClient, .clients-page    {
+ .clients-page    {
     display: block; 
 }
 
 
+
+.mainSection {
+    margin-top: 100px;
+    display: block;
+}
+
+
+
+
 .transaction-form, .transaction-table {
     background: white;
-    padding: 2.5rem; /* increased padding for larger boxes */
+    padding: 2.5rem; 
     margin-bottom: 2.25rem;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0,0,0,0.06);

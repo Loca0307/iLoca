@@ -42,6 +42,7 @@ export default function Register() {
   };
 
   return (
+    
     <div className="auth-container">
       <div className="auth-header">
         <h2>Create Account</h2>
@@ -49,7 +50,7 @@ export default function Register() {
       </div>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+      {successMessage && <div className="success-message">{successMessage}</div>} 
 
       <form id="register-form" onSubmit={handleSubmit}>
         <div className="form-group">

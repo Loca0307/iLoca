@@ -81,7 +81,7 @@ export default function Clients() {
 
   return (
     <div className="clients-page">
-      <main id="mainTransaction">
+      <main class="mainSection">
 
         {/* CLIENT TABLE BOX */}
         <section className="transaction-table">

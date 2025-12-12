@@ -95,7 +95,7 @@ export default function Transactions() {
     <div className="transaction-container">
 
 
-      <main id="mainTransaction">
+      <main class="mainSection">
         <section className="transaction-form">
           <h2>Add New Transaction</h2>
           <form onSubmit={handleSubmit}>
