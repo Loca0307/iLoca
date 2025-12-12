@@ -30,6 +30,7 @@ and open the localhost written on the terminal
 
 # Docker
 
+FOR BACKEND:
 1) To build the docker image:
 - docker build -t `"image name"` .
 
@@ -38,6 +39,14 @@ and open the localhost written on the terminal
 So in this case: docker run -p 5027:5027 "image name"
 
 3) Go to link "http://localhost:5027/" to see the build
+
+
+FOR FRONTEND:
+1) To build the docker image:
+- docker build -t my-frontend .
+
+2) To run the image and create a container:
+- docker run --name frontend -p 3000:80 my-frontend
 
 # Postgre
 
