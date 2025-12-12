@@ -8,17 +8,7 @@ export default function Home() {
 
   return (
     <div className="home-container">
-      <header>
-        <h1 className="site-logo">
-          <a id="site-logo" href="/">Bankuum Tubo</a>
-        </h1>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/clients">Clients</a>
-          <a href="/transactions">Transactions</a>
-          <a href="/profile">Profile</a>
-        </nav>
-      </header>
+
 
       <main>
         <section id="home-section" className="home-section">
@@ -43,9 +33,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer>
-        <p>© 2025 Bankuum Tubo. All rights reserved.</p>
-      </footer>
+
     </div>
   );
 }

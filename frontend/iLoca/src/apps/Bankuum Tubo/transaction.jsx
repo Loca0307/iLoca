@@ -93,17 +93,7 @@ export default function Transactions() {
 
   return (
     <div className="transaction-container">
-      <header>
-        <h1 className="site-logo">
-          <a href="/">Bankuum Tubo</a>
-        </h1>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/clients">Clients</a>
-          <a href="/transactions">Transactions</a>
-          <a href="/profile">Profile</a>
-        </nav>
-      </header>
+
 
       <main>
         <section className="transaction-form">
@@ -184,9 +174,7 @@ export default function Transactions() {
         </section>
       </main>
 
-      <footer>
-        <p>© 2025 Bankuum Tubo. All rights reserved.</p>
-      </footer>
+
     </div>
   );
 }

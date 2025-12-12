@@ -83,16 +83,7 @@ export default function Clients() {
   return (
     <div className="clients-page">
 
-      
-      <header>
-        <h1 className="site-logo">Bankuum Tubo</h1>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/apps/bank/clients">Clients</a>
-          <a href="/apps/bank/transactions">Transactions</a>
-          <a href="/profile">Profile</a>
-        </nav>
-      </header>
+
 
      
       <main>
@@ -201,10 +192,7 @@ export default function Clients() {
 
       </main>
 
-      {/* FOOTER */}
-      <footer>
-        <p>© 2025 Bankuum Tubo. All rights reserved.</p>
-      </footer>
+
     </div>
   );
 }
