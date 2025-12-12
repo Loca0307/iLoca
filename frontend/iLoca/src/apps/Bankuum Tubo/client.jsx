@@ -83,7 +83,7 @@ export default function Clients() {
     <div className="clients-page">
       <main class="mainSection">
 
-        {/* CLIENT TABLE BOX */}
+        
         <section className="transaction-table">
           <h2>Clients</h2>
           <table>
@@ -129,7 +129,7 @@ export default function Clients() {
           </table>
         </section>
 
-        {/* ADD CLIENT BOX */}
+        
         <section className="transaction-form">
           <h2>Add New Client</h2>
           <form onSubmit={handleSubmit}>
