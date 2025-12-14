@@ -1,52 +1,42 @@
-import { BrowserRouter as Router, Routes, Route, Link, Outlet } from "react-router-dom";
-import Home from "./iLoca/index"; 
-import Clients from "./apps/Bankuum Tubo/client";
-import Transactions from "./apps/Bankuum Tubo/transaction";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Phone from "./iLoca/index";
+import Client from "./apps/Bankuum Tubo/client";
+import Transaction from "./apps/Bankuum Tubo/transaction";
 import Login from "./apps/Bankuum Tubo/login";
 import Register from "./apps/Bankuum Tubo/register";
 import BankuumLanding from "./apps/Bankuum Tubo/index";
+
+import Header from "./apps/Bankuum Tubo/header";
+import Footer from "./apps/Bankuum Tubo/footer";
+
 import "./styles/style.css";
+
+// Local layout used only for Bankuum app routes with its specific footer and header
+const BankuumLayout = ({ children }) => (
+  <div className="full-app-root">
+    <Header />
+    <main className="site-main">{children}</main>
+    <Footer />
+  </div>
+);
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* Phone */}
+        <Route path="/" element={<Phone />} />
 
-        <Route element={<FullAppLayout />}>
-          <Route path="/bankuum" element={<BankuumLanding />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
+        {/* Bankuum Tubo*/}
+        <Route path="/bankuum" element={<BankuumLayout><BankuumLanding /></BankuumLayout>} />
+        <Route path="/clients" element={<BankuumLayout><Client /></BankuumLayout>} />
+        <Route path="/transactions" element={<BankuumLayout><Transaction /></BankuumLayout>} />
+        <Route path="/login" element={<BankuumLayout><Login /></BankuumLayout>} />
+        <Route path="/register" element={<BankuumLayout><Register /></BankuumLayout>} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
-function FullAppLayout() {
-  return (
-    <div className="full-app-root">
-      <header className="site-header">
-        <h1 className="site-logo"><Link to="/bankuum">Bankuum Tubo</Link></h1>
-        <nav className="site-nav">
-          <Link to="/">Phone</Link>
-          <Link to="/clients">Clients</Link>
-          <Link to="/transactions">Transactions</Link>
-          <Link to="/login">Profile</Link>
-        </nav>
-      </header>
-
-      <main className="site-main">
-        <Outlet />
-      </main>
-
-      <footer className="site-footer">
-        <p>© 2025 Bankuum Tubo. All rights reserved.</p>
-      </footer>
-    </div>
-  );
-}
