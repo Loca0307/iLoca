@@ -13,6 +13,8 @@
     - (JSON Web Token) and more
 
 
+
+
 # HINTS
  1) In case of the frontend not running, run `npm install`
  2) The frontend is in the `"wwwroot"` file as it is the 
@@ -63,6 +65,5 @@ FOR FRONTEND:
  1) Enter the frontend folder
  2) Enter the iLoca folder
  12 Write in terminal `npm run dev`
-```
 
 
