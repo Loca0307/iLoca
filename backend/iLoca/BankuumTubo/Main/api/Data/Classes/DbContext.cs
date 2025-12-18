@@ -1,5 +1,6 @@
 using Npgsql;
 using System;
+using DotNetEnv;
 
 namespace Api.Data;
 
@@ -13,7 +14,11 @@ public class DbContext : IDbContext
         int port = 13765;
         string database = "defaultdb";
         string username = "avnadmin";
-        
+
+
+        // Load .env file for password
+        Env.Load();
+
         // Get the password from an environment variable instead of hardcoding it
         string password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
                           ?? throw new Exception("DB_PASSWORD environment variable is not set");
