@@ -19,9 +19,10 @@ public class DbContext : IDbContext
         // Load .env file for password
         Env.Load();
 
-        // Get the password from an environment variable instead of hardcoding it
-        string password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
-                          ?? throw new Exception("DB_PASSWORD environment variable is not set");
+        string password = "AVNS_6GtbsR1hQPaErNpfB2O";
+                
+            // Get the password from an environment variable instead of hardcoding it
+            //Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new Exception("DB_PASSWORD environment variable is not set");
 
         _connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;";
     }
