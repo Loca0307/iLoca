@@ -50,6 +50,9 @@ FOR FRONTEND:
 3) Go to link "http://localhost:3000" to see the build
 
 
+FOR BOTH(docker-compose):
+1) docker compose up --build, to run the containers
+2) docker compose down, to shut it down
 # Postgre
 
 1) Install `PostGre` on your pc to use the database
