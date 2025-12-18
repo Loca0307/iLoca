@@ -38,3 +38,5 @@ coverage/
 
 # The DB password in the launchSettings.json file
 **/Properties/launchSettings.json
+
+.env
