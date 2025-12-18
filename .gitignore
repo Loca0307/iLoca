@@ -36,5 +36,5 @@ coverage/
 *.pfx
 *.key
 
-# The secrets in .env file
-.env
+# The DB password in the launchSettings.json file
+**/Properties/launchSettings.json
