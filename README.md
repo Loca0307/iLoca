@@ -13,18 +13,15 @@
     - (JSON Web Token) and more
 
 
-# Notes
-
-The frontend is in the `"wwwroot"` file as it is the 
+# HINTS
+ 1) In case of the frontend not running, run `npm install`
+ 2) The frontend is in the `"wwwroot"` file as it is the 
 default root name for ASP.NET to search for `frontend`
 
-### Tecnical notes to solve ###
 
-- For now the DTOs classes contain all the fileds of the models classes, we should decide which field to show and which to hid. 
+# Dotnet
 
-# .NET
-
-in the "dotnet" folder terminal write: `dotnet run`
+ 1) In the "dotnet" folder terminal write: `dotnet run`
 and open the localhost written on the terminal
 
 
@@ -53,23 +50,19 @@ FOR FRONTEND:
 
 # Postgre
 
-1) Install `PostGre` on your pc
-2) Install `Dbeaver` on your pc
+1) Install `PostGre` on your pc to use the database
+2) Install `Dbeaver` on your pc to interact with the database
 
 # Test
 
-1) Change directory to the dotnetFiles.Tests
+1) Enter the dotnetFiles.Tests folder
 2) Write in terminal: `dotnet test`
 
 
 ## Frontend 
-
-
-dotnet run --launch-profile https
-```
-
-
-cp -r build/* ../dotnetFiles/wwwroot/
+ 1) Enter the frontend folder
+ 2) Enter the iLoca folder
+ 12 Write in terminal `npm run dev`
 ```
 
 
