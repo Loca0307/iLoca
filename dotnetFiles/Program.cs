@@ -1,98 +1,64 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
-
 using Api.Data;
 using Api.Repositories;
 using Api.Services;
 
-
-
-// App builder creation
+// Create the builder
 var builder = WebApplication.CreateBuilder(args);
 
-// add controllers to the builder
+// Add controllers
 builder.Services.AddControllers();
 
-// Add Razor Pages support for Server Side Rendering
-// builder.Services.AddRazorPages();
-
-// Add services to the builder
+// Add OpenAPI/Swagger support
 builder.Services.AddOpenApi();
 
-// Configure CORS from configuration
-// and defines which frontend URLS can call the API
-var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://localhost:5027" };
+// --- CORS configuration ---
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("DefaultCorsPolicy", policy =>
-		policy.WithOrigins(allowedOrigins)
-			  .AllowAnyHeader()
-			  .AllowAnyMethod());
+    options.AddPolicy("DefaultCorsPolicy", policy =>
+        policy.WithOrigins("http://localhost:5173") // set the ports to listen to (e.g. react)
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
-// Register the layers to be used in the controllers
-// DB ACCESS
+// --- Dependency Injection ---
+// DB layer
 builder.Services.AddScoped<IDbContext, DbContext>();
 
-// CLIENT LAYERS
+// Client layer
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 
-// LOGIN LAYERS
-builder.Services.AddScoped<ILoginService, LoginService>();
+// Login layer
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
-// TRANSACTION LAYERS
-builder.Services.AddScoped<ITransactionService, TransactionService>();
+// Transaction layer
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
-
-
-
+// Build the app
 var app = builder.Build();
 
-// Serve static files (wwwroot/index.html)
+// Serve static files from wwwroot
 app.UseStaticFiles();
 
-// Enforce HTTPS and HSTS in non-development environments
-if (!app.Environment.IsDevelopment())
-{
-	app.UseHsts();
-}
-
-// Activate HTTPS site serving
+// Use HTTPS redirection
 app.UseHttpsRedirection();
 
-// Add a few secure response headers
-app.Use(async (context, next) =>
-{
-	context.Response.Headers["X-Content-Type-Options"] = "nosniff";
-	context.Response.Headers["X-Frame-Options"] = "DENY";
-	context.Response.Headers["Referrer-Policy"] = "no-referrer";
-	context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
-	// Minimal CSP - adjust for your static assets and trusted CDNs
-	context.Response.Headers["Content-Security-Policy"] = "default-src 'self'";
-	await next();
-});
+//CORS
+app.UseRouting();                // Sets up routing for the request
+app.UseCors("DefaultCorsPolicy"); // Applies the CORS policy
+app.UseAuthorization();           // Applies authorization middleware
 
-// Routing, CORS and Authorization middleware
-app.UseRouting();
-app.UseCors("DefaultCorsPolicy");
-app.UseAuthorization();
-
-// Enable controller routing 
+// Map controllers
 app.MapControllers();
 
-// Enable Razor Pages routing for Server Side Rendering
-//app.MapRazorPages();
-
-
-// DEFAULT ROUTE - redirect to static HTML "index.html" from the "wwwroot/html" folder
+// Default route redirects to static index.html
 app.MapGet("/", () => Results.Redirect("/html/index.html"));
 
-
+// Run the app
 app.Run();
-
 
