@@ -19,7 +19,7 @@ FROM nginx:alpine
 # Remove default nginx files
 RUN rm -rf /usr/share/nginx/html/*
 
-
+# Copy the built frontend
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80

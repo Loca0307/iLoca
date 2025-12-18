@@ -62,8 +62,7 @@ FOR FRONTEND:
 
 
 ## Frontend 
- 1) Enter the frontend folder
- 2) Enter the iLoca folder
+ 1) Enter the frontend/iLoca folder
  12 Write in terminal `npm run dev`
 
 
