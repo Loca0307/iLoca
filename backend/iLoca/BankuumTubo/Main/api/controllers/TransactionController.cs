@@ -1,0 +1,87 @@
+using Api.DTO;
+using Api.Services;
+using Api.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
+
+using System.Linq;
+
+namespace Api.controllers;
+
+[ApiController]
+[Route("/[controller]")]
+[EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
+public class TransactionController : ControllerBase
+{
+    private readonly ITransactionService _transactionService;
+
+    public TransactionController(ITransactionService transactionService, ILoginService loginService)
+    {
+        _transactionService = transactionService;
+    }
+
+    // GET ALL THE TRANSACTION
+    [HttpGet("ShowTransactions")]
+    public ActionResult<List<TransactionDTO>> GetAllTransactions()
+    {
+        var transactions = _transactionService.GetAllTransactions();
+
+        // Here get given what the controller 
+        // will return to the frontend as DTO
+        var transactionDTOs = transactions.Select(t => new TransactionDTO
+        {
+            TransactionId = t.TransactionId,
+            SenderEmail = t.SenderEmail,
+            ReceiverIban = t.ReceiverIban,
+            Amount = t.Amount,
+            DateTime = t.DateTime,
+            Reason = t.Reason ?? string.Empty
+        }).ToList();
+
+        return Ok(transactionDTOs);
+    }
+
+    // TO INSERT A TRANSACTION
+    [HttpPost("InsertTransaction")]
+    public ActionResult<TransactionDTO> InsertTransaction([FromBody] Transaction transaction)
+    {
+
+        try
+        {
+            _transactionService.InsertTransaction(transaction);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Thi catch shows to the client if the transaction failed because of insufficient credit
+            return BadRequest(new { message = ex.Message });
+        }
+
+        var transactionDTO = new TransactionDTO
+        {
+            TransactionId = transaction.TransactionId,
+            SenderEmail = transaction.SenderEmail,
+            ReceiverIban = transaction.ReceiverIban,
+            Amount = transaction.Amount,
+            DateTime = transaction.DateTime,
+            Reason = transaction.Reason ?? string.Empty,
+
+        };
+
+        return Ok(transactionDTO);
+    }
+
+    // TO DELETE A TRANSACTION
+    [HttpDelete("DeleteTransaction")]
+    public ActionResult DeleteTrasaction(Transaction transaction)
+    {
+        _transactionService.DeleteTransaction(transaction);
+        return Ok(new { message = "The transaction has been deleted from the Database" });
+    }
+
+    // TO DELETE EVERY TRANSACTION
+    [HttpDelete("DeleteAllTransactions")]
+    public ActionResult DeleteAllTransactions(){
+        _transactionService.DeleteAllTransactions();
+        return Ok(new { message = "All the transactions has been deleted from the Database" });
+    }
+}

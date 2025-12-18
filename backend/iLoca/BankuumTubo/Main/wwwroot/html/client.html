@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bankuum Tubo</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<header>
+		<h1 class="site-logo"><a id="site-logo" href="/html/index.html">Bankuum Tubo</a></h1>
+		<nav>
+			<a href="/html/index.html">Home</a>
+			<a href="/html/client.html">Clients</a>
+			<a href="/html/transaction.html">Transactions</a>
+			<a href="/html/login.html">Profile</a>
+		</nav>
+	</header>
+
+	<main>
+		<section class="client-table">
+			<h2>Clients</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+						<th>IBAN</th>
+						<th>Balance</th>
+						<th>Delete</th> 
+					</tr>
+				</thead>
+				<tbody id="clientsBody">
+					<!-- Clients will appear here -->
+				</tbody>
+			</table>
+		</section>
+
+		<section class="add-client">
+			<h2>Add New Client</h2>
+			<form id="addClientForm">
+				<input type="text" id="firstName" placeholder="First Name" required>
+				<input type="text" id="lastName" placeholder="Last Name" required>
+				<input type="email" id="email" placeholder="Email" required>
+				<input type="text" id="phone" placeholder="Phone" required>
+					<input type="text" id="iban" placeholder="IBAN" required>
+					<button type="submit" >Add Client</button>
+			</form>
+		</section>
+
+	</main>
+
+	<footer>
+		<p>&copy; 2025 Bankuum Tubo. All rights reserved.</p>
+	</footer>
+
+	<script>
+	// SHOW ALL CLIENTS
+	const tbody = document.getElementById('clientsBody');
+
+	// Load all clients from backend
+	async function loadClients() {
+		try {
+			const response = await fetch('http://localhost:5027/client/ShowClients'); // Controller endpoint
+			if (!response.ok) {
+				throw new Error('Failed to fetch clients');
+			}
+			// Extract the JSON from the response
+			const clients = await response.json();
+
+			tbody.innerHTML = ''; // clear table
+			clients.forEach(c => {
+				const row = document.createElement('tr');
+				// For every client in the list create a HTML object
+				row.innerHTML = `
+					<td>${c.clientId}</td>
+					<td>${c.firstName}</td>
+					<td>${c.lastName}</td>
+					<td>${c.email}</td>
+					<td>${c.phone}</td>
+						<td>${c.iban || ''}</td>
+						<td>${c.balance != null ? Number(c.balance).toFixed(2) : '0.00'}</td>
+						<td><button class="remove-btn" data-id="${c.clientId}">Remove</button></td>
+				`;
+				tbody.appendChild(row);
+			});
+		} catch (error) {
+			console.error(error);
+				tbody.innerHTML = '<tr><td colspan="8">Error loading clients</td></tr>';
+		}
+	}
+
+	// Initial load
+	loadClients();
+
+
+	// POST NEW CLIENT
+	const form = document.getElementById('addClientForm');
+
+			//  the "submit" type 
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault(); // prevent page reload
+
+		const newClient = {
+			firstName: document.getElementById('firstName').value,
+			lastName: document.getElementById('lastName').value,
+			email: document.getElementById('email').value,
+					phone: document.getElementById('phone').value,
+					iban: document.getElementById('iban').value
+		};
+
+		try {
+			const response = await fetch('http://localhost:5027/client/InsertClient', {
+				method: 'POST', // call your addClient endpoint
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newClient) // creates the actual JSON to send to the backend
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to add client');
+			}
+
+			// Clear form
+			form.reset();
+
+			// Reload clients in table
+			loadClients();
+		} catch (error) {
+			console.error(error);
+			alert('Error adding client');
+		}
+
+	});
+
+	tbody.addEventListener('click', async (e) => {
+		if (e.target.classList.contains('remove-btn')) {
+			const clientId = e.target.dataset.id;
+
+			try {
+				const response = await fetch(`http://localhost:5027/api/client/DeleteClient`, {
+					method: 'DELETE',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ clientId: parseInt(clientId) })
+				});
+
+				if (!response.ok) throw new Error('Failed to delete client');
+
+				// reload table
+				loadClients();
+			} catch (error) {
+				console.error(error);
+				alert('Error deleting client');
+			}
+		}
+	});
+
+	</script>
+
+</body>
+</html>

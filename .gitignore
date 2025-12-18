@@ -28,13 +28,8 @@ coverage/
 # Logs
 *.log
 
-# Secrets or local configuration (enable only if you have secrets locally)
-# appsettings.Development.json
-# dotnet user-secrets are stored outside the repo; no file to ignore by default.
-
 # Certificates (if you put certs into repo by mistake)
 *.pfx
 *.key
 
-# The secrets in .env file
 .env
