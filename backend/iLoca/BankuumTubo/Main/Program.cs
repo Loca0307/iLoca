@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BankuumCors", policy =>
         // set the ports to listen (e.g react)
-        policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod()); 
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173").AllowAnyHeader().AllowAnyMethod()); 
+
 
     options.AddPolicy("DefaultCorsPolicy", policy =>
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
