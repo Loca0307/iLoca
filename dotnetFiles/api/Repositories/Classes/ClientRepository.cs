@@ -266,12 +266,12 @@ public class ClientRepository : IClientRepository
             }
 
             // Insert transaction record
-            using (var cmdInsert = new NpgsqlCommand(@"INSERT INTO transactions (sender_email, receiver_iban, amount, dateTime, reason) VALUES (@sender, @receiver, @amount, @dateTime, @reason)", conn, tx))
+            using (var cmdInsert = new NpgsqlCommand(@"INSERT INTO transactions (sender_email, receiver_iban, amount, date_time, reason) VALUES (@sender, @receiver, @amount, @date_time, @reason)", conn, tx))
             {
                 cmdInsert.Parameters.AddWithValue("sender", transaction.SenderEmail);
                 cmdInsert.Parameters.AddWithValue("receiver", transaction.ReceiverIban);
                 cmdInsert.Parameters.AddWithValue("amount", transaction.Amount);
-                cmdInsert.Parameters.AddWithValue("dateTime", transaction.DateTime);
+                cmdInsert.Parameters.AddWithValue("date_time", transaction.DateTime);
                 cmdInsert.Parameters.AddWithValue("reason", transaction.Reason ?? string.Empty);
                 cmdInsert.ExecuteNonQuery();
             }

@@ -23,7 +23,7 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
     using var cmd = new NpgsqlCommand(
-    @"SELECT LoginId, Email, Password, Username, ClientId FROM logins", conn
+    @"SELECT login_id, email, password, user_name, client_id FROM logins", conn
     );
         using var reader = cmd.ExecuteReader();
 
@@ -48,7 +48,7 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO logins (Email, Password, Username, ClientId)
+            @"INSERT INTO logins (email, password, user_name, client_id)
             VALUES (@email, @password, @username, @clientId)
             ON CONFLICT (Email) DO NOTHING", conn);
 
@@ -68,7 +68,7 @@ public class LoginRepository : ILoginRepository
 
         using var cmd = new NpgsqlCommand(
             @"DELETE FROM logins
-            WHERE LoginId = @id", conn);
+            WHERE login_id = @id", conn);
 
         cmd.Parameters.AddWithValue("id", login.LoginId);
         cmd.ExecuteNonQuery();
@@ -81,8 +81,8 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT LoginId, Email, Password, Username, ClientId FROM logins
-            WHERE Email = @email", conn
+            @"SELECT login_id, email, password, user_name, client_id FROM logins
+            WHERE email = @email", conn
         );
 
         cmd.Parameters.AddWithValue("email", email);

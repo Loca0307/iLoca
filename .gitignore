@@ -35,3 +35,6 @@ coverage/
 # Certificates (if you put certs into repo by mistake)
 *.pfx
 *.key
+
+# The secrets in .env file
+.env
