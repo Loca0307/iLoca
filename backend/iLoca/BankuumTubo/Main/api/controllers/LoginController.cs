@@ -11,7 +11,7 @@ using System.Linq;
 namespace Api.controllers;
 
 [ApiController]
-[Route("api/bankuum/[controller]")]
+[Route("/[controller]")]
 [EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
 public class LoginController : ControllerBase
 {

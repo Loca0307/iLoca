@@ -11,7 +11,7 @@ namespace Api.controllers;
 // Defines this controller file in the "ApiController" group
 // it automatically defines "api/client" as the route to manage
 [ApiController]
-[Route("api/bankuum/[controller]")]
+[Route("/[controller]")]
 [EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
 public class ClientController : ControllerBase
 {

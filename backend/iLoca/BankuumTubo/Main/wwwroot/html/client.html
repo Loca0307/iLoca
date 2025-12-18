@@ -142,7 +142,7 @@
 			const clientId = e.target.dataset.id;
 
 			try {
-				const response = await fetch(`http://localhost:5027/client/DeleteClient`, {
+				const response = await fetch(`http://localhost:5027/api/client/DeleteClient`, {
 					method: 'DELETE',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ clientId: parseInt(clientId) })
