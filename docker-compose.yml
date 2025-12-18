@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:15
     restart: unless-stopped
-    env_file: .env.compose
+    env_file: .env
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -20,7 +20,7 @@ services:
       context: ./backend/iLoca/BankuumTubo/Main
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file: .env.compose
+    env_file: .env
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
