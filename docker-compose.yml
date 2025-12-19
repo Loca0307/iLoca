@@ -6,12 +6,9 @@
 services:
 
   backend:
-    build:
-      context: ./dotnetFiles         #
-      dockerfile: Dockerfile
-    restart: unless-stopped
+    build: ./backend/iLoca/BankuumTubo/Main
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development # to set the backend to Development to find the correct file "appsettings.Development.json"
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     ports:
       - "5027:5027"               
@@ -19,8 +16,6 @@ services:
   frontend:
     build:
       context: ./frontend/iLoca
-      dockerfile: Dockerfile
-    restart: unless-stopped
     ports:
       - "3000:80"                 
     environment:
