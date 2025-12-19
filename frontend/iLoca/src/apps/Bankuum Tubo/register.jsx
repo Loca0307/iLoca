@@ -21,7 +21,7 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch("/login/InsertLogin", {
+      const response = await fetch("http://localhost:5027/login/InsertLogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, username }),

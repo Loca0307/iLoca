@@ -28,10 +28,10 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Expose the port you want
-EXPOSE 5028
+EXPOSE 5027
 
 # Tell .NET Core to listen on port 5027 inside the container
-ENV ASPNETCORE_URLS=http://+:5028
+ENV ASPNETCORE_URLS=http://+:5027
 
 # Start the app
 ENTRYPOINT ["dotnet", "dotnetFiles.dll"]

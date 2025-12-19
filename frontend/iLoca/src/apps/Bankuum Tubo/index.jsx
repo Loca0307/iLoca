@@ -24,7 +24,7 @@ export default function Home() {
               <a href="/clients" className="main-action-btn">View Clients</a>
               <a href="/transactions" className="main-action-btn">Transactions</a>
               {!username && <a href="/login" className="main-action-btn">Login</a>}
-              {username && <a href="/profile" className="main-action-btn">Profile</a>}
+              {username && <a href="/login" className="main-action-btn">Profile</a>}
             </div>
             <p className="home-footer-note">
               Manage your clients, view transactions, and more.

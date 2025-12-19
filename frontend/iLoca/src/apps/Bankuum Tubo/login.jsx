@@ -12,7 +12,7 @@ export default function Login() {
     if (username && emailStored) {
       (async () => {
         try {
-          const resp = await fetch(`/client/GetClientByEmail?email=${encodeURIComponent(emailStored)}`);
+          const resp = await fetch(`http://localhost:5027/client/GetClientByEmail?email=${encodeURIComponent(emailStored)}`);
           if (resp.ok) {
             const client = await resp.json();
             if (client) setClientData({ iban: client.iban || "", balance: Number(client.balance) || 0 });
@@ -32,7 +32,7 @@ export default function Login() {
     setSuccessMessage("");
 
     try {
-      const response = await fetch('/login/authenticate', {
+      const response = await fetch('http://localhost:5027/login/authenticate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -99,7 +99,7 @@ export default function Login() {
           <button type="submit" className="btn-login">Login</button>
 
           <div id="signup-link" className="signup-link">
-            Don't have an account? <a href="/html/register.html">Register</a>
+            Don't have an account? <a href="/register">Register</a>
           </div>
         </form>
       ) : (
