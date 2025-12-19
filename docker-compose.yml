@@ -1,43 +1,25 @@
-version: '3.8'
+# To define a service:
+# 1) Define the build paths
+# 2) Define the environment variables
+# 3) Define the ports as host:container
 
 services:
-  db:
-    image: postgres:15
-    restart: unless-stopped
-    env_file: .env
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   backend:
-    build:
-      context: ./backend/iLoca/BankuumTubo/Main
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    env_file: .env
+    build: ./backend/iLoca/BankuumTubo/Main
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development # to set the backend to Development to find the correct file "appsettings.Development.json"
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     ports:
-      - "5027:5027"                   # route host 5027 to container 5027 (backend listens on 5027)
-    depends_on:
-      db:
-        condition: service_healthy
+      - "5027:5027"               
 
   frontend:
     build:
       context: ./frontend/iLoca
-      dockerfile: Dockerfile
-    restart: unless-stopped
     ports:
-      - "3000:80"                   # maps container's web server to host 3000
+      - "3000:80"                 
     environment:
-      - REACT_APP_API_BASE=http://backend:5027
+      - REACT_APP_API_BASE=http://localhost:5027
     depends_on:
       - backend
 

@@ -1,28 +1,33 @@
-# STEP 1: BUILD
+# STEP 1: BUILD THE APP
 FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the frontend code
+# Copy source code
 COPY . .
 
-# Build the production app
+# Build production bundle
 RUN npm run build
 
-# STEP 2: RUN / SERVE
+
+# STEP 2: PUBLISH WITH NGINX
 FROM nginx:alpine
 
-# Remove default nginx files
-RUN rm -rf /usr/share/nginx/html/*
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy the built frontend
+# Copy custom SPA nginx config (React by default uses Single Page Applciation)
+COPY nginx.conf /etc/nginx/conf.d/default.conf 
+   
+
+# Copy built frontend files
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 80
+# Expose HTTP port
 EXPOSE 80
 
 # Start nginx
