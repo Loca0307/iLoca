@@ -45,14 +45,14 @@ FOR FRONTEND:
 - docker build -t my-frontend .
 
 2) To run the image and create a container:
-- docker run --name frontend -p 3000:80 my-frontend
+- docker run --name frontend -p 3000:3000 my-frontend
 
 3) Go to link "http://localhost:3000" to see the build
 
 
 FOR BOTH(docker-compose):
-1) docker compose up --build, to run the containers
-2) docker compose down, to shut it down
+1) docker compose up, to run the containers
+
 # Postgre
 
 1) Install `PostGre` on your pc to use the database
