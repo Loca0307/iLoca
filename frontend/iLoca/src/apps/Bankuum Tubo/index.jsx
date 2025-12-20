@@ -1,5 +1,4 @@
 import useState from "react";
-import "../../styles/style.css";
 
 export default function Home() {
   const [username] = useState(() => localStorage.getItem("loggedInUsername"));

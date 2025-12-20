@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../../styles/style.css";
 
 export default function Register() {
   const [errorMessage, setErrorMessage] = useState("");

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "../../styles/style.css";
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
