@@ -1,14 +1,11 @@
-
-
-import React from "react";
+import useState from "react";
 import "../../styles/style.css";
 
 export default function Home() {
-  const [username] = React.useState(() => localStorage.getItem("loggedInUsername"));
+  const [username] = useState(() => localStorage.getItem("loggedInUsername"));
 
   return (
     <div className="home-container">
-
 
       <main>
         <section id="home-section" className="home-section">
