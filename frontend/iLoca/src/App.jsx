@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 import Phone from "./iLoca";
 
-import Home from "./apps/BankuumTubo";
+import Home from "./apps/BankuumTubo/index";
 import Client from "./apps/BankuumTubo/client";
 import Transaction from "./apps/BankuumTubo/transaction";
 import Login from "./apps/BankuumTubo/login";
