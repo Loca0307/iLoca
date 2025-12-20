@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect  } from "react";
 
 export default function Clients() {
   const [clients, setClients] = useState([]); 
   // Defines a variable to locally store the clients and defines 
-  // the method to update the local variable. Initialises the list as empty.
+  // the method to update the local variable (create a new one. Initialises the list as empty.
   const [formData, setFormData] = useState({
-    // Define formData as a locl variable and "setFormData" as the method 
-    // to update it to create the client. Initialises it as a "Javascript Object" object with blank fields.
+    // Define formData as a local variable and "setFormData" as the method 
+    // to update it (create a new one) to create the client. Initialises it as a "Javascript Object" object with blank fields.
     firstName: "",
     lastName: "",
     email: "",
@@ -15,7 +15,7 @@ export default function Clients() {
   });
 
   // Load all clients 
-  async function loadClients() { // Asyncly request the clients list
+  async function loadClients() { // asynchronously request the clients list
     try {
       const res = await fetch("http://localhost:5027/client/ShowClients");
       if (!res.ok) throw new Error("Failed to fetch clients");
@@ -27,7 +27,7 @@ export default function Clients() {
     }
   }
 
- // To asyncly run the method
+ // To asynchronously run the method
   useEffect(() => {
     loadClients();
   }, []); // The "dependency array" [], tells when to rerun the method, in this case just once
@@ -82,7 +82,7 @@ export default function Clients() {
 
   function handleChange(event) { // This method os called when something in the HTML form is modified so it keeps the formData object updated
     setFormData({ ...formData, [event.target.id]: event.target.value });
-  }
+  } // ...formData == to select the old object except the property with a new value
 
   return (
     <div className="clients-page">

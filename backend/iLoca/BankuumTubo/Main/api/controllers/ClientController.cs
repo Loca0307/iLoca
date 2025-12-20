@@ -89,7 +89,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("GetClientByEmail")]
-    public ActionResult<Client?> GetClientByEmail([FromQuery] string email)
+    public ActionResult<Client?> GetClientByEmail([FromQuery] string email) // takes the email from the query
     {
         return _clientService.GetClientByEmail(email);
     }

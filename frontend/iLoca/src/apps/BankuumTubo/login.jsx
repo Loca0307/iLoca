@@ -1,39 +1,46 @@
 import { useState, useEffect} from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
  
 
+
+
 export default function Login() {
-  const [username] = useState(() => localStorage.getItem("loggedInUsername"));
+  // Define local variables from the localstorage
+  const [username] = useState(() => localStorage.getItem("loggedInUsername")); 
   const [emailStored] = useState(() => localStorage.getItem("loggedInEmail"));
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [clientData, setClientData] = useState({ iban: "", balance: 0 });
+  const navigate = useNavigate(); // Defines the navigation function for logic-induced routing
 
   useEffect(() => {
     if (username && emailStored) {
       (async () => {
         try {
-          const resp = await fetch(`http://localhost:5027/client/GetClientByEmail?email=${encodeURIComponent(emailStored)}`);
+          const resp = await fetch(`http://localhost:5027/client/GetClientByEmail?email=${encodeURIComponent(emailStored)}`); // Get information for a specific email
           if (resp.ok) {
             const client = await resp.json();
             if (client) setClientData({ iban: client.iban || "", balance: Number(client.balance) || 0 });
           }
-        } catch {
-            // ignore errors 
-            }
-      })();
+        } catch (err) {
+            console.error(err);
+            alert("Error authenticating client");
+          }
+      });
     }
   }, [username, emailStored]);
+   // The use effect runs only on mount up, and when username 
+   // or emailStored are changed, to keep the authentication in sync.
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // prevent default HTML behavior
+    const email = event.target.email.value;
+    const password = event.target.password.value;
     setErrorMessage("");
     setSuccessMessage("");
 
     try {
-      const response = await fetch('http://localhost:5027/login/authenticate', {
+      const response = await fetch('http://localhost:5027/login/authenticate', { // sends the authentication request for the given email and password
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -48,18 +55,19 @@ export default function Login() {
             const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
             if (found && found.username) localStorage.setItem('loggedInUsername', found.username);
           }
-        } catch {
-            // ignore errors 
+        } catch (err) {
+            console.error(err)
+            alert("Login not found")
             }
 
-        localStorage.setItem('loggedInEmail', email);
+        localStorage.setItem('loggedInEmail', email); // Set  email in localStorage
 
-        if (!localStorage.getItem('loggedInUsername')) {
+        if (!localStorage.getItem('loggedInUsername')) { // if email not found in localStorage, put the given one in localStorage
           const fallback = (email || '').split('@')[0];
           if (fallback) localStorage.setItem('loggedInUsername', fallback);
         }
-
-        setTimeout(() => window.location.href = '/html/index.html', 1200);
+        // After logging in, redirect with a delay to home page, logged in
+        setTimeout(() => window.location.href = '/html/index.html', 1200); 
       } else {
         const error = await response.json();
         setErrorMessage(error.message || 'Invalid email or password');
@@ -69,10 +77,12 @@ export default function Login() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = () => { // When logging out, reset the localStorage values
     localStorage.removeItem('loggedInUsername');
     localStorage.removeItem('loggedInEmail');
-    window.location.href = '/html/index.html';
+
+
+    navigate("/BankuumTubo"); // Reset the html file when logging out
   };
 
   return (
