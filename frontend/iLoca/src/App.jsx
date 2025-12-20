@@ -17,7 +17,7 @@ const BankuumLayout = () => {
     <div className="full-app-root">
       <Header />
       <main className="site-main">
-        <Outlet />
+        <Outlet /> {/* Actual placeholder for the components*/}
       </main>
       <Footer />
     </div>
@@ -26,14 +26,14 @@ const BankuumLayout = () => {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> {/* Router that uses browser history*/}
       <Routes>
 
         {/* Phone app (landing) */}
         <Route path="/" element={<Phone />} />
 
-        {/* Bankuum Tubo app */}
-        <Route path="/bankuum" element={<BankuumLayout />}>
+        {/* Bankuum Tubo app routes, with BankuumTubo as route prefix*/}
+        <Route path="BankuumTubo" element={<BankuumLayout />} >
           <Route index element={<Home />} />
           <Route path="clients" element={<Client />} />
           <Route path="transactions" element={<Transaction />} />

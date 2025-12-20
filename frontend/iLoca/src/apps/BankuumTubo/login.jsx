@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
+import { Link } from "react-router-dom"
  
 
 export default function Login() {
@@ -99,7 +100,7 @@ export default function Login() {
           <button type="submit" className="btn-login">Login</button>
 
           <div id="signup-link" className="signup-link">
-            Don't have an account? <a href="/register">Register</a>
+            Don't have an account? <Link to="/BankuumTubo/register">Register</Link>
           </div>
         </form>
       ) : (

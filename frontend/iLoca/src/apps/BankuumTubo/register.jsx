@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 export default function Register() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -93,7 +94,7 @@ export default function Register() {
         </button>
 
         <div className="signup-link">
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <Link to="/BankuumTubo/login">Login</Link>
         </div>
       </form>
     </div>

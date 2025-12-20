@@ -1,13 +1,6 @@
-import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom"; // When the routing is User-based use "Link"
 
 export default function Home() {
-  const navigate = useNavigate();
-
-  const openBankuum = () => {
-    navigate("/bankuum");
-  };
-
   return (
     <div className="phone-outer">
       <div className="phone-container">
@@ -16,21 +9,14 @@ export default function Home() {
         </header>
 
         <main className="phone-main">
-            <div className="home-screen">
-              <div className="app-grid">
-                <div
-                  className="app-tile"
-                  role="button"
-                  tabIndex={0}
-                  onClick={openBankuum}
-                  onKeyDown={(e) => e.key === "Enter" && openBankuum()}
-                >
-                  <div className="app-icon">🏦</div>
-                  <div className="app-label">Bankuum Tubo</div>
-                </div>
-                
-              </div>
+          <div className="home-screen">
+            <div className="app-grid">
+              <Link to="/BankuumTubo" className="app-tile">
+                <div className="app-icon" aria-hidden>🏦</div>
+                <div className="app-label">Bankuum Tubo</div>
+              </Link>
             </div>
+          </div>
         </main>
       </div>
     </div>

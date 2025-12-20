@@ -1,4 +1,6 @@
-import {useState} from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 
 export default function Home() {
   const [username] = useState(() => localStorage.getItem("loggedInUsername"));
@@ -17,10 +19,10 @@ export default function Home() {
             )}
             <p className="home-subtitle">Your secure, modern banking dashboard.</p>
             <div className="home-actions">
-              <a href="/clients" className="main-action-btn">View Clients</a>
-              <a href="/transactions" className="main-action-btn">Transactions</a>
-              {!username && <a href="/login" className="main-action-btn">Login</a>}
-              {username && <a href="/login" className="main-action-btn">Profile</a>}
+              <Link to="/BankuumTubo/clients" className="main-action-btn">View Clients</Link>
+              <Link to="/BankuumTubo/transactions" className="main-action-btn">Transactions</Link>
+              {!username && <Link to="/BankuumTubo/login" className="main-action-btn">Login</Link>}
+              {username && <Link to="/BankuumTubo/login" className="main-action-btn">Profile</Link>}
             </div>
             <p className="home-footer-note">
               Manage your clients, view transactions, and more.
