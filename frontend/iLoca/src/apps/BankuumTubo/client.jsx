@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 
 export default function Clients() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([]); 
+  // Defines a variable to locally store the clients and defines 
+  // the method to update the local variable. Initialises the list as empty.
   const [formData, setFormData] = useState({
+    // Define formData as a locl variable and "setFormData" as the method 
+    // to update it to create the client. Initialises it as a "Javascript Object" object with blank fields.
     firstName: "",
     lastName: "",
     email: "",
@@ -11,31 +15,32 @@ export default function Clients() {
   });
 
   // Load all clients 
-  async function loadClients() {
+  async function loadClients() { // Asyncly request the clients list
     try {
       const res = await fetch("http://localhost:5027/client/ShowClients");
       if (!res.ok) throw new Error("Failed to fetch clients");
 
-      const data = await res.json();
+      const data = await res.json(); // The response is a string that gets JSON'ed to update the local variable clients
       setClients(data);
     } catch (err) {
       console.error(err);
     }
   }
 
+ // To asyncly run the method
   useEffect(() => {
     loadClients();
-  }, []);
+  }, []); // The "dependency array" [], tells when to rerun the method, in this case just once
 
   // Add new client 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault(); // Prevents default HTML behavior
 
     try {
       const res = await fetch("http://localhost:5027/client/InsertClient", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Stringify the JSON saved "formData" as the request body
       });
 
       if (!res.ok) throw new Error("Failed to add client");
@@ -49,6 +54,7 @@ export default function Clients() {
         iban: "",
       });
 
+      // To update the list instantly when a new client is added
       loadClients();
     } catch (err) {
       console.error(err);
@@ -74,8 +80,8 @@ export default function Clients() {
     }
   }
 
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+  function handleChange(event) { // This method os called when something in the HTML form is modified so it keeps the formData object updated
+    setFormData({ ...formData, [event.target.id]: event.target.value });
   }
 
   return (
