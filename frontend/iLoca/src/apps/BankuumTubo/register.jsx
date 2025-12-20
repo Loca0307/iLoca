@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Register() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default HTML behavior
 
-    const username = (e.target.username.value || "").trim();
-    const email = (e.target.email.value || "").trim();
-    const password = (e.target.password.value || "").trim();
+
+    // Store in variables the data written and submitted by the user
+    const username = (event.target.username.value || "").trim();
+    const email = (event.target.email.value || "").trim();
+    const password = (event.target.password.value || "").trim();
 
     setErrorMessage("");
     setSuccessMessage("");
@@ -30,7 +33,7 @@ export default function Register() {
       if (response.ok) {
         setSuccessMessage("Registration successful! Redirecting to login...");
         setTimeout(() => {
-          window.location.href = "/login";
+          navigate("/login"); // After registration, return to the login page with useNavigate
         }, 800);
       } else {
         const error = await response.json();

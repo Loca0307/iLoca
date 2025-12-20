@@ -2,8 +2,6 @@ import { useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom"
  
 
-
-
 export default function Login() {
   // Define local variables from the localstorage
   const [username] = useState(() => localStorage.getItem("loggedInUsername")); 
@@ -55,9 +53,8 @@ export default function Login() {
             const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
             if (found && found.username) localStorage.setItem('loggedInUsername', found.username);
           }
-        } catch (err) {
-            console.error(err)
-            alert("Login not found")
+        } catch  {
+            // ignore for now
             }
 
         localStorage.setItem('loggedInEmail', email); // Set  email in localStorage
@@ -67,7 +64,7 @@ export default function Login() {
           if (fallback) localStorage.setItem('loggedInUsername', fallback);
         }
         // After logging in, redirect with a delay to home page, logged in
-        setTimeout(() => window.location.href = '/html/index.html', 1200); 
+        setTimeout(() => navigate("/BankuumTubo"), 1200); 
       } else {
         const error = await response.json();
         setErrorMessage(error.message || 'Invalid email or password');
