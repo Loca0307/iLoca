@@ -64,7 +64,7 @@ export default function Login() {
           if (fallback) localStorage.setItem('loggedInUsername', fallback);
         }
         // After logging in, redirect with a delay to home page, logged in
-        setTimeout(() => navigate("/BankuumTubo"), 1200); 
+        setTimeout(() => navigate("/BankuumTubo"), 0); 
       } else {
         const error = await response.json();
         setErrorMessage(error.message || 'Invalid email or password');

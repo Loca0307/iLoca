@@ -23,12 +23,19 @@ export default function Register() {
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5027/login/InsertLogin", {
+    try { // THIS REQUEST OS NTO WORKING
+      const response = await fetch("http://localhost:5027/login/InsertLogin", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, username }),
-      });
+        body: JSON.stringify({     
+          LoginId: 0,
+          Email: email,      
+          Username: username, 
+          Password: password,
+          ClientId: 0,
+
+      }),
+    });
 
       if (response.ok) {
         setSuccessMessage("Registration successful! Redirecting to login...");
