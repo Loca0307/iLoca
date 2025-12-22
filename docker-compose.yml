@@ -9,7 +9,7 @@ services:
     build: ./backend/iLoca/BankuumTubo/Main
     environment:
       - ASPNETCORE_ENVIRONMENT=Development # to set the backend to Development to find the correct file "appsettings.Development.json"
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      - ConnectionStrings__DefaultConnection=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_DATABASE};Username=${DB_USERNAME};Password=${DB_PASSWORD}
     ports:
       - "5027:5027"               
 
@@ -23,5 +23,6 @@ services:
     depends_on:
       - backend
 
+# To store data outside the container file system         
 volumes:
   db_data:
