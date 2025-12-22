@@ -7,9 +7,9 @@ services:
 
   backend:
     build: ./backend/iLoca/BankuumTubo/Main
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development # to set the backend to Development to find the correct file "appsettings.Development.json"
-      - ConnectionStrings__DefaultConnection=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_DATABASE};Username=${DB_USERNAME};Password=${DB_PASSWORD}
+    # Load environment variables from .env file (secrets not hardcoded)
+    env_file:
+      - .env
     ports:
       - "5027:5027"               
 
