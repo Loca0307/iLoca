@@ -7,7 +7,7 @@ services:
 
   backend:
     build: ./backend/iLoca/BankuumTubo/Main
-    # Load environment variables from .env file (secrets not hardcoded)
+    # Load environment variables from .env file into backend service
     env_file:
       - .env
     ports:
