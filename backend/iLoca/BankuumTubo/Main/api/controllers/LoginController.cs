@@ -48,25 +48,20 @@ public class LoginController : ControllerBase
     [HttpPost("InsertLogin")]
     public ActionResult<LoginDTO> InsertLogin([FromBody] Login login)
     {
-        try
-        {
-            _loginService.InsertLogin(login);
 
-            var loginDTO = new LoginDTO
-            {
-                LoginId = login.LoginId,
-                Email = login.Email,
-                Username = login.Username,
-                ClientId = login.ClientId
-            };
+        _loginService.InsertLogin(login);
 
-            return Ok(loginDTO);
-        }
-        catch (InvalidOperationException ex)
+        var loginDTO = new LoginDTO
         {
-            return BadRequest(new { message = ex.Message });
-        }
+            LoginId = login.LoginId,
+            Email = login.Email,
+            Username = login.Username,
+            ClientId = login.ClientId
+        };
+
+        return Ok(loginDTO);
     }
+
 
 
     [HttpDelete("DeleteLogin")]

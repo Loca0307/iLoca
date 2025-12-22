@@ -9,10 +9,10 @@ using Api.Modules.BankuumTubo;
 // Create the builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controllers
+// Add controllers to the builder
 builder.Services.AddControllers();
 
-// Add OpenAPI/Swagger support
+// Add OpenAPI/Swagger support to the builder
 builder.Services.AddOpenApi();
 
 // --- CORS configuration ---
@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BankuumCors", policy =>
         // set the ports to listen (e.g react)
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5174").AllowAnyHeader().AllowAnyMethod()); 
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174").AllowAnyHeader().AllowAnyMethod()); 
 
 
     options.AddPolicy("DefaultCorsPolicy", policy =>

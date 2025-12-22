@@ -80,7 +80,7 @@ export default function Clients() {
     }
   }
 
-  function handleChange(event) { // This method os called when something in the HTML form is modified so it keeps the formData object updated
+  function handleChange(event) { // This method is called when something in the HTML form is modified so it keeps the formData object updated
     setFormData({ ...formData, [event.target.id]: event.target.value });
   } // ...formData == to select the old object except the property with a new value
 

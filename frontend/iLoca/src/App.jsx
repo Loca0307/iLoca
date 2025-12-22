@@ -12,7 +12,7 @@ import Header from "./apps/BankuumTubo/header";
 import Footer from "./apps/BankuumTubo/footer";
 
 // Layout used only for Bankuum Tubo routes
-const BankuumLayout = () => {
+const BankuumTuboLayout = () => {
   return (
     <div className="full-app-root">
       <Header />
@@ -33,10 +33,10 @@ function App() {
         <Route path="/" element={<Phone />} />
 
         {/* Bankuum Tubo app routes, with BankuumTubo as route prefix*/}
-        <Route path="BankuumTubo" element={<BankuumLayout />} >
+        <Route path="BankuumTubo" element={<BankuumTuboLayout />} >
           <Route index element={<Home />} />
           <Route path="clients" element={<Client />} />
-          <Route path="transactions" element={<Transaction />} />
+          <Route path="transactions" element={<Transaction/> } />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
