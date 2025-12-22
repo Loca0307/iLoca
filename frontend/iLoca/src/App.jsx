@@ -1,41 +1,48 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
-import Phone from "./iLoca/index";
-import Client from "./apps/Bankuum Tubo/client";
-import Transaction from "./apps/Bankuum Tubo/transaction";
-import Login from "./apps/Bankuum Tubo/login";
-import Register from "./apps/Bankuum Tubo/register";
-import BankuumLanding from "./apps/Bankuum Tubo/index";
+import Phone from "./iLoca";
 
-import Header from "./apps/Bankuum Tubo/header";
-import Footer from "./apps/Bankuum Tubo/footer";
+import Home from "./apps/BankuumTubo/index";
+import Client from "./apps/BankuumTubo/client";
+import Transaction from "./apps/BankuumTubo/transaction";
+import Login from "./apps/BankuumTubo/login";
+import Register from "./apps/BankuumTubo/register";
 
-import "./styles/style.css";
+import Header from "./apps/BankuumTubo/header";
+import Footer from "./apps/BankuumTubo/footer";
 
-// Local layout used only for Bankuum app routes with its specific footer and header
-const BankuumLayout = ({ children }) => (
-  <div className="full-app-root">
-    <Header />
-    <main className="site-main">{children}</main>
-    <Footer />
-  </div>
-);
+// Layout used only for Bankuum Tubo routes
+const BankuumTuboLayout = () => {
+  return (
+    <div className="full-app-root">
+      <Header />
+      <main className="site-main">
+        <Outlet /> {/* Actual placeholder for the components*/}
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter> {/* Router that uses browser history*/}
       <Routes>
-        {/* Phone */}
+
+        {/* Phone app (landing) */}
         <Route path="/" element={<Phone />} />
 
-        {/* Bankuum Tubo*/}
-        <Route path="/bankuum" element={<BankuumLayout><BankuumLanding /></BankuumLayout>} />
-        <Route path="/clients" element={<BankuumLayout><Client /></BankuumLayout>} />
-        <Route path="/transactions" element={<BankuumLayout><Transaction /></BankuumLayout>} />
-        <Route path="/login" element={<BankuumLayout><Login /></BankuumLayout>} />
-        <Route path="/register" element={<BankuumLayout><Register /></BankuumLayout>} />
+        {/* Bankuum Tubo app routes, with BankuumTubo as route prefix*/}
+        <Route path="BankuumTubo" element={<BankuumTuboLayout />} >
+          <Route index element={<Home />} />
+          <Route path="clients" element={<Client />} />
+          <Route path="transactions" element={<Transaction/> } />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 

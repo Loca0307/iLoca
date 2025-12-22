@@ -52,6 +52,8 @@ public class ClientController : ControllerBase
     [HttpPost("InsertClient")]
     public ActionResult<ClientDTO> InsertClient([FromBody] Client client)
     {
+        
+
         _clientService.InsertClient(client);
         
         // Map the inserted client to DTO and return it
@@ -89,7 +91,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet("GetClientByEmail")]
-    public ActionResult<Client?> GetClientByEmail([FromQuery] string email)
+    public ActionResult<Client?> GetClientByEmail([FromQuery] string email) // takes the email from the query
     {
         return _clientService.GetClientByEmail(email);
     }
