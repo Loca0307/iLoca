@@ -24,7 +24,7 @@ export default function Login() {
             console.error(err);
             alert("Error authenticating client");
           }
-      });
+      })(); // added () to actually call the method in the useEffect
     }
   }, [username, emailStored]);
    // The use effect runs only on mount up, and when username 
@@ -64,7 +64,7 @@ export default function Login() {
           if (fallback) localStorage.setItem('loggedInUsername', fallback);
         }
         // After logging in, redirect with a delay to home page, logged in
-        setTimeout(() => navigate("/BankuumTubo"), 0); 
+        setTimeout(() => navigate("/BankuumTubo"), 1500); 
       } else {
         const error = await response.json();
         setErrorMessage(error.message || 'Invalid email or password');
