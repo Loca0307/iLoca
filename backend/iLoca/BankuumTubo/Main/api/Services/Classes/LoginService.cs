@@ -24,6 +24,10 @@ public class LoginService : ILoginService
 
     public void InsertLogin(Login login)
     {
+        if (_loginRepository.GetLoginByEmail(login.Email) != null)
+        {
+            throw new InvalidOperationException("a Account with this email already exists. Did you forget your password?");
+        }
         var clientCheck = _clientRepository.GetClientByEmail(login.Email);
         if (clientCheck == null)
         {
@@ -72,6 +76,8 @@ public class LoginService : ILoginService
         bool isValid = BCrypt.Net.BCrypt.Verify(password, Login.Password);
         return isValid;
     }
+
+
 
     
 }

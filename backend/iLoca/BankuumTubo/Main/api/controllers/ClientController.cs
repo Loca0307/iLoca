@@ -52,6 +52,8 @@ public class ClientController : ControllerBase
     [HttpPost("InsertClient")]
     public ActionResult<ClientDTO> InsertClient([FromBody] Client client)
     {
+        
+
         _clientService.InsertClient(client);
         
         // Map the inserted client to DTO and return it

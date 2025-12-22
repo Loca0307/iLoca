@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     username: "",
     password: ""
   });
+
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusType, setStatusType] = useState(""); // "success" or "error"
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,15 +20,23 @@ export default function Register() {
       const res = await fetch("http://localhost:5027/login/InsertLogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)  
+        body: JSON.stringify(formData)
       });
 
       if (!res.ok) throw new Error("Failed to add login");
 
+      setStatusType("success");
+      setStatusMessage("Account successfully created! Redirecting to login...");
+
+      // Wait 1.5 seconds then navigate
+      setTimeout(() => {
+        navigate("/BankuumTubo/login");
+      }, 1500);
 
     } catch (err) {
       console.error(err);
-      alert("Error adding login");
+      setStatusType("error");
+      setStatusMessage("Failed to create account. Please try again.");
     }
   };
 
@@ -56,6 +68,18 @@ export default function Register() {
         </div>
 
         <button type="submit" className="btn-login">Register</button>
+
+        {statusMessage && (
+          <p
+            style={{
+              marginTop: "10px",
+              color: statusType === "success" ? "green" : "red",
+              fontWeight: "bold"
+            }}
+          >
+            {statusMessage}
+          </p>
+        )}
 
         <div className="signup-link">
           Already have an account? <Link to="/BankuumTubo/login">Login</Link>
