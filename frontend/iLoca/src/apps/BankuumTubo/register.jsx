@@ -21,7 +21,6 @@ export default function Register() {
 
       if (!res.ok) throw new Error("Failed to add login");
 
-      alert("Account Created!");
 
     } catch (err) {
       console.error(err);
