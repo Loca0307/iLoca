@@ -4,7 +4,6 @@ using Api.Repositories;
 using Api.Services;
 
 
-
 namespace Api.Modules.BankuumTubo;
 
 public static class BankuumTuboExtension
@@ -12,6 +11,7 @@ public static class BankuumTuboExtension
     // Module to import the project in Program.cs, and simplify structure there
     public static IServiceCollection BankuumTuboModule(this IServiceCollection services, IConfiguration configuration)
     {
+
         // Repositories
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
