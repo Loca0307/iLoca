@@ -16,14 +16,14 @@
 
 
 # HINTS
- 1) In case of the frontend not running, run `npm install`
- 2) The frontend is in the `"wwwroot"` file as it is the 
+ 1) In case of the backend frontend not running, run `npm install`
+ 2) The frontend of the backend is in the `"wwwroot"` file as it is the 
 default root name for ASP.NET to search for `frontend`
 
 
 # Dotnet
 
- 1) In the "dotnet" folder terminal write: `dotnet run`
+ 1) In the "backend/iLoca/X/Main" folder terminal write: `dotnet run`
 and open the localhost written on the terminal
 
 
