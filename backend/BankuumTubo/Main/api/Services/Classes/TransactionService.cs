@@ -9,7 +9,7 @@ public class TransactionService : ITransactionService
     private readonly IClientRepository _clientRepository;
 
     public TransactionService(ITransactionRepository transactionRepository,
-    IClientRepository clientRepository, ILoginRepository loginRepository)
+    IClientRepository clientRepository)
     {
         _transactionRepository = transactionRepository;
         _clientRepository = clientRepository;

@@ -5,35 +5,35 @@ using Npgsql;
 
 namespace Api.Repositories;
 
-public class LoginRepository : ILoginRepository
+public class AccountRepository : IAccountRepository
 {
     private readonly IDbContext _dbContext;
 
 
-    public LoginRepository(IDbContext dbContext)
+    public AccountRepository(IDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
 
-    public List<Login> GetAllLogins()
+    public List<Account> GetAllAccounts()
     {
-        var logins = new List<Login>();
+        var accounts = new List<Account>();
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
     using var cmd = new NpgsqlCommand(
-    @"SELECT login_id, email, password, user_name, client_id 
-    FROM ""BankuumTubo"".logins", 
+    @"SELECT account_id, email, password, user_name, client_id 
+    FROM ""BankuumTubo"".accounts", 
     conn);
 
         using var reader = cmd.ExecuteReader();
 
         while (reader.Read())
         {
-            logins.Add(new Login
+            accounts.Add(new Account
             {
-                LoginId = reader.GetInt32(0),
+                AccountId = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.GetString(2),
                 Username = reader.IsDBNull(3) ? "" : reader.GetString(3),
@@ -41,63 +41,63 @@ public class LoginRepository : ILoginRepository
             });
         }
 
-        return logins;
+        return accounts;
     }
 
-    public void InsertLogin(Login login)
+    public void InsertAccount(Account account)
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO ""BankuumTubo"".logins (email, password, user_name, client_id) 
-            VALUES (@email, @password, @username, @clientId) ON CONFLICT (Email) DO NOTHING", 
+            @"INSERT INTO ""BankuumTubo"".accounts (email, password, user_name, client_id) 
+            VALUES (@email, @password, @username, @clientId)", 
             conn);
 
-        cmd.Parameters.AddWithValue("email", login.Email);
-        cmd.Parameters.AddWithValue("password", login.Password); // Password should already be hashed
-        cmd.Parameters.AddWithValue("username", login.Username);
-        cmd.Parameters.AddWithValue("clientId", login.ClientId);
+        cmd.Parameters.AddWithValue("email", account.Email);
+        cmd.Parameters.AddWithValue("password", account.Password); // Password should already be hashed
+        cmd.Parameters.AddWithValue("username", account.Username);
+        cmd.Parameters.AddWithValue("clientId", account.ClientId);
         
 
         cmd.ExecuteNonQuery();
     }
 
-    public void DeleteLogin(Login login)
+    public void DeleteAccount(Account account)
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM ""BankuumTubo"".logins 
-            WHERE login_id = @id", 
+            @"DELETE FROM ""BankuumTubo"".accounts 
+            WHERE account_id = @id", 
             conn);
 
-        cmd.Parameters.AddWithValue("id", login.LoginId);
+        cmd.Parameters.AddWithValue("id", account.AccountId);
         cmd.ExecuteNonQuery();
     }
 
 
     
-    public void DeleteAllLogins(){
+    public void DeleteAllAccounts(){
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM ""BankuumTubo"".logins",
+            @"DELETE FROM ""BankuumTubo"".accounts",
             conn);
 
         cmd.ExecuteNonQuery();
     }
 
-    // Method that returns only the username of a login to set the localStorage variable
+    // Method that returns only the username of a Account to set the localStorage variable
     public string? GetUsernameByEmail(string email)
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT user_name FROM ""BankuumTubo"".logins 
+            @"SELECT user_name FROM ""BankuumTubo"".accounts 
             WHERE email = @email", 
             conn);
 
@@ -115,14 +115,14 @@ public class LoginRepository : ILoginRepository
         return null;
     }
 
-    public Login? GetLoginByEmail(string email)
+    public Account? GetAccountByEmail(string email)
     {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT login_id, email, password, user_name, client_id 
-            FROM ""BankuumTubo"".logins WHERE email = @email", 
+            @"SELECT account_id, email, password, user_name, client_id 
+            FROM ""BankuumTubo"".accounts WHERE email = @email", 
             conn);
 
         cmd.Parameters.AddWithValue("email", email);
@@ -131,9 +131,9 @@ public class LoginRepository : ILoginRepository
 
         if (reader.Read())
         {
-            return new Login
+            return new Account
             {
-                LoginId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                AccountId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
                 Email = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                 Password = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
                 Username = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),

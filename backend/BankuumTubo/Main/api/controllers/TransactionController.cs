@@ -15,7 +15,7 @@ public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
 
-    public TransactionController(ITransactionService transactionService, ILoginService loginService)
+    public TransactionController(ITransactionService transactionService)
     {
         _transactionService = transactionService;
     }

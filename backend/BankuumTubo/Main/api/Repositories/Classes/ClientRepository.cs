@@ -104,7 +104,7 @@ public class ClientRepository : IClientRepository
         cmd.ExecuteNonQuery();
     }
 
-    //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
+    //  RETURN IF PRESENT THE ACCOUNT OF THE GIVEN EMAIL
     public Client? GetClientByEmail(string email)
     {
         using var conn = _dbContext.GetConnection();

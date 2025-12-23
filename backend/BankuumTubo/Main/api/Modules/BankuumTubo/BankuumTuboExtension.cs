@@ -14,12 +14,12 @@ public static class BankuumTuboExtension
     {
         // Repositories
         services.AddScoped<IClientRepository, ClientRepository>();
-        services.AddScoped<ILoginRepository, LoginRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         // Services
         services.AddScoped<IClientService, ClientService>();
-        services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ITransactionService, TransactionService>();
 
         return services;

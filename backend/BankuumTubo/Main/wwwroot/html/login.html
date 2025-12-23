@@ -88,7 +88,7 @@
             <div class="auth-container">
                 <div class="auth-header">
                     <h2>Welcome Back</h2>
-                    <p>Login to your Bankuum Tubo account</p>
+                    <p>Account to your Bankuum Tubo account</p>
                 </div>
                 <div id="error-message" class="error-message"></div>
                 <div id="success-message" class="success-message"></div>
@@ -142,7 +142,7 @@
     </footer>
 
     <script>
-        // Handle login form submission
+        // Handle Account form submission
         document.getElementById('login-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -158,7 +158,7 @@
             successMsg.textContent = '';
 
             try {
-                const response = await fetch('/login/authenticate', {
+                const response = await fetch('/account/authenticate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -171,9 +171,9 @@
                     successMsg.textContent = 'Login successful! Redirecting...';
                     successMsg.style.display = 'block';
 
-                    // Try to resolve username from Login/ShowLogins
+                    // Try to resolve username from Account/ShowAccounts
                     try {
-                        const usersResp = await fetch('/Login/ShowLogins');
+                        const usersResp = await fetch('/account/ShowAccounts');
                         if (usersResp.ok) {
                             const users = await usersResp.json();
                             const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
@@ -220,7 +220,7 @@
             const signupLink = document.getElementById('signup-link');
 
             if (username) {
-                // Hide login form and show profile info
+                // Hide Account form and show profile info
                 const form = document.getElementById('login-form');
                 if (form) form.style.display = 'none';
                 profileUsername.textContent = `Logged in as ${username}`;
