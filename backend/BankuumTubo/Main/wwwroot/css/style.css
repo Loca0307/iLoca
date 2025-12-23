@@ -381,3 +381,67 @@ footer {
     font-size: 14px;
     display: none;
 }
+
+/* Auth and profile card styles — enlarged for better visibility */
+.auth-container {
+    max-width: 860px;
+    margin: 1.25rem auto;
+    padding: 28px 32px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+    font-size: 1.05rem;
+}
+
+.auth-header h2 {
+    font-size: 2.1rem;
+    margin: 0 0 6px 0;
+}
+
+/* Profile card styles for logged-in user (bigger, centered) */
+#profile-section {
+    display: none;
+    margin: 1.5rem auto 0 auto;
+    text-align: center;
+    max-width: 760px;
+    background: #f8fafb;
+    padding: 32px 36px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+#profile-username {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+#profile-email {
+    color: #555;
+    font-size: 1.15rem;
+    margin-bottom: 14px;
+}
+
+#profile-iban {
+    color: #333;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+/* Emphasize the balance number much larger */
+#profile-balance {
+    color: #1b6e22;
+    font-size: 3.2rem;
+    font-weight: 900;
+    margin: 8px 0 16px 0;
+    letter-spacing: 0.5px;
+}
+
+#logout-btn {
+    margin-top: 14px;
+    padding: 1rem 1.8rem;
+    font-size: 1.05rem;
+    border-radius: 8px;
+}
