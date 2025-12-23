@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NV00QZhV7a0=",
+  "dgSpecHash": "jetGY1futVw=",
   "success": true,
-  "projectFilePath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/dotnetFiles.Tests.csproj",
+  "projectFilePath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Test/BankuumTuboTests.csproj",
   "expectedPackageFiles": [
     "/Users/luca/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/luca/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",

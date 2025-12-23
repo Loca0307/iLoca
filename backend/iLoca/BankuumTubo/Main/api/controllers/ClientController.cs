@@ -6,7 +6,7 @@ using Api.Services;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Api.controllers;
+namespace Api.Controllers;
 
 // Defines this controller file in the "ApiController" group
 // it automatically defines "api/client" as the route to manage

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 using System.Linq;
 
-namespace Api.controllers;
+namespace Api.Controllers;
 
 [ApiController]
 [Route("/[controller]")]

@@ -2086,7 +2086,7 @@
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "dotnetFiles/1.0.0": {
+      "BankuumTubo/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
@@ -2097,10 +2097,10 @@
           "Npgsql": "9.0.4"
         },
         "compile": {
-          "bin/placeholder/dotnetFiles.dll": {}
+          "bin/placeholder/BankuumTubo.dll": {}
         },
         "runtime": {
-          "bin/placeholder/dotnetFiles.dll": {}
+          "bin/placeholder/BankuumTubo.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -6396,18 +6396,18 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "dotnetFiles/1.0.0": {
+    "BankuumTubo/1.0.0": {
       "type": "project",
-      "path": "../dotnetFiles/dotnetFiles.csproj",
-      "msbuildProject": "../dotnetFiles/dotnetFiles.csproj"
+      "path": "../Main/BankuumTubo.csproj",
+      "msbuildProject": "../Main/BankuumTubo.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "BankuumTubo >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.12.0",
       "Moq >= 4.20.72",
       "coverlet.collector >= 6.0.2",
-      "dotnetFiles >= 1.0.0",
       "xunit >= 2.9.2",
       "xunit.runner.visualstudio >= 2.8.2"
     ]
@@ -6418,11 +6418,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/dotnetFiles.Tests.csproj",
-      "projectName": "dotnetFiles.Tests",
-      "projectPath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/dotnetFiles.Tests.csproj",
+      "projectUniqueName": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Test/BankuumTuboTests.csproj",
+      "projectName": "BankuumTuboTests",
+      "projectPath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Test/BankuumTuboTests.csproj",
       "packagesPath": "/Users/luca/.nuget/packages/",
-      "outputPath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles.Tests/obj/",
+      "outputPath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Test/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/luca/.nuget/NuGet/NuGet.Config"
@@ -6437,8 +6437,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles/dotnetFiles.csproj": {
-              "projectPath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/dotnetFiles/dotnetFiles.csproj"
+            "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Main/BankuumTubo.csproj": {
+              "projectPath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Main/BankuumTubo.csproj"
             }
           }
         }

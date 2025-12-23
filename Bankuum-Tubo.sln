@@ -1,11 +1,10 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetFiles.Tests", "dotnetFiles.Tests\dotnetFiles.Tests.csproj", "{951E3EF4-F86B-4561-B7BA-D197B33C4A18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankuumTubo.Tests", "backend\iLoca\BankuumTubo\Test\BankuumTuboTests.csproj", "{951E3EF4-F86B-4561-B7BA-D197B33C4A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetFiles", "dotnetFiles\dotnetFiles.csproj", "{E1D4880F-52E9-4C0D-BD03-5E0604CDF060}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankuumTubo", "backend\iLoca\BankuumTubo\Main\BankuumTubo.csproj", "{E1D4880F-52E9-4C0D-BD03-5E0604CDF060}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

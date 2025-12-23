@@ -5338,11 +5338,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/backend/iLoca/BankuumTubo/Main/dotnetFiles.csproj",
-      "projectName": "dotnetFiles",
-      "projectPath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/backend/iLoca/BankuumTubo/Main/dotnetFiles.csproj",
+      "projectUniqueName": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Main/BankuumTubo.csproj",
+      "projectName": "BankuumTubo",
+      "projectPath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Main/BankuumTubo.csproj",
       "packagesPath": "/Users/luca/.nuget/packages/",
-      "outputPath": "/Users/luca/Documents/Side Quests/Bankuum-Tubo/backend/iLoca/BankuumTubo/Main/obj/",
+      "outputPath": "/Users/luca/Documents/Side Quests/iLoca/backend/iLoca/BankuumTubo/Main/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/luca/.nuget/NuGet/NuGet.Config"
