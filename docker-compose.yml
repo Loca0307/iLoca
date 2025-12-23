@@ -23,6 +23,6 @@ services:
     depends_on:
       - backend
 
-# To store data outside the container file system         
-volumes:
-  db_data:
+# Data storage used by the container but outside of it        
+#volumes:
+ # db_data:
