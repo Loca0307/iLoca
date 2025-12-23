@@ -23,8 +23,10 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
     using var cmd = new NpgsqlCommand(
-    @"SELECT login_id, email, password, user_name, client_id FROM logins", conn
-    );
+    @"SELECT login_id, email, password, user_name, client_id 
+    FROM ""BankuumTubo"".logins", 
+    conn);
+
         using var reader = cmd.ExecuteReader();
 
         while (reader.Read())
@@ -48,9 +50,9 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO logins (email, password, user_name, client_id)
-            VALUES (@email, @password, @username, @clientId)
-            ON CONFLICT (Email) DO NOTHING", conn);
+            @"INSERT INTO ""BankuumTubo"".logins (email, password, user_name, client_id) 
+            VALUES (@email, @password, @username, @clientId) ON CONFLICT (Email) DO NOTHING", 
+            conn);
 
         cmd.Parameters.AddWithValue("email", login.Email);
         cmd.Parameters.AddWithValue("password", login.Password); // Password should already be hashed
@@ -67,8 +69,9 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM logins
-            WHERE login_id = @id", conn);
+            @"DELETE FROM ""BankuumTubo"".logins 
+            WHERE login_id = @id", 
+            conn);
 
         cmd.Parameters.AddWithValue("id", login.LoginId);
         cmd.ExecuteNonQuery();
@@ -81,9 +84,8 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM logins",
-            conn
-        );
+            @"DELETE FROM ""BankuumTubo"".logins",
+            conn);
 
         cmd.ExecuteNonQuery();
     }
@@ -95,9 +97,9 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT user_name FROM logins
-            WHERE email = @email", conn
-        );
+            @"SELECT user_name FROM ""BankuumTubo"".logins 
+            WHERE email = @email", 
+            conn);
 
         cmd.Parameters.AddWithValue("email", email);
 
@@ -119,9 +121,9 @@ public class LoginRepository : ILoginRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT login_id, email, password, user_name, client_id FROM logins
-            WHERE email = @email", conn
-        );
+            @"SELECT login_id, email, password, user_name, client_id 
+            FROM ""BankuumTubo"".logins WHERE email = @email", 
+            conn);
 
         cmd.Parameters.AddWithValue("email", email);
 

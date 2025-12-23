@@ -26,7 +26,11 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         // For "Get" returning request you need to "Read" 
-        using var cmd = new NpgsqlCommand("SELECT client_id, first_name, last_name, email, phone, iban, balance FROM clients", conn);
+        // Add "" with \ to find the specific schema
+        using var cmd = new NpgsqlCommand(@"SELECT client_id, first_name, last_name, email, phone, iban, balance 
+        FROM ""BankuumTubo"".clients", 
+        conn);
+
         using var reader = cmd.ExecuteReader();
 
         // to structure the read data
@@ -56,7 +60,9 @@ public class ClientRepository : IClientRepository
 
         // Define the SQL query (include iban and balance)
         using var cmd = new NpgsqlCommand(
-            "INSERT INTO clients (first_name, last_name, email, phone, iban, balance) VALUES (@first, @last, @email, @phone, @iban, @balance) ON CONFLICT (email) DO NOTHING",
+            @"INSERT INTO ""BankuumTubo"".clients (first_name, last_name, email, phone, iban, balance) 
+            VALUES (@first, @last, @email, @phone, @iban, @balance) 
+            ON CONFLICT (email) DO NOTHING",
             conn);
 
         // Define actual parameters
@@ -67,7 +73,7 @@ public class ClientRepository : IClientRepository
         cmd.Parameters.AddWithValue("iban", client.Iban);
         cmd.Parameters.AddWithValue("balance", 1000);
 
-        // To actually run the query 
+        // To actually run the query \
         cmd.ExecuteNonQuery();
     }
 
@@ -77,8 +83,8 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM clients
-            WHERE client_id = @id", conn);
+            @"DELETE FROM ""BankuumTubo"".clients WHERE client_id = @id", 
+            conn);
 
         cmd.Parameters.AddWithValue("id", client.ClientId);
         cmd.ExecuteNonQuery();
@@ -91,8 +97,9 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-                @"DELETE FROM clients", conn
-        );
+            @"DELETE FROM ""BankuumTubo"".clients", 
+            conn);
+        
 
         cmd.ExecuteNonQuery();
     }
@@ -103,10 +110,11 @@ public class ClientRepository : IClientRepository
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
+
         using var cmd = new NpgsqlCommand(
             @"SELECT client_id, first_name, last_name, email, phone, iban, balance 
-            FROM clients
-            WHERE Email = @email", conn
+            FROM ""BankuumTubo"".clients WHERE Email = @email", 
+            conn
         );
 
         cmd.Parameters.AddWithValue("email", email);
@@ -139,8 +147,7 @@ public class ClientRepository : IClientRepository
 
         using var cmd = new NpgsqlCommand(
             @"SELECT client_id, first_name, last_name, email, phone, iban, balance 
-            FROM clients 
-            WHERE Iban = @iban",
+            FROM ""BankuumTubo"".clients WHERE Iban = @iban",
             conn);
 
         cmd.Parameters.AddWithValue("iban", iban);
@@ -175,7 +182,9 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"SELECT balance FROM clients WHERE client_id = @id", conn);
+            @"SELECT balance FROM ""BankuumTubo"".clients 
+            WHERE client_id = @id", 
+            conn);
 
         cmd.Parameters.AddWithValue("id", client.ClientId);
 
@@ -194,10 +203,9 @@ public class ClientRepository : IClientRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-        @"UPDATE clients
-        SET balance = balance + @amount
-        WHERE client_id = @clientId;"
-        , conn);
+        @"UPDATE ""BankuumTubo"".clients SET balance = balance + @amount 
+        WHERE client_id = @clientId;",
+        conn);
 
         cmd.Parameters.AddWithValue("clientId", client.ClientId);
         cmd.Parameters.AddWithValue("amount", amount);
@@ -222,7 +230,9 @@ public class ClientRepository : IClientRepository
             var secondId = Math.Max(sender.ClientId, receiver.ClientId);
 
             // Lock those client so no other update can happen to them during the transaction processx
-            using (var cmdLock = new NpgsqlCommand("SELECT client_id, balance FROM clients WHERE client_id IN (@id1, @id2) FOR UPDATE", conn, tx))
+            using (var cmdLock = new NpgsqlCommand(@"SELECT client_id, balance FROM ""BankuumTubo"".clients 
+            WHERE client_id IN (@id1, @id2) FOR UPDATE", conn, tx))
+
             {
                 cmdLock.Parameters.AddWithValue("id1", firstId);
                 cmdLock.Parameters.AddWithValue("id2", secondId);
@@ -233,7 +243,9 @@ public class ClientRepository : IClientRepository
 
             // Re-check sender balance from DB to avoid stale reads
             decimal dbSenderBalance;
-            using (var cmdGet = new NpgsqlCommand("SELECT balance FROM clients WHERE client_id = @id", conn, tx))
+            using (var cmdGet = new NpgsqlCommand(@"SELECT balance FROM ""BankuumTubo"".clients 
+            WHERE client_id = @id", conn, tx))
+
             {
                 cmdGet.Parameters.AddWithValue("id", sender.ClientId);
                 var res = cmdGet.ExecuteScalar();
@@ -250,7 +262,7 @@ public class ClientRepository : IClientRepository
             }
 
             // Update sender balance (subtract)
-            using (var cmdUpdateSender = new NpgsqlCommand("UPDATE clients SET balance = balance - @amount WHERE client_id = @id", conn, tx))
+            using (var cmdUpdateSender = new NpgsqlCommand(@"UPDATE ""BankuumTubo"".clients SET balance = balance - @amount WHERE client_id = @id", conn, tx))
             {
                 cmdUpdateSender.Parameters.AddWithValue("amount", amount);
                 cmdUpdateSender.Parameters.AddWithValue("id", sender.ClientId);
@@ -258,7 +270,7 @@ public class ClientRepository : IClientRepository
             }
 
             // Update receiver balance (add)
-            using (var cmdUpdateReceiver = new NpgsqlCommand("UPDATE clients SET balance = balance + @amount WHERE client_id = @id", conn, tx))
+            using (var cmdUpdateReceiver = new NpgsqlCommand(@"UPDATE ""BankuumTubo"".clients SET balance = balance + @amount WHERE client_id = @id", conn, tx))
             {
                 cmdUpdateReceiver.Parameters.AddWithValue("amount", amount);
                 cmdUpdateReceiver.Parameters.AddWithValue("id", receiver.ClientId);
@@ -266,7 +278,7 @@ public class ClientRepository : IClientRepository
             }
 
             // Insert transaction record
-            using (var cmdInsert = new NpgsqlCommand(@"INSERT INTO transactions (sender_email, receiver_iban, amount, date_time, reason) VALUES (@sender, @receiver, @amount, @date_time, @reason)", conn, tx))
+            using (var cmdInsert = new NpgsqlCommand(@"INSERT INTO ""BankuumTubo"".transactions (sender_email, receiver_iban, amount, date_time, reason) VALUES (@sender, @receiver, @amount, @date_time, @reason)", conn, tx))
             {
                 cmdInsert.Parameters.AddWithValue("sender", transaction.SenderEmail);
                 cmdInsert.Parameters.AddWithValue("receiver", transaction.ReceiverIban);

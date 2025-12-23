@@ -23,9 +23,9 @@ public class TransactionRepository : ITransactionRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-        @"SELECT transaction_id, sender_email, receiver_iban, 
-        amount, date_time, reason FROM transactions", conn
-        );
+        @"SELECT transaction_id, sender_email, receiver_iban, amount, date_time, reason 
+        FROM ""BankuumTubo"".transactions", 
+        conn);
 
         using var reader = cmd.ExecuteReader();
 
@@ -54,9 +54,9 @@ public class TransactionRepository : ITransactionRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"INSERT INTO transactions (sender_email, receiver_iban,
-            amount, date_time, reason)
-            VALUES (@sender, @receiver, @amount, @date_time, @reason)", conn);
+            @"INSERT INTO ""BankuumTubo"".transactions (sender_email, receiver_iban, amount, date_time, reason) 
+            VALUES (@sender, @receiver, @amount, @date_time, @reason)", 
+            conn);
 
         // Define the Transaction values
         cmd.Parameters.AddWithValue("sender", transaction.SenderEmail);
@@ -74,9 +74,9 @@ public class TransactionRepository : ITransactionRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-        @"DELETE FROM transactions
-        WHERE transaction_id = @id"
-        , conn);
+        @"DELETE FROM ""BankuumTubo"".transactions 
+        WHERE transaction_id = @id",
+        conn);
 
         cmd.Parameters.AddWithValue("id", transaction.TransactionId);
         cmd.ExecuteNonQuery();
@@ -88,8 +88,8 @@ public class TransactionRepository : ITransactionRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-        @"DELETE FROM transactions"
-        , conn);
+        @"DELETE FROM ""BankuumTubo"".transactions",
+        conn);
 
         cmd.ExecuteNonQuery();
     }

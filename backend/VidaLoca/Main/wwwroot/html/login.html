@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VidaLoca — Login</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container center">
+        <h1 class="site-title">VidaLoca</h1>
+      </div>
+    </header>
+
+    <main class="container home-main center">
+      <div class="card login-card">
+        <h2 class="card-title">Login</h2>
+        <form id="loginForm">
+          <label for="username">Username</label>
+          <input id="username" name="username" class="input" type="text" required />
+
+          <label for="email">Email</label>
+          <input id="email" name="email" class="input" type="email" required />
+
+          <label for="password">Password</label>
+          <input id="password" name="password" class="input" type="password" required />
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Sign In</button>
+            <a class="btn btn-ghost" href="/html/index.html">Back</a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer center">
+      <div class="container">
+        <p class="small">© 2025 VidaLoca — All rights reserved</p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        // demo behaviour — don't send credentials
+        const u = document.getElementById('username').value;
+        alert('Demo login for ' + u + '. This is a prototype.');
+      });
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 @BankuumTubo_HostAddress = http://localhost:5027
 
-GET {{BankuumTubo_HostAddress}}/weatherforecast/
+GET {{BankuumTubo_HostAddress}}/client/ShowClients
 Accept: application/json    
 
 
