@@ -13,18 +13,16 @@ COPY . .
 # Build production bundle
 RUN npm run build
 
-
 # STEP 2: PUBLISH WITH NGINX
 FROM nginx:alpine
 
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy custom SPA nginx config (React by default uses Single Page Applciation)
-COPY nginx.conf /etc/nginx/conf.d/default.conf 
-   
+# Copy custom SPA nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built frontend files
+# Copy built frontend files 
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose HTTP port
