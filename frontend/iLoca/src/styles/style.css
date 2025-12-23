@@ -405,6 +405,7 @@ footer {
     display: flex;
     justify-content: center;
     padding: 2rem 0;
+    margin-top: 3rem;
 }
 .phone-container {
     width: 360px;
@@ -440,7 +441,7 @@ footer {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 85px;
+    bottom: -16px;
     width: 56px;
     height: 56px;   
     background: radial-gradient(circle at 30% 30%, #fff, #e8e8e8 40%, #cfcfcf 100%);
