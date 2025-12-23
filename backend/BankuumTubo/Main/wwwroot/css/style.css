@@ -445,3 +445,46 @@ footer {
     font-size: 1.05rem;
     border-radius: 8px;
 }
+
+/* Exact copy of the inline styles from login.html to preserve visual appearance */
+#profile-section.moved-inline-styles {
+    display: none;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+#profile-section.moved-inline-styles #profile-username {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+#profile-section.moved-inline-styles #profile-email {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+#profile-section.moved-inline-styles #profile-iban {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.2rem 0;
+}
+
+#profile-section.moved-inline-styles #profile-balance {
+    color: #2b7a0b;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0.2rem 0;
+}
+
+#profile-section.moved-inline-styles #logout-btn {
+    background: #e53935;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+}
