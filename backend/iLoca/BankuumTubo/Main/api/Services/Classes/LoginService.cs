@@ -78,6 +78,12 @@ public class LoginService : ILoginService
     }
 
 
+    public string? GetUsernameByEmail(string email)
+    {
+        return _loginRepository.GetUsernameByEmail(email);
+    }
+
+
 
     
 }

@@ -60,12 +60,12 @@ FOR BOTH(docker-compose):
 
 # Test
 
-1) Enter the dotnetFiles.Tests folder
+1) Enter the "Test" folder
 2) Write in terminal: `dotnet test`
 
 
 ## Frontend 
  1) Enter the frontend/iLoca folder
- 12 Write in terminal `npm run dev`
+ 2) Write in terminal `npm run dev`
 
 

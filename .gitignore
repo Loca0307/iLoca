@@ -1,35 +1,3 @@
-# Build outputs
-**/bin/
-**/obj/
-
-# Visual Studio / Rider / VS Code
-.vs/
-.idea/
-.vscode/
-
-# User-specific files
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# OS files
-.DS_Store
-
-# Test results / coverage
-TestResults/
-*.coverage
-coverage/
-
-# NuGet / packages
-*.nupkg
-.packages/
-
-# Logs
-*.log
-
-# Certificates (if you put certs into repo by mistake)
-*.pfx
-*.key
-
+# Which files of the project should not be pushed on github
 .env
+node_modules/

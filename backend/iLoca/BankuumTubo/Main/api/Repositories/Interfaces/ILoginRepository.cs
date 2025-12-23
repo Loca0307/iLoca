@@ -11,6 +11,7 @@ public interface ILoginRepository
     public void DeleteLogin(Login login);
 
     public Login? GetLoginByEmail(string email);
+    public string? GetUsernameByEmail(string email);
 
     public void DeleteAllLogins();
 }

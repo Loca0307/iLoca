@@ -22,6 +22,14 @@ public class LoginController : ControllerBase
         _loginService = loginService;
     }
 
+    [HttpGet("GetUsernameByEmail")]
+    public ActionResult<string> GetUsernameByEmail([FromQuery] string email)
+    {
+        var username = _loginService.GetUsernameByEmail(email);
+        if (username == null) return NotFound();
+        return Ok(username);
+    }
+
 
     // RETURN ALL THE LOGINS
     [HttpGet("ShowLogins")]

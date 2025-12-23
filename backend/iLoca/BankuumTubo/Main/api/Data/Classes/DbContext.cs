@@ -10,20 +10,24 @@ public class DbContext : IDbContext
 
     public DbContext() 
     {
-        string host = "pg-2325aa38-loca2gaming-18ad.l.aivencloud.com";
-        int port = 13765;
-        string database = "defaultdb";
-        string username = "avnadmin";
-
-
-        // Load .env file for password
+        // Load the .env file
         Env.Load();
 
-        string password = "AVNS_6GtbsR1hQPaErNpfB2O";
-                
-            // Get the password from an environment variable instead of hardcoding it
-            //Environment.GetEnvironmentVariable("DB_PASSWORD") ?? throw new Exception("DB_PASSWORD environment variable is not set");
+        string host = Environment.GetEnvironmentVariable("DB_HOST") 
+                      ?? throw new Exception("DB_HOST environment variable is not set");
 
+        int port = int.Parse(Environment.GetEnvironmentVariable("DB_PORT")!);
+
+        string database = Environment.GetEnvironmentVariable("DB_DATABASE") 
+                          ?? throw new Exception("DB_DATABASE environment variable is not set");
+
+        string username = Environment.GetEnvironmentVariable("DB_USERNAME") 
+                          ?? throw new Exception("DB_USERNAME environment variable is not set");
+
+        string password = Environment.GetEnvironmentVariable("DB_PASSWORD") 
+                          ?? throw new Exception("DB_PASSWORD environment variable is not set");
+
+        // Build the connection string
         _connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;";
     }
 
