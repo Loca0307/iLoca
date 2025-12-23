@@ -74,7 +74,45 @@ public class LoginRepository : ILoginRepository
         cmd.ExecuteNonQuery();
     }
 
-    //  RETURN IF PRESENT THE LOGIN OF THE GIVEN EMAIL
+
+    
+    public void DeleteAllLogins(){
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"DELETE FROM logins",
+            conn
+        );
+
+        cmd.ExecuteNonQuery();
+    }
+
+    // Method that returns only the username of a login to set the localStorage variable
+    public string? GetUsernameByEmail(string email)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"SELECT user_name FROM logins
+            WHERE email = @email", conn
+        );
+
+        cmd.Parameters.AddWithValue("email", email);
+
+
+        using var reader = cmd.ExecuteReader();
+
+        if (reader.Read())
+        {
+            return reader.GetString(0);
+
+        }
+
+        return null;
+    }
+
     public Login? GetLoginByEmail(string email)
     {
         using var conn = _dbContext.GetConnection();
@@ -93,26 +131,15 @@ public class LoginRepository : ILoginRepository
         {
             return new Login
             {
-                LoginId = reader.GetInt32(0),
-                Email = reader.GetString(1),
-                Password = reader.GetString(2),
-                Username = reader.GetString(3),
-                ClientId = reader.GetInt32(4)
+                LoginId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                Email = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                Password = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                Username = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                ClientId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
             };
         }
 
         return null;
     }
-    
-    public void DeleteAllLogins(){
-        using var conn = _dbContext.GetConnection();
-        conn.Open();
 
-        using var cmd = new NpgsqlCommand(
-            @"DELETE FROM logins",
-            conn
-        );
-
-        cmd.ExecuteNonQuery();
-    }
 }
