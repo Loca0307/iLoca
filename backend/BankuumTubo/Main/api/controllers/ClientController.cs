@@ -12,7 +12,7 @@ namespace Api.Controllers;
 // it automatically defines "api/client" as the route to manage
 [ApiController]
 [Route("/[controller]")]
-[EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
+[EnableCors("BankuumTuboCors")] // To limit BankuumTubo calls only to these controllers
 public class ClientController : ControllerBase
 {
     // Define the clientService to use for the controller

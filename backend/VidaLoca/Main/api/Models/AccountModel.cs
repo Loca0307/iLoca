@@ -2,10 +2,10 @@ namespace Api.Models;
 
 public class Account
 {
-    public int ClientId { get; set; }
-    public string FirstName { get; set; } = "";
-    public string LastName { get; set; } = "";
+    public int AccountId{ get; set; }
     public string Email { get; set; } = ""; // Current way to access bank account
-    public string Password {get; set;} = "";
+    public string Password { get; set; } = "";
+    public string Username { get; set; } = "";
+    public int ClientId { get; set; }
 
 }

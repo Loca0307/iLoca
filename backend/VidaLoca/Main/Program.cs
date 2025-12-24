@@ -1,6 +1,12 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Api.Data;
+using Api.Repositories;
+using Api.Services;
+using Api.Modules.VidaLoca;
+
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 // Add controllers to the builder
 builder.Services.AddControllers();
@@ -18,6 +24,15 @@ builder.Services.AddCors(options =>
     options.AddPolicy("DefaultCorsPolicy", policy =>
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
+
+// --- Dependency Injection ---
+// DB layer
+builder.Services.AddScoped<IDbContext, DbContext>();
+
+
+// Module registration 
+builder.Services.VidaLocaModule(builder.Configuration);
+
 
 var app = builder.Build();
 

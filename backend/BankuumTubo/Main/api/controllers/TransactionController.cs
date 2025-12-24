@@ -10,7 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("/[controller]")]
-[EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
+[EnableCors("BankuumTuboCors")] // To limit BankuumTubo calls only to these controllers
 public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;

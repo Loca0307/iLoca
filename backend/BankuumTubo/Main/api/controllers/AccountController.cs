@@ -12,7 +12,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("/[controller]")]
-[EnableCors("BankuumCors")] // To limit BankuumTubo calls only to these controllers
+[EnableCors("BankuumTuboCors")] // To limit BankuumTubo calls only to these controllers
 public class AccountController : ControllerBase
 {
     private readonly IAccountService _accountService;
@@ -22,6 +22,27 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
+
+        // RETURN ALL THE ACCOUNTS
+    [HttpGet("ShowAccounts")]
+    public ActionResult<List<AccountDTO>> GetAllAccounts()
+    {
+        var accounts = _accountService.GetAllAccounts();
+
+        // Here get given what the controller will return to the frontend
+        var accountDTOs = accounts.Select(a => new AccountDTO // Select is like map in java and js
+        {
+            AccountId = a.AccountId,
+            Email = a.Email,
+            Username = a.Username,
+            ClientId = a.ClientId
+        });
+
+        return Ok(accountDTOs);
+    }
+
+
+
     [HttpGet("GetUsernameByEmail")]
     public ActionResult<string> GetUsernameByEmail([FromQuery] string email)
     {
@@ -29,27 +50,6 @@ public class AccountController : ControllerBase
         if (username == null) return NotFound();
         return Ok(username);
     }
-
-
-    // RETURN ALL THE profileS
-    [HttpGet("ShowAccounts")]
-    public ActionResult<List<AccountDTO>> GetAllAccounts()
-    {
-        var accounts = _accountService.GetAllAccounts();
-
-        // Here get given what the controller will return to the frontend
-        var accountDTOs = accounts.Select(a => new AccountDTO
-        {
-            AccountId = a.AccountId,
-            Email = a.Email,
-            Username = a.Username,
-            ClientId = a.ClientId
-        }
-        );
-
-        return Ok(accountDTOs);
-    }
-
 
 
     // ADD ACCOUNT TO THE DATABASE

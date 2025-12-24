@@ -18,7 +18,8 @@ public class AccountRepository : IAccountRepository
 
     public List<Account> GetAllAccounts()
     {
-        var accounts = new List<Account>();
+        // Define Accounts list to be returned afterwrds
+        var accounts = new List<Account>(); 
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
@@ -29,15 +30,13 @@ public class AccountRepository : IAccountRepository
 
         using var reader = cmd.ExecuteReader();
 
-        while (reader.Read())
-        {
-            accounts.Add(new Account
-            {
+        while (reader.Read()) {
+            accounts.Add(new Account {
                 AccountId = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.GetString(2),
-                Username = reader.IsDBNull(3) ? "" : reader.GetString(3),
-                ClientId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
+                Username = reader.GetString(3),
+                ClientId = reader.GetInt32(4)
             });
         }
 
