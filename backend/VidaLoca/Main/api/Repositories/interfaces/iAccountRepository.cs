@@ -4,6 +4,7 @@ namespace Api.Repositories;
 
 public interface IAccountRepository
 {
-    List<Account> GetAllAccounts();
+    public List<Account> GetAllAccounts();
+    public void InsertAccount(Account account);
 
 }

@@ -112,8 +112,8 @@
                         if (usersResp.ok) {
                             const users = await usersResp.json();
                             const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
-                            if (found && found.username) {
-                                localStorage.setItem('loggedInUsername', found.username);
+                                if (found && found.username) {
+                                localStorage.setItem('BankuumTubo/loggedInUsername', found.username);
                             }
                         }
                     } catch (err) {
@@ -121,12 +121,12 @@
                     }
 
                     // Save authenticated email for transactions (no other client data saved)
-                    localStorage.setItem('loggedInEmail', email);
+                    localStorage.setItem('BankuumTubo/loggedInEmail', email);
 
                     // Fallback username
-                    if (!localStorage.getItem('loggedInUsername')) {
+                    if (!localStorage.getItem('BankuumTubo/loggedInUsername')) {
                         const fallback = (email || '').split('@')[0];
-                        if (fallback) localStorage.setItem('loggedInUsername', fallback);
+                        if (fallback) localStorage.setItem('BankuumTubo/loggedInUsername', fallback);
                     }
 
                     // Redirect to home
@@ -149,8 +149,8 @@
             const profileEmail = document.getElementById('profile-email');
             const logoutBtn = document.getElementById('logout-btn');
 
-            const username = localStorage.getItem('loggedInUsername');
-            const email = localStorage.getItem('loggedInEmail');
+            const username = localStorage.getItem('BankuumTubo/loggedInUsername');
+            const email = localStorage.getItem('BankuumTubo/loggedInEmail');
 
             const signupLink = document.getElementById('signup-link');
 
@@ -190,8 +190,8 @@
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
                     // Clear only the username and email from localStorage
-                    localStorage.removeItem('loggedInUsername');
-                    localStorage.removeItem('loggedInEmail');
+                    localStorage.removeItem('BankuumTubo/loggedInUsername');
+                    localStorage.removeItem('BankuumTubo/loggedInEmail');
                     // Redirect to home page
                     window.location.href = '/html/index.html';
                 });

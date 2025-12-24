@@ -3,5 +3,7 @@ using Api.Models;
 namespace Api.Services;
 
 public interface IAccountService{
-    List<Account> GetAllAccounts();
+    public List<Account> GetAllAccounts();
+    public void InsertAccount(Account account);
+
 }

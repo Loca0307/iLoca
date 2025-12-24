@@ -39,4 +39,23 @@ public class AccountRepository : IAccountRepository{
         return accounts;
     }
 
+
+    public void InsertAccount(Account account)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(
+            @"INSERT INTO ""VidaLoca"".accounts (email, password, user_name, client_id) 
+            VALUES (@email, @password, @username, @clientId)", 
+            conn);
+
+        cmd.Parameters.AddWithValue("email", account.Email);
+        cmd.Parameters.AddWithValue("password", account.Password); // Password should already be hashed
+        cmd.Parameters.AddWithValue("username", account.Username);
+        cmd.Parameters.AddWithValue("clientId", account.ClientId);
+        
+
+        cmd.ExecuteNonQuery();
+    }
 }

@@ -17,4 +17,9 @@ public class AccountService : IAccountService
         return _accountRepository.GetAllAccounts();
     }
 
+    public void InsertAccount(Account account)
+    {
+        _accountRepository.InsertAccount(account);
+    }
+
 }

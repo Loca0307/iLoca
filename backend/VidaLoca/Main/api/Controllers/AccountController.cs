@@ -39,4 +39,20 @@ public class AccountController : ControllerBase
 
     }
 
+    [HttpGet("InsertAccount")]
+    public ActionResult<AccountDTO> InsertAccount(Account account)
+    {
+        _accountService.InsertAccount(account);
+
+        var accountDTO = new AccountDTO
+        {
+            AccountId = account.AccountId,
+            Email = account.Email,
+            Username = account.Username,
+            ClientId = account.ClientId
+        };
+
+        return accountDTO;
+    }
+
 }

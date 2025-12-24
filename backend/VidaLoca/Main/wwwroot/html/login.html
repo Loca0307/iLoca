@@ -16,18 +16,21 @@
     <main class="container home-main center">
       <div class="card login-card">
         <h2 class="card-title">Login</h2>
+        <div id="error-message" class="error-message" style="display:none;"></div>
+        <div id="success-message" class="success-message" style="display:none;"></div>
         <form id="loginForm">
-          <label for="username">Username</label>
-          <input id="username" name="username" class="input" type="text" required />
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" class="input" type="email" autocomplete="email" required />
+          </div>
 
-          <label for="email">Email</label>
-          <input id="email" name="email" class="input" type="email" required />
-
-          <label for="password">Password</label>
-          <input id="password" name="password" class="input" type="password" required />
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" class="input" type="password" autocomplete="current-password" required />
+          </div>
 
           <div class="actions">
-            <button class="btn btn-primary" type="submit">Sign In</button>
+            <button class="btn btn-primary" type="submit">Login</button>
             <a class="btn btn-ghost" href="/html/index.html">Back</a>
           </div>
         </form>
@@ -41,11 +44,55 @@
     </footer>
 
     <script>
-      document.getElementById('loginForm').addEventListener('submit', function(e){
+      document.getElementById('loginForm').addEventListener('submit', async function(e){
         e.preventDefault();
-        // demo behaviour — don't send credentials
-        const u = document.getElementById('username').value;
-        alert('Demo login for ' + u + '. This is a prototype.');
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('error-message');
+        const successMsg = document.getElementById('success-message');
+
+        errorMsg.style.display = 'none'; errorMsg.textContent = '';
+        successMsg.style.display = 'none'; successMsg.textContent = '';
+
+        try {
+          const resp = await fetch('/account/authenticate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          if (resp.ok) {
+            successMsg.textContent = 'Login successful! Redirecting...';
+            successMsg.style.display = 'block';
+
+            // try to resolve username from /account/ShowAccounts
+                try {
+              const usersResp = await fetch('/account/ShowAccounts');
+              if (usersResp.ok) {
+                const users = await usersResp.json();
+                const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
+                if (found && found.username) {
+                  localStorage.setItem('VidaLoca/loggedInUsername', found.username);
+                }
+              }
+            } catch (err) { /* ignore */ }
+
+            localStorage.setItem('VidaLoca/loggedInEmail', email);
+            if (!localStorage.getItem('VidaLoca/loggedInUsername')) {
+              const fallback = (email || '').split('@')[0];
+              if (fallback) localStorage.setItem('VidaLoca/loggedInUsername', fallback);
+            }
+
+            setTimeout(() => window.location.href = '/html/index.html', 900);
+          } else {
+            const err = await resp.json();
+            errorMsg.textContent = err.message || 'Invalid credentials';
+            errorMsg.style.display = 'block';
+          }
+        } catch (err) {
+          errorMsg.textContent = 'Network error. Try again.';
+          errorMsg.style.display = 'block';
+        }
       });
     </script>
   </body>
