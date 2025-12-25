@@ -16,8 +16,8 @@
     <main class="container home-main center">
       <div class="card login-card">
         <h2 class="card-title">Create Account</h2>
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
+  <div id="error-message" class="error-message hidden"></div>
+  <div id="success-message" class="success-message hidden"></div>
         <form id="register-form">
           <div class="form-group">
             <label for="email">Email Address</label>
@@ -57,8 +57,8 @@
         const errorMsg = document.getElementById('error-message');
         const successMsg = document.getElementById('success-message');
 
-        errorMsg.style.display = 'none'; errorMsg.textContent = '';
-        successMsg.style.display = 'none'; successMsg.textContent = '';
+      errorMsg.classList.add('hidden'); errorMsg.textContent = '';
+      successMsg.classList.add('hidden'); successMsg.textContent = '';
 
         if (!email || !username || !password) {
           errorMsg.textContent = 'Please fill username, email and password.';
@@ -75,16 +75,16 @@
 
           if (response.ok) {
             successMsg.textContent = 'Registration successful! Redirecting to login...';
-            successMsg.style.display = 'block';
+            successMsg.classList.remove('hidden');
             setTimeout(() => window.location.href = '/html/login.html', 900);
           } else {
             const err = await response.json().catch(() => ({}));
             errorMsg.textContent = err.message || 'Registration failed.';
-            errorMsg.style.display = 'block';
+            errorMsg.classList.remove('hidden');
           }
         } catch (err) {
           errorMsg.textContent = 'Network error. Please try again.';
-          errorMsg.style.display = 'block';
+          errorMsg.classList.remove('hidden');
         }
       });
     </script>

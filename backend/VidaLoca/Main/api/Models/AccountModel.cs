@@ -6,6 +6,5 @@ public class Account
     public string Email { get; set; } = ""; // Current way to access bank account
     public string Password { get; set; } = "";
     public string Username { get; set; } = "";
-    public int ClientId { get; set; }
 
 }

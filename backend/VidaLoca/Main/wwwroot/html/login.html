@@ -16,8 +16,8 @@
     <main class="container home-main center">
       <div class="card login-card">
         <h2 class="card-title">Login</h2>
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
+  <div id="error-message" class="error-message hidden"></div>
+  <div id="success-message" class="success-message hidden"></div>
         <form id="loginForm">
           <div class="form-group">
             <label for="email">Email Address</label>
@@ -51,9 +51,9 @@
         const errorMsg = document.getElementById('error-message');
         const successMsg = document.getElementById('success-message');
 
-        // Hide previous messages
-        errorMsg.style.display = 'none'; errorMsg.textContent = '';
-        successMsg.style.display = 'none'; successMsg.textContent = '';
+  // Hide previous messages
+  errorMsg.classList.add('hidden'); errorMsg.textContent = '';
+  successMsg.classList.add('hidden'); successMsg.textContent = '';
 
         if (!email || !password) {
           errorMsg.textContent = 'Please provide email and password.';
@@ -62,7 +62,7 @@
         }
 
         try {
-          const resp = await fetch('/account/authenticate', {
+          const resp = await fetch('/account/Authenticate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -70,7 +70,7 @@
 
           if (resp.ok) {
             successMsg.textContent = 'Login successful! Redirecting...';
-            successMsg.style.display = 'block';
+            successMsg.classList.remove('hidden');
 
             // store email (namespaced)
             localStorage.setItem('VidaLoca/loggedInEmail', email);
@@ -99,11 +99,11 @@
           } else {
             const ebody = await resp.json().catch(() => ({}));
             errorMsg.textContent = ebody.message || 'Invalid email or password';
-            errorMsg.style.display = 'block';
+            errorMsg.classList.remove('hidden');
           }
         } catch (err) {
           errorMsg.textContent = 'Network error. Please try again.';
-          errorMsg.style.display = 'block';
+          errorMsg.classList.remove('hidden');
         }
       });
     </script>
