@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>VidaLoca — Games</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <!-- force cache-bust so browsers fetch the latest CSS -->
+    <link rel="stylesheet" href="/css/style.css?v=1703520000" />
   </head>
   <body>
     <header class="site-header">
@@ -18,27 +19,27 @@
       <p class="small games-intro">Choose a table to play</p>
 
       <div class="games-grid">
-        <a class="card game-card" href="/html/roullete.html">
-          <img src="/html/assets/roulette.jpg" alt="Roulette" />
+        <a class="card game-card game-roulette" href="/html/roulette.html">
+          <img class="game-bg" src="/assets/roulette.jpeg" alt="Roulette" />
           <div class="game-meta">
-            <strong>Roulette</strong>
-            <div class="small" style="margin-top:0.25rem;color:var(--muted)">Classic wheel — place your bets</div>
+            <strong class="game-title">Roulette</strong>
+            <div class="small">Classic wheel — place your bets</div>
           </div>
         </a>
 
-        <a class="card game-card" href="/html/blackJack.html">
-          <img src="/html/assets/blackjack.jpg" alt="Blackjack" />
+        <a class="card game-card game-blackjack" href="/html/blackJack.html">
+          <img class="game-bg" src="/assets/blackJack.jpg" alt="Blackjack" />
           <div class="game-meta">
-            <strong>Blackjack</strong>
-            <div class="small" style="margin-top:0.25rem;color:var(--muted)">Beat the dealer — 21</div>
+            <strong class="game-title">Blackjack</strong>
+            <div class="small">Beat the dealer — 21</div>
           </div>
         </a>
 
-        <a class="card game-card" href="/html/poker.html">
-          <img src="/html/assets/poker.jpg" alt="Poker" />
+        <a class="card game-card game-poker" href="/html/poker.html">
+          <img class="game-bg" src="/assets/poker.jpeg" alt="Poker" />
           <div class="game-meta">
-            <strong>Poker</strong>
-            <div class="small" style="margin-top:0.25rem;color:var(--muted)">Texas Hold'em tables</div>
+            <strong class="game-title">Poker</strong>
+            <div class="small">Texas Hold'em tables</div>
           </div>
         </a>
       </div>
