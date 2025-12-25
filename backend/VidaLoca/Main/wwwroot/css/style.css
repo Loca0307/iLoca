@@ -73,5 +73,18 @@ button{font:inherit}
 .index-actions{display:flex;flex-direction:column;gap:1rem;align-items:center;margin-top:1.5rem}
 .index-actions .btn.big{width:360px}
 
+/* Games page styles */
+.games-grid{margin-top:1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;width:100%;max-width:980px}
+.game-card{display:block;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));text-decoration:none;color:inherit}
+.game-card img{width:100%;height:160px;object-fit:cover;display:block}
+.game-card .game-meta{padding:0.75rem;text-align:center}
+.games-cta{margin-top:1.25rem}
+.games-intro{margin-top:0.25rem;color:var(--muted)}
+
+/* Small helpers */
+.muted{color:var(--muted)}
+.mt-1{margin-top:1rem}
+.mt-025{margin-top:0.25rem}
+
 /* End */
 

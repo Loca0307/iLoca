@@ -95,7 +95,7 @@
               // ignore username resolution failure
             }
 
-            setTimeout(() => window.location.href = '/html/index.html', 900);
+            setTimeout(() => window.location.href = '/html/games.html', 900);
           } else {
             const ebody = await resp.json().catch(() => ({}));
             errorMsg.textContent = ebody.message || 'Invalid email or password';
