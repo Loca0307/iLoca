@@ -16,8 +16,8 @@
     <main class="container home-main center">
       <div class="card login-card">
         <h2 class="card-title">Login</h2>
-        <div id="error-message" class="error-message" style="display:none;"></div>
-        <div id="success-message" class="success-message" style="display:none;"></div>
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
         <form id="loginForm">
           <div class="form-group">
             <label for="email">Email Address</label>
@@ -51,8 +51,15 @@
         const errorMsg = document.getElementById('error-message');
         const successMsg = document.getElementById('success-message');
 
+        // Hide previous messages
         errorMsg.style.display = 'none'; errorMsg.textContent = '';
         successMsg.style.display = 'none'; successMsg.textContent = '';
+
+        if (!email || !password) {
+          errorMsg.textContent = 'Please provide email and password.';
+          errorMsg.style.display = 'block';
+          return;
+        }
 
         try {
           const resp = await fetch('/account/authenticate', {
@@ -65,32 +72,37 @@
             successMsg.textContent = 'Login successful! Redirecting...';
             successMsg.style.display = 'block';
 
-            // try to resolve username from /account/ShowAccounts
-                try {
-              const usersResp = await fetch('/account/ShowAccounts');
-              if (usersResp.ok) {
-                const users = await usersResp.json();
-                const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
-                if (found && found.username) {
-                  localStorage.setItem('VidaLoca/loggedInUsername', found.username);
+            // store email (namespaced)
+            localStorage.setItem('VidaLoca/loggedInEmail', email);
+
+            // Try to fetch username from backend (GetUsernameByEmail or ShowAccounts)
+            try {
+              // prefer a dedicated endpoint if present
+              const nameResp = await fetch(`/account/GetUsernameByEmail?email=${encodeURIComponent(email)}`);
+              if (nameResp.ok) {
+                const username = await nameResp.text();
+                if (username) localStorage.setItem('VidaLoca/loggedInUsername', username);
+              } else {
+                // fallback to ShowAccounts
+                const usersResp = await fetch('/account/ShowAccounts');
+                if (usersResp.ok) {
+                  const users = await usersResp.json();
+                  const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
+                  if (found && found.username) localStorage.setItem('VidaLoca/loggedInUsername', found.username);
                 }
               }
-            } catch (err) { /* ignore */ }
-
-            localStorage.setItem('VidaLoca/loggedInEmail', email);
-            if (!localStorage.getItem('VidaLoca/loggedInUsername')) {
-              const fallback = (email || '').split('@')[0];
-              if (fallback) localStorage.setItem('VidaLoca/loggedInUsername', fallback);
+            } catch (err) {
+              // ignore username resolution failure
             }
 
             setTimeout(() => window.location.href = '/html/index.html', 900);
           } else {
-            const err = await resp.json();
-            errorMsg.textContent = err.message || 'Invalid credentials';
+            const ebody = await resp.json().catch(() => ({}));
+            errorMsg.textContent = ebody.message || 'Invalid email or password';
             errorMsg.style.display = 'block';
           }
         } catch (err) {
-          errorMsg.textContent = 'Network error. Try again.';
+          errorMsg.textContent = 'Network error. Please try again.';
           errorMsg.style.display = 'block';
         }
       });
