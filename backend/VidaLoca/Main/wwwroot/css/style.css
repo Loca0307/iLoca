@@ -36,6 +36,10 @@ button {
   font: inherit;
 }
 
+h3 {
+  padding: 0.5rem;
+}
+
 /* 2) Variables */
 :root {
   --bg: #000;
