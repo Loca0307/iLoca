@@ -6,74 +6,14 @@
     <title>VidaLoca — Roulette</title>
   <link rel="stylesheet" href="../css/style.css?v=20251226" />
     <!-- Inline fallback styles to ensure pointer/table visible while debugging -->
-    <style>
-      /* fallback pointer */
-  .wheel-edge { position:absolute; top:0; left:50%; transform:translate(-50%,-40%); width:0; height:0; border-left:28px solid transparent; border-right:28px solid transparent; border-bottom:56px solid #d30000; z-index:99999; box-shadow:0 6px 12px rgba(0,0,0,0.6); }
-  .wheel-edge.inverted { transform: translate(-50%,6%) rotate(180deg); top: auto; bottom: 0; }
-      .wheel-pointer { display:block; }
-      /* betting area fallback visuals */
-      .bets-card { background:#0f0f10; color:#fff; border:1px solid rgba(255,255,255,0.06); padding:12px; border-radius:10px; }
-      .bet-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:6px; margin-top:8px; }
-  .bet-cell { background:#151515; color:#fff; border:1px solid rgba(255,255,255,0.04); padding:8px 6px; border-radius:6px; text-align:center; min-height:40px; }
-      .bet-cell-zero { grid-column: 1 / -1; font-weight:700; }
-  .badge { background:#fff; color:#111; padding:2px 6px; border-radius:10px; font-size:0.8rem; margin-left:6px; border:1px solid rgba(0,0,0,0.06); }
-  /* default fallback: bet numbers shown white as requested */
-  .bet-cell .num { color: #fff; }
-  /* chip buttons fallback: labels white */
-  .chip { color: #fff; background: #222; border: 1px solid rgba(255,255,255,0.04); padding:6px 10px; border-radius:8px; }
-  .bet-cell.bet-placed .badge { background: #2e7d32; color: #e8f5e9; }
-    </style>
     <script>
-      // quick DOM check and inline-style fallback to ensure visual elements render
+      // debug log; keep minimal to avoid inline styling
       window.addEventListener('DOMContentLoaded', ()=>{
-        try{
-          console.log('roulette debug:', {
-            wheelEdge: !!document.querySelector('.wheel-edge'),
-            wheelCanvas: !!document.getElementById('roulette'),
-            betGrid: !!document.getElementById('betGrid'),
-            betsCard: !!document.querySelector('.bets-card')
-          });
-
-          // Force the top pointer triangle inline so it shows even if stylesheet is cached
-          const pointer = document.querySelector('.wheel-pointer');
-          if(pointer){
-            pointer.style.position = 'absolute';
-            pointer.style.top = '-48px';
-            pointer.style.left = '50%';
-            pointer.style.transform = 'translateX(-50%) rotate(180deg)';
-            pointer.style.width = '0';
-            pointer.style.height = '0';
-            pointer.style.borderLeft = '36px solid transparent';
-            pointer.style.borderRight = '36px solid transparent';
-            pointer.style.borderBottom = '72px solid #d30000';
-            pointer.style.zIndex = '99999';
-            pointer.style.boxShadow = '0 8px 16px rgba(0,0,0,0.5)';
-            pointer.style.display = 'block';
-          }
-
-          // Make bet number labels white inline (user requested) to override stale CSS
-          document.querySelectorAll('.bet-cell .num').forEach(n=>{
-            n.style.color = '#fff';
-            n.style.fontWeight = '600';
-          });
-
-          // Make chip labels clearly white
-          document.querySelectorAll('.chip').forEach(c=>{
-            c.style.color = '#fff';
-            c.style.background = '#222';
-            c.style.border = '1px solid rgba(255,255,255,0.04)';
-          });
-
-          // Ensure empty badges look like white placeholders
-          document.querySelectorAll('.bet-cell .badge').forEach(b=>{
-            if(!b.innerText || b.innerText.trim()===''){
-              b.style.background = '#fff';
-              b.style.color = '#111';
-              b.style.border = '1px solid rgba(0,0,0,0.06)';
-            }
-          });
-
-        }catch(e){ console.error('debug check failed', e); }
+        console.log('roulette debug:', {
+          wheelCanvas: !!document.getElementById('roulette'),
+          betGrid: !!document.getElementById('betGrid'),
+          betsCard: !!document.querySelector('.bets-card')
+        });
       });
     </script>
   </head>
