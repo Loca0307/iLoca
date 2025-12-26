@@ -108,7 +108,8 @@
             // number label
             ctx.save();
             ctx.rotate(start + slice/2);
-            ctx.translate(radius*0.65,0);
+            // push number labels further toward the rim
+            ctx.translate(radius*0.9,0);
             ctx.rotate(Math.PI/2);
             ctx.fillStyle = '#fff';
             ctx.font = '18px Inter, system-ui, -apple-system, Roboto, Arial';
@@ -117,9 +118,9 @@
             ctx.restore();
           }
 
-          // center hub
+          // center hub 
           ctx.beginPath();
-          ctx.arc(0,0,44,0,2*Math.PI);
+          ctx.arc(0,0,32,0,2*Math.PI);
           ctx.fillStyle = '#222';
           ctx.fill();
           ctx.restore();
@@ -171,9 +172,7 @@
           const b = cell.querySelector('.badge');
           if(b) {
             b.innerText = pendingBets[number];
-            // ensure visual even if CSS cached
-            b.style.background = '#2e7d32';
-            b.style.color = '#e8f5e9';
+            // visuals handled by CSS classes
           }
         }
         createBetCells();
@@ -195,9 +194,7 @@
             const badge = b.querySelector('.badge');
             if(badge) {
               badge.innerText='';
-              badge.style.background = '#fff';
-              badge.style.color = '#111';
-              badge.style.border = '1px solid rgba(0,0,0,0.06)';
+              // reset visuals via CSS by removing parent class
             }
             delete b.dataset.amount;
           });
