@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VidaLoca — Withdraw</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container center">
+        <h1 class="site-title">VidaLoca — Withdraw</h1>
+      </div>
+    </header>
+
+    <main class="container home-main center">
+      <div class="bets-card">
+        <h3>Your Balance</h3>
+        <p id="balance" class="large muted">Loading...</p>
+
+        <label for="amount">Amount to withdraw</label>
+        <input id="amount" type="number" step="0.01" min="0" />
+
+        <div class="mt-1">
+          <button id="withdrawBtn" class="btn btn-primary">Withdraw</button>
+        </div>
+
+        <div class="mt-1">
+          <a class="btn btn-ghost" href="/html/games.html">Back to Games</a>
+        </div>
+
+        <p id="msg" class="muted mt-1"></p>
+      </div>
+    </main>
+
+    <footer class="site-footer center">
+      <div class="container">
+        <p class="small">© 2025 VidaLoca — All rights reserved</p>
+      </div>
+    </footer>
+
+    <script>
+      // The page expects ?accountId= in the URL. Default to 1 if not present.
+      const params = new URLSearchParams(window.location.search);
+      const accountId = Number(params.get('accountId') || 1);
+
+      async function fetchBalance() {
+        const res = await fetch(`/Account/GetBalanceByAccount?accountId=${accountId}`);
+        if (!res.ok) {
+          document.getElementById('balance').innerText = 'Unable to load balance';
+          return;
+        }
+        const balance = await res.json();
+        document.getElementById('balance').innerText = Number(balance).toFixed(2) + ' €';
+      }
+
+      document.getElementById('withdrawBtn').addEventListener('click', async ()=>{
+        const raw = document.getElementById('amount').value;
+        const amount = Number(raw);
+        if (!amount || amount <= 0) {
+          document.getElementById('msg').innerText = 'Enter a valid amount';
+          return;
+        }
+
+        const payload = { accountId, amount };
+        const res = await fetch('/Account/Withdraw', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const txt = await res.text();
+        if (!res.ok) {
+          document.getElementById('msg').innerText = 'Withdraw failed: ' + txt;
+        } else {
+          document.getElementById('msg').innerText = 'Withdraw successful';
+          fetchBalance();
+        }
+      });
+
+      fetchBalance();
+    </script>
+  </body>
+</html>

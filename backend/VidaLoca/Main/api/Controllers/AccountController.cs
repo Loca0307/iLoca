@@ -104,4 +104,27 @@ public class AccountController : ControllerBase
 
         return Ok(new { message = "All accounts have been deleted from the Database" });
     }
+
+    [HttpPost("Withdraw")]
+    public ActionResult WithDraw([FromBody] WithdrawDTO dto)
+    {
+        if (dto == null) return BadRequest();
+
+        bool success = _accountService.WithDraw(dto.AccountId, dto.Amount);
+
+        if (!success)
+        {
+            return BadRequest(new { message = "Withdraw failed (insufficient funds or invalid request)" });
+        }
+
+        return Ok(new { message = "Withdraw successful" });
+    }
+
+    [HttpGet("GetBalanceByAccount")]
+    public ActionResult<decimal> GetBalanceByAccount([FromQuery] int accountId)
+    {
+        var balance = _accountService.GetBalance(accountId);
+        if (balance == null) return NotFound();
+        return Ok(balance.Value);
+    }
 }

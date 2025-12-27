@@ -138,4 +138,66 @@ public class AccountRepository : IAccountRepository
 
         return null;
     }
+
+    public bool WithDraw(int accountId, decimal amount)
+    {
+        if (amount <= 0) return false;
+
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var tx = conn.BeginTransaction();
+        try
+        {
+            // Lock the specific account row for update
+            decimal dbBalance;
+            using (var cmdLock = new NpgsqlCommand(@"SELECT balance FROM ""VidaLoca"".accounts WHERE account_id = @id FOR UPDATE", conn, tx))
+            {
+                cmdLock.Parameters.AddWithValue("id", accountId);
+                var res = cmdLock.ExecuteScalar();
+                if (res == null || res == DBNull.Value)
+                {
+                    tx.Rollback();
+                    return false; // account not found
+                }
+
+                dbBalance = Convert.ToDecimal(res);
+                if (dbBalance < amount)
+                {
+                    tx.Rollback();
+                    return false; // insufficient funds
+                }
+            }
+
+            // Subtract amount
+            using (var cmdUpdate = new NpgsqlCommand(@"UPDATE ""VidaLoca"".accounts SET balance = balance - @amount WHERE account_id = @id", conn, tx))
+            {
+                cmdUpdate.Parameters.AddWithValue("amount", amount);
+                cmdUpdate.Parameters.AddWithValue("id", accountId);
+                cmdUpdate.ExecuteNonQuery();
+            }
+
+            tx.Commit();
+            return true;
+        }
+        catch
+        {
+            try { tx.Rollback(); } catch { 
+                // Ignore for now
+            }
+            throw;
+        }
+    }
+
+    public decimal? GetBalance(int accountId)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(@"SELECT balance FROM ""VidaLoca"".accounts WHERE account_id = @id", conn);
+        cmd.Parameters.AddWithValue("id", accountId);
+        var res = cmd.ExecuteScalar();
+        if (res == null || res == DBNull.Value) return null;
+        return Convert.ToDecimal(res);
+    }
 }

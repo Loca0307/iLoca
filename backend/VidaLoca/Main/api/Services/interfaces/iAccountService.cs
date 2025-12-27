@@ -13,4 +13,7 @@ public interface IAccountService
     public string? GetUsernameByEmail(string email);
 
     public void DeleteAllAccounts();
+
+    public bool WithDraw(int accountId, decimal amount);
+    public decimal? GetBalance(int accountId);
 }
