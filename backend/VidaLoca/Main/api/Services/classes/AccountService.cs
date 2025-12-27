@@ -1,4 +1,5 @@
 using Api.Models;
+using Api.DTO;
 using Api.Repositories;
 using BCrypt.Net;
 
@@ -69,6 +70,11 @@ public class AccountService : IAccountService
         return isValid;
     }
 
+    public Account? GetAccountByEmail(string email)
+    {
+        return _accountRepository.GetAccountByEmail(email);
+    }
+
 
     public string? GetUsernameByEmail(string email)
     {
@@ -86,6 +92,18 @@ public class AccountService : IAccountService
     public decimal? GetBalance(int accountId)
     {
         return _accountRepository.GetBalance(accountId);
+    }
+
+    public bool TransferFromBankToVida(int accountId, string bankIban, decimal amount)
+    {
+        if (amount <= 0 || string.IsNullOrEmpty(bankIban)) return false;
+        return _accountRepository.TransferFromBankToVida(accountId, bankIban, amount);
+    }
+
+    public BankClientInfo? GetBankClientByIban(string iban)
+    {
+        if (string.IsNullOrEmpty(iban)) return null;
+        return _accountRepository.GetBankClientByIban(iban);
     }
     
 }

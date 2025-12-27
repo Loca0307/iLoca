@@ -1,4 +1,5 @@
 using Api.Models;
+using Api.DTO;
 
 
 namespace Api.Repositories;
@@ -17,4 +18,6 @@ public interface IAccountRepository
 
     public bool WithDraw(int accountId, decimal amount);
     public decimal? GetBalance(int accountId);
+    public bool TransferFromBankToVida(int accountId, string bankIban, decimal amount);
+    public BankClientInfo? GetBankClientByIban(string iban);
 }

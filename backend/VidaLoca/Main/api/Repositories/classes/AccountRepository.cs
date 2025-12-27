@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.DTO;
 using Api.Models;
 using Npgsql;
 
@@ -80,7 +81,7 @@ public class AccountRepository : IAccountRepository
         conn.Open();
 
         using var cmd = new NpgsqlCommand(
-            @"DELETE FROM ""VidaLoxa"".accounts",
+            @"DELETE FROM ""VidaLoca"".accounts",
             conn);
 
         cmd.ExecuteNonQuery();
@@ -199,5 +200,88 @@ public class AccountRepository : IAccountRepository
         var res = cmd.ExecuteScalar();
         if (res == null || res == DBNull.Value) return null;
         return Convert.ToDecimal(res);
+    }
+
+    public bool TransferFromBankToVida(int accountId, string bankIban, decimal amount)
+    {
+        if (amount <= 0) return false;
+
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var tx = conn.BeginTransaction();
+        try
+        {
+            // 1) Lock bank client by IBAN
+            int bankClientId;
+            decimal bankBalance;
+            using (var cmdBank = new NpgsqlCommand(@"SELECT client_id, balance FROM ""BankuumTubo"".clients WHERE iban = @iban FOR UPDATE", conn, tx))
+            {
+                cmdBank.Parameters.AddWithValue("iban", bankIban);
+
+                using var r = cmdBank.ExecuteReader();
+                if (!r.Read()) { tx.Rollback(); return false; }
+                bankClientId = r.GetInt32(0);
+                bankBalance = r.GetDecimal(1);
+            }
+
+            if (bankBalance < amount)
+            {
+                tx.Rollback();
+                return false; // insufficient bank funds
+            }
+
+            // 2) Lock VidaLoca account
+            using (var cmdVida = new NpgsqlCommand(@"SELECT balance FROM ""VidaLoca"".accounts WHERE account_id = @id FOR UPDATE", conn, tx))
+            {
+                cmdVida.Parameters.AddWithValue("id", accountId);
+
+                var res = cmdVida.ExecuteScalar();
+                if (res == null || res == DBNull.Value) { tx.Rollback(); return false; }
+            }
+
+            // 3) Subtract from bank
+            using (var cmdUpdateBank = new NpgsqlCommand(@"UPDATE ""BankuumTubo"".clients SET balance = balance - @amt WHERE client_id = @id", conn, tx))
+            {
+                cmdUpdateBank.Parameters.AddWithValue("amt", amount);
+                cmdUpdateBank.Parameters.AddWithValue("id", bankClientId);
+                cmdUpdateBank.ExecuteNonQuery();
+            }
+
+            // 4) Add to VidaLoca
+            using (var cmdUpdateVida = new NpgsqlCommand(@"UPDATE ""VidaLoca"".accounts SET balance = balance + @amt WHERE account_id = @id", conn, tx))
+            {
+                cmdUpdateVida.Parameters.AddWithValue("amt", amount);
+                cmdUpdateVida.Parameters.AddWithValue("id", accountId);
+                cmdUpdateVida.ExecuteNonQuery();
+            }
+
+            tx.Commit();
+            return true;
+        }
+        catch
+        {
+            try { tx.Rollback(); } catch { }
+            throw;
+        }
+    }
+
+    public BankClientInfo? GetBankClientByIban(string iban)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var cmd = new NpgsqlCommand(@"SELECT client_id, first_name, last_name, email, iban FROM ""BankuumTubo"".clients WHERE iban = @iban", conn);
+        cmd.Parameters.AddWithValue("iban", iban);
+        using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return null;
+
+        return new BankClientInfo {
+            ClientId = reader.GetInt32(0),
+            FirstName = reader.GetString(1),
+            LastName = reader.GetString(2),
+            Email = reader.GetString(3),
+            Iban = reader.GetString(4),
+        };
     }
 }

@@ -50,6 +50,21 @@ public class AccountController : ControllerBase
         return Ok(username);
     }
 
+    [HttpGet("GetAccountByEmail")]
+    public ActionResult<AccountDTO> GetAccountByEmail([FromQuery] string email)
+    {
+        if (string.IsNullOrEmpty(email)) return BadRequest();
+        var acct = _accountService.GetAccountByEmail(email);
+        if (acct == null) return NotFound();
+        var dto = new AccountDTO
+        {
+            AccountId = acct.AccountId,
+            Email = acct.Email,
+            Username = acct.Username,
+        };
+        return Ok(dto);
+    }
+
 
     // ADD ACCOUNT TO THE DATABASE
     [HttpPost("InsertAccount")]
@@ -88,12 +103,17 @@ public class AccountController : ControllerBase
             return Unauthorized(new { message = "Invalid email or password" });
         }
 
+        // Fetch the account from DB to return canonical data (accountId, username)
+        var acct = _accountService.GetAccountByEmail(account.Email);
+        if (acct == null) return NotFound();
+
         var accountDTO = new AccountDTO
         {
-            AccountId = account.AccountId,
-            Email = account.Email,
-            Username = account.Username,
+            AccountId = acct.AccountId,
+            Email = acct.Email,
+            Username = acct.Username,
         };
+
         return Ok(accountDTO);
     }
 
@@ -126,5 +146,24 @@ public class AccountController : ControllerBase
         var balance = _accountService.GetBalance(accountId);
         if (balance == null) return NotFound();
         return Ok(balance.Value);
+    }
+
+    [HttpPost("WithdrawFromBank")]
+    public ActionResult WithdrawFromBank([FromBody] WithdrawDTO dto)
+    {
+        if (dto == null || string.IsNullOrEmpty(dto.BankIban)) return BadRequest();
+
+        var success = _accountService.TransferFromBankToVida(dto.AccountId, dto.BankIban, dto.Amount);
+        if (!success) return BadRequest(new { message = "Transfer failed (insufficient funds or invalid request)" });
+        return Ok(new { message = "Transfer successful" });
+    }
+
+    [HttpGet("VerifyBankIban")]
+    public ActionResult<BankClientInfo> VerifyBankIban([FromQuery] string iban)
+    {
+        if (string.IsNullOrEmpty(iban)) return BadRequest();
+        var info = _accountService.GetBankClientByIban(iban);
+        if (info == null) return NotFound();
+        return Ok(info);
     }
 }
