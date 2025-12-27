@@ -17,6 +17,7 @@
       <div class="bets-card">
         <h3>Your Balance</h3>
         <p id="balance" class="large muted">Loading...</p>
+        
 
         <label for="bankIban">Bank IBAN</label>
         <input id="bankIban" type="text" placeholder="IT00..." />
@@ -51,9 +52,32 @@
       const params = new URLSearchParams(window.location.search);
       const accountIdParam = params.get('accountId');
       const stored = localStorage.getItem('accountId');
-      const accountId = accountIdParam ? Number(accountIdParam) : (stored ? Number(stored) : null);
+      let accountId = accountIdParam ? Number(accountIdParam) : (stored ? Number(stored) : null);
+
+      async function resolveAccount() {
+        if (accountId && !isNaN(accountId)) return accountId;
+        const loggedEmail = localStorage.getItem('VidaLoca/loggedInEmail');
+        if (!loggedEmail) return null;
+        try {
+          const resp = await fetch(`/Account/GetAccountByEmail?email=${encodeURIComponent(loggedEmail)}`);
+          if (!resp.ok) return null;
+          const acct = await resp.json();
+          if (acct && acct.accountId) {
+            accountId = Number(acct.accountId);
+            localStorage.setItem('accountId', String(accountId));
+            return accountId;
+          }
+        } catch (err) {
+          // ignore
+        }
+        return null;
+      }
 
       async function fetchBalance() {
+        if (!accountId || isNaN(accountId)) {
+          // attempt to resolve from logged-in email
+          await resolveAccount();
+        }
         if (!accountId || isNaN(accountId)) {
           document.getElementById('balance').innerText = 'No account selected';
           return;
@@ -87,10 +111,15 @@
           const bankIban = document.getElementById('bankIban').value.trim();
           if (!bankIban) { document.getElementById('msg').innerText = 'Verify bank IBAN first'; return; }
 
-          if (!accountId || isNaN(accountId)) {
-            document.getElementById('msg').innerText = 'No account selected. Please log in.';
-            return;
-          }
+            if (!accountId || isNaN(accountId)) {
+              // try to resolve account before failing
+              await resolveAccount();
+            }
+
+            if (!accountId || isNaN(accountId)) {
+              document.getElementById('msg').innerText = 'No account selected. Please log in.';
+              return;
+            }
 
           const payload = { accountId, amount, bankIban };
           const res = await fetch('/Account/WithdrawFromBank', {
@@ -108,7 +137,7 @@
         }
       });
 
-      fetchBalance();
+  fetchBalance();
     </script>
   </body>
 </html>

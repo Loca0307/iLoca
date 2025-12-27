@@ -7,4 +7,5 @@ public class BankClientInfo
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Iban { get; set; } = string.Empty;
+    public decimal Balance { get; set; }
 }

@@ -74,37 +74,10 @@
             successMsg.textContent = 'Login successful! Redirecting...';
             successMsg.classList.remove('hidden');
 
-            // store email (namespaced)
+            // store email (namespaced) and accountId when available
             localStorage.setItem('VidaLoca/loggedInEmail', email);
-            // store accountId from Authenticate response when available
             if (authData && authData.accountId) {
               localStorage.setItem('accountId', String(authData.accountId));
-            } else {
-              // Otherwise, resolve canonical account using the logged-in email
-              try {
-                const acctResp = await fetch(`/Account/GetAccountByEmail?email=${encodeURIComponent(email)}`);
-                if (acctResp.ok) {
-                  const acct = await acctResp.json();
-                  if (acct && acct.accountId) localStorage.setItem('accountId', String(acct.accountId));
-                  if (acct && acct.username) localStorage.setItem('VidaLoca/loggedInUsername', acct.username);
-                }
-              } catch (errAcct) {
-                // ignore resolution failure
-              }
-            }
-
-            // Try to fetch username from backend (GetUsernameByEmail or ShowAccounts)
-            try {
-              // prefer a dedicated endpoint if present
-              const nameResp = await fetch(`/account/GetUsernameByEmail?email=${encodeURIComponent(email)}`);
-              if (nameResp.ok) {
-                const username = await nameResp.text();
-                if (username) localStorage.setItem('VidaLoca/loggedInUsername', username);
-              }
-
-              // (ShowAccounts fallback removed — we use GetAccountByEmail instead)
-            } catch (err) {
-              // ignore username resolution failure
             }
 
             setTimeout(() => window.location.href = '/html/games.html', 900);

@@ -153,9 +153,34 @@ public class AccountController : ControllerBase
     {
         if (dto == null || string.IsNullOrEmpty(dto.BankIban)) return BadRequest();
 
-        var success = _accountService.TransferFromBankToVida(dto.AccountId, dto.BankIban, dto.Amount);
+        var targetAccountId = dto.AccountId;
+
+        // If caller didn't provide an accountId, resolve it from the bank IBAN -> bank client email -> Vida account
+        if (targetAccountId == 0)
+        {
+            var bankClient = _accountService.GetBankClientByIban(dto.BankIban);
+            if (bankClient == null || string.IsNullOrEmpty(bankClient.Email))
+            {
+                return BadRequest(new { message = "Unable to resolve bank client by IBAN" });
+            }
+
+            var vidaAccount = _accountService.GetAccountByEmail(bankClient.Email);
+            if (vidaAccount == null)
+            {
+                return BadRequest(new { message = "No VidaLoca account found for bank client's email" });
+            }
+
+            targetAccountId = vidaAccount.AccountId;
+            // If the bank client doesn't have enough funds, fail fast with informative message
+            if (bankClient.Balance < dto.Amount)
+            {
+                return BadRequest(new { message = "Bank account has insufficient funds" });
+            }
+        }
+
+        var success = _accountService.TransferFromBankToVida(targetAccountId, dto.BankIban, dto.Amount);
         if (!success) return BadRequest(new { message = "Transfer failed (insufficient funds or invalid request)" });
-        return Ok(new { message = "Transfer successful" });
+        return Ok(new { message = "Transfer successful", accountId = targetAccountId });
     }
 
     [HttpGet("VerifyBankIban")]

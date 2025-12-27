@@ -271,7 +271,7 @@ public class AccountRepository : IAccountRepository
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
-        using var cmd = new NpgsqlCommand(@"SELECT client_id, first_name, last_name, email, iban FROM ""BankuumTubo"".clients WHERE iban = @iban", conn);
+        using var cmd = new NpgsqlCommand(@"SELECT client_id, first_name, last_name, email, iban, balance FROM ""BankuumTubo"".clients WHERE iban = @iban", conn);
         cmd.Parameters.AddWithValue("iban", iban);
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) return null;
@@ -282,6 +282,7 @@ public class AccountRepository : IAccountRepository
             LastName = reader.GetString(2),
             Email = reader.GetString(3),
             Iban = reader.GetString(4),
+            Balance = reader.GetDecimal(5),
         };
     }
 }
