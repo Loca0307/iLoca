@@ -4,14 +4,22 @@
 # 3) Define the ports as host:container
 
 services:
-
-  backend:
+  bankuumtubo:
     build: ./backend/BankuumTubo/Main
     # Load environment variables from .env file into backend service
     env_file:
       - .env
     ports:
-      - "5027:5027"               
+      - "5027:5027"
+    restart: unless-stopped
+
+  vidaloca:
+    build: ./backend/VidaLoca/Main
+    env_file:
+      - .env
+    ports:
+      - "5112:5112"
+    restart: unless-stopped
 
   frontend:
     build:
@@ -19,10 +27,15 @@ services:
     ports:
       - "3000:80"                 
     environment:
-      - REACT_APP_API_BASE=http://localhost:5027
-    depends_on:
-      - backend
+      # inside docker-compose, services can reach VidaLoca as http://vidaloca:112
+      - REACT_APP_API_BASE=http://vidaloca:5112
+      - REACT_APP_API_BASE=http://bankuumtubo:5027
 
-# Data storage used by the container but outside of it        
-#volumes:
- # db_data:
+    depends_on:
+      - bankuumtubo
+      - vidaloca
+  
+
+networks:
+  default:
+    name: iloca_network

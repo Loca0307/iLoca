@@ -107,8 +107,24 @@
         const id = await resolveAccountId();
         const el = document.getElementById('balanceView');
         const userEl = document.getElementById('usernameView');
+        // try to refresh username from server when possible (keeps UI in sync if user re-logged-in)
         const storedName = localStorage.getItem('VidaLoca/loggedInUsername');
-        if (userEl) userEl.innerText = storedName ? storedName : '';
+        const emailForRefresh = localStorage.getItem('VidaLoca/loggedInEmail');
+        if (userEl) {
+          userEl.innerText = storedName ? storedName : '';
+        }
+        if (emailForRefresh) {
+          try {
+            const aresp = await fetch(`/Account/GetAccountByEmail?email=${encodeURIComponent(emailForRefresh)}`);
+            if (aresp.ok) {
+              const acct = await aresp.json();
+              if (acct && acct.username) {
+                localStorage.setItem('VidaLoca/loggedInUsername', acct.username);
+                if (userEl) userEl.innerText = acct.username;
+              }
+            }
+          } catch (e) { /* ignore refresh errors and keep storedName */ }
+        }
         if (!id) { if (el) el.innerText = 'Balance: - (not logged)'; return; }
         try {
           const res = await fetch(`/Account/GetBalanceByAccount?accountId=${id}`);
@@ -319,7 +335,7 @@
           }
 
           // if there's a stake, subtract it before spinning
-          if(totalStake > 0){
+          if(totalStake > 0) {
             const ok = await postUpdateBet(totalStake, false, email);
             if(!ok){
               document.getElementById('result').innerText = 'Bet failed: insufficient funds or server error.';
