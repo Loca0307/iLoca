@@ -221,6 +221,68 @@ public class AccountRepository : IAccountRepository
         }
     }
 
+    public bool TransferFromVidaToBank(int accountId, string bankIban, decimal amount)
+    {
+        if (amount <= 0) return false;
+
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        using var tx = conn.BeginTransaction();
+        try
+        {
+            // 1) Lock Vida account
+            decimal vidaBalance;
+            using (var cmdVida = new NpgsqlCommand(@"SELECT balance FROM ""VidaLoca"".accounts WHERE account_id = @id FOR UPDATE", conn, tx))
+            {
+                cmdVida.Parameters.AddWithValue("id", accountId);
+                var r = cmdVida.ExecuteScalar();
+                if (r == null || r == DBNull.Value) { tx.Rollback(); return false; }
+                vidaBalance = Convert.ToDecimal(r);
+            }
+
+            if (vidaBalance < amount)
+            {
+                tx.Rollback();
+                return false; // insufficient vida funds
+            }
+
+            // 2) Lock bank client by IBAN
+            int bankClientId;
+            using (var cmdBank = new NpgsqlCommand(@"SELECT client_id FROM ""BankuumTubo"".clients WHERE iban = @iban FOR UPDATE", conn, tx))
+            {
+                cmdBank.Parameters.AddWithValue("iban", bankIban);
+                using var r = cmdBank.ExecuteReader();
+                if (!r.Read()) { tx.Rollback(); return false; }
+                bankClientId = r.GetInt32(0);
+            }
+
+            // 3) Subtract from Vida
+            using (var cmdUpdateVida = new NpgsqlCommand(@"UPDATE ""VidaLoca"".accounts SET balance = balance - @amt WHERE account_id = @id", conn, tx))
+            {
+                cmdUpdateVida.Parameters.AddWithValue("amt", amount);
+                cmdUpdateVida.Parameters.AddWithValue("id", accountId);
+                cmdUpdateVida.ExecuteNonQuery();
+            }
+
+            // 4) Add to bank
+            using (var cmdUpdateBank = new NpgsqlCommand(@"UPDATE ""BankuumTubo"".clients SET balance = balance + @amt WHERE client_id = @id", conn, tx))
+            {
+                cmdUpdateBank.Parameters.AddWithValue("amt", amount);
+                cmdUpdateBank.Parameters.AddWithValue("id", bankClientId);
+                cmdUpdateBank.ExecuteNonQuery();
+            }
+
+            tx.Commit();
+            return true;
+        }
+        catch
+        {
+            try { tx.Rollback(); } catch { }
+            throw;
+        }
+    }
+
     public BankClientInfo? GetBankClientByIban(string iban)
     {
         using var conn = _dbContext.GetConnection();

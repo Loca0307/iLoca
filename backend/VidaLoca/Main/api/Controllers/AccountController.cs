@@ -138,36 +138,51 @@ public class AccountController : ControllerBase
     [HttpPost("WithdrawFromBank")]
     public ActionResult WithdrawFromBank([FromBody] WithdrawDTO dto)
     {
-        if (dto == null || string.IsNullOrEmpty(dto.BankIban)) return BadRequest();
+        if (dto == null || string.IsNullOrEmpty(dto.BankIban) || dto.Amount <= 0) return BadRequest();
 
         var targetAccountId = dto.AccountId;
 
-        // If caller didn't provide an accountId, resolve it from the bank IBAN -> BankuumTubo client email -> VidaLoca account
-        if (targetAccountId == 0)
+        if (!dto.IsDeposit)
         {
-            var bankClient = _accountService.GetBankClientByIban(dto.BankIban);
-            if (bankClient == null || string.IsNullOrEmpty(bankClient.Email))
+            // bank -> vida (withdraw)
+            if (targetAccountId == 0)
             {
-                return BadRequest(new { message = "Unable to resolve bank client by IBAN" });
+                // Get BankuumTubo client
+                var bankClient = _accountService.GetBankClientByIban(dto.BankIban);
+                if (bankClient == null || string.IsNullOrEmpty(bankClient.Email))
+                {
+                    return BadRequest(new { message = "Unable to resolve bank client by IBAN" });
+                }
+
+                // Get VidaLoca account
+                var vidaAccount = _accountService.GetAccountByEmail(bankClient.Email);
+                if (vidaAccount == null)
+                {
+                    return BadRequest(new { message = "No VidaLoca account found for bank client's email" });
+                }
+
+                targetAccountId = vidaAccount.AccountId;
+                // If the bank client doesn't have enough funds, fail 
+                if (bankClient.Balance < dto.Amount)
+                {
+                    return BadRequest(new { message = "Bank account has insufficient funds" });
+                }
             }
 
-            var vidaAccount = _accountService.GetAccountByEmail(bankClient.Email);
-            if (vidaAccount == null)
-            {
-                return BadRequest(new { message = "No VidaLoca account found for bank client's email" });
-            }
-
-            targetAccountId = vidaAccount.AccountId;
-            // If the bank client doesn't have enough funds, fail fast with informative message
-            if (bankClient.Balance < dto.Amount)
-            {
-                return BadRequest(new { message = "Bank account has insufficient funds" });
-            }
+            var success = _accountService.TransferFromBankToVida(targetAccountId, dto.BankIban, dto.Amount);
+            if (!success) return BadRequest(new { message = "Transfer failed (insufficient funds or invalid request)" });
+            return Ok(new { message = "Transfer successful", accountId = targetAccountId });
         }
+        else
+        {
+            // vida -> bank (deposit)
+            // For deposits require  accountId 
+            if (targetAccountId == 0) return BadRequest(new { message = "AccountId required for deposit" });
 
-        var success = _accountService.TransferFromBankToVida(targetAccountId, dto.BankIban, dto.Amount);
-        if (!success) return BadRequest(new { message = "Transfer failed (insufficient funds or invalid request)" });
-        return Ok(new { message = "Transfer successful", accountId = targetAccountId });
+            var success = _accountService.TransferFromVidaToBank(targetAccountId, dto.BankIban, dto.Amount);
+            if (!success) return BadRequest(new { message = "Deposit failed (insufficient funds or invalid request)" });
+            return Ok(new { message = "Deposit successful", accountId = targetAccountId });
+        }
     }
 
     [HttpGet("VerifyBankIban")]

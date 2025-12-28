@@ -93,6 +93,12 @@ public class AccountService : IAccountService
         return _accountRepository.TransferFromBankToVida(accountId, bankIban, amount);
     }
 
+    public bool TransferFromVidaToBank(int accountId, string bankIban, decimal amount)
+    {
+        if (amount <= 0 || string.IsNullOrEmpty(bankIban)) return false;
+        return _accountRepository.TransferFromVidaToBank(accountId, bankIban, amount);
+    }
+
     public BankClientInfo? GetBankClientByIban(string iban)
     {
         if (string.IsNullOrEmpty(iban)) return null;

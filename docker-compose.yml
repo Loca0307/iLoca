@@ -27,9 +27,7 @@ services:
     ports:
       - "3000:80"                 
     environment:
-      # inside docker-compose, services can reach VidaLoca as http://vidaloca:112
       - REACT_APP_API_BASE=http://vidaloca:5112
-      - REACT_APP_API_BASE=http://bankuumtubo:5027
 
     depends_on:
       - bankuumtubo

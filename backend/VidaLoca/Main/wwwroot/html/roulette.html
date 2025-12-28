@@ -66,9 +66,6 @@
             </div>
 
             <div class="mt-1">
-              <button id="placeBetBtn" class="btn btn-primary">Place Selected Bet</button>
-            </div>
-            <div class="mt-1">
               <a class="btn btn-ghost" href="/html/games.html">Back to Games</a>
             </div>
           </div>
@@ -275,9 +272,7 @@
           document.getElementById('result').innerText = 'Placed black bet: ' + colorBets.black;
         });
 
-        document.getElementById('placeBetBtn').addEventListener('click', ()=>{
-          document.getElementById('result').innerText = 'Bets placed: ' + Object.keys(pendingBets).length;
-        });
+        // bets are placed when the wheel is spun; no separate 'place bet' action needed
 
         document.getElementById('resetBtn').addEventListener('click', ()=>{
           pendingBets = {};
@@ -346,7 +341,7 @@
           }
 
           // disable betting UI while spinning
-          const controls = Array.from(document.querySelectorAll('.chip, .bet-cell, #betRed, #betBlack, #placeBetBtn, #resetBtn'));
+          const controls = Array.from(document.querySelectorAll('.chip, .bet-cell, #betRed, #betBlack, #resetBtn'));
           controls.forEach(c => c.setAttribute('disabled','true'));
           spinBtn.setAttribute('disabled','true');
           spinning = true;
