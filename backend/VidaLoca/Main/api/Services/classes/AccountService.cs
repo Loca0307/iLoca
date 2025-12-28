@@ -82,13 +82,6 @@ public class AccountService : IAccountService
     }
 
 
-    public bool WithDraw(int accountId, decimal amount)
-    {
-        if (amount <= 0) return false;
-        var success = _accountRepository.WithDraw(accountId, amount);
-        return success;
-    }
-
     public decimal? GetBalance(int accountId)
     {
         return _accountRepository.GetBalance(accountId);

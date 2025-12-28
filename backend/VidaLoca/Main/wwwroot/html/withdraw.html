@@ -59,6 +59,7 @@
         const loggedEmail = localStorage.getItem('VidaLoca/loggedInEmail');
         if (!loggedEmail) return null;
         try {
+          // 1 BACKEND REQUEST: to identify to which VidaLoca account to add money
           const resp = await fetch(`/Account/GetAccountByEmail?email=${encodeURIComponent(loggedEmail)}`);
           if (!resp.ok) return null;
           const acct = await resp.json();
@@ -82,6 +83,7 @@
           document.getElementById('balance').innerText = 'No account selected';
           return;
         }
+        // 2 BACKEND REQUEST: To show the current balance of the Vida Loca account
         const res = await fetch(`/Account/GetBalanceByAccount?accountId=${accountId}`);
         if (!res.ok) {
           document.getElementById('balance').innerText = 'Unable to load balance';
@@ -122,6 +124,7 @@
             }
 
           const payload = { accountId, amount, bankIban };
+          // 3 BACKEND REQUEST: To actually do the money tansfer from BankuumTubo to VidaLoca accounts
           const res = await fetch('/Account/WithdrawFromBank', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

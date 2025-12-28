@@ -20,19 +20,21 @@ public class AccountRepository : IAccountRepository
     public List<Account> GetAllAccounts()
     {
         // Define Accounts list to be returned afterwrds
-        var accounts = new List<Account>(); 
+        var accounts = new List<Account>();
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
-    using var cmd = new NpgsqlCommand(
-    @"SELECT account_id, email, password, user_name 
-    FROM ""VidaLoca"".accounts", 
-    conn);
+        using var cmd = new NpgsqlCommand(
+        @"SELECT account_id, email, password, user_name 
+    FROM ""VidaLoca"".accounts",
+        conn);
 
         using var reader = cmd.ExecuteReader();
 
-        while (reader.Read()) {
-            accounts.Add(new Account {
+        while (reader.Read())
+        {
+            accounts.Add(new Account
+            {
                 AccountId = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.GetString(2),
@@ -50,13 +52,13 @@ public class AccountRepository : IAccountRepository
 
         using var cmd = new NpgsqlCommand(
             @"INSERT INTO ""VidaLoca"".accounts (email, password, user_name) 
-            VALUES (@email, @password, @username)", 
+            VALUES (@email, @password, @username)",
             conn);
 
         cmd.Parameters.AddWithValue("email", account.Email);
         cmd.Parameters.AddWithValue("password", account.Password); // Password should already be hashed
         cmd.Parameters.AddWithValue("username", account.Username);
-        
+
 
         cmd.ExecuteNonQuery();
     }
@@ -68,15 +70,16 @@ public class AccountRepository : IAccountRepository
 
         using var cmd = new NpgsqlCommand(
             @"DELETE FROM ""VidaLoca"".accounts 
-            WHERE account_id = @id", 
+            WHERE account_id = @id",
             conn);
 
         cmd.Parameters.AddWithValue("id", account.AccountId);
         cmd.ExecuteNonQuery();
     }
 
-    
-    public void DeleteAllAccounts(){
+
+    public void DeleteAllAccounts()
+    {
         using var conn = _dbContext.GetConnection();
         conn.Open();
 
@@ -95,7 +98,7 @@ public class AccountRepository : IAccountRepository
 
         using var cmd = new NpgsqlCommand(
             @"SELECT user_name FROM ""VidaLoca"".accounts 
-            WHERE email = @email", 
+            WHERE email = @email",
             conn);
 
         cmd.Parameters.AddWithValue("email", email);
@@ -119,7 +122,7 @@ public class AccountRepository : IAccountRepository
 
         using var cmd = new NpgsqlCommand(
             @"SELECT account_id, email, password, user_name 
-            FROM ""VidaLoca"".accounts WHERE email = @email", 
+            FROM ""VidaLoca"".accounts WHERE email = @email",
             conn);
 
         cmd.Parameters.AddWithValue("email", email);
@@ -140,55 +143,7 @@ public class AccountRepository : IAccountRepository
         return null;
     }
 
-    public bool WithDraw(int accountId, decimal amount)
-    {
-        if (amount <= 0) return false;
 
-        using var conn = _dbContext.GetConnection();
-        conn.Open();
-
-        using var tx = conn.BeginTransaction();
-        try
-        {
-            // Lock the specific account row for update
-            decimal dbBalance;
-            using (var cmdLock = new NpgsqlCommand(@"SELECT balance FROM ""VidaLoca"".accounts WHERE account_id = @id FOR UPDATE", conn, tx))
-            {
-                cmdLock.Parameters.AddWithValue("id", accountId);
-                var res = cmdLock.ExecuteScalar();
-                if (res == null || res == DBNull.Value)
-                {
-                    tx.Rollback();
-                    return false; // account not found
-                }
-
-                dbBalance = Convert.ToDecimal(res);
-                if (dbBalance < amount)
-                {
-                    tx.Rollback();
-                    return false; // insufficient funds
-                }
-            }
-
-            // Subtract amount
-            using (var cmdUpdate = new NpgsqlCommand(@"UPDATE ""VidaLoca"".accounts SET balance = balance - @amount WHERE account_id = @id", conn, tx))
-            {
-                cmdUpdate.Parameters.AddWithValue("amount", amount);
-                cmdUpdate.Parameters.AddWithValue("id", accountId);
-                cmdUpdate.ExecuteNonQuery();
-            }
-
-            tx.Commit();
-            return true;
-        }
-        catch
-        {
-            try { tx.Rollback(); } catch { 
-                // Ignore for now
-            }
-            throw;
-        }
-    }
 
     public decimal? GetBalance(int accountId)
     {
@@ -276,7 +231,8 @@ public class AccountRepository : IAccountRepository
         using var reader = cmd.ExecuteReader();
         if (!reader.Read()) return null;
 
-        return new BankClientInfo {
+        return new BankClientInfo
+        {
             ClientId = reader.GetInt32(0),
             FirstName = reader.GetString(1),
             LastName = reader.GetString(2),

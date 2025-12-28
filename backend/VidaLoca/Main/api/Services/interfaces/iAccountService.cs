@@ -17,7 +17,6 @@ public interface IAccountService
 
     public void DeleteAllAccounts();
 
-    public bool WithDraw(int accountId, decimal amount);
     public decimal? GetBalance(int accountId);
     public bool TransferFromBankToVida(int accountId, string bankIban, decimal amount);
     public BankClientInfo? GetBankClientByIban(string iban);

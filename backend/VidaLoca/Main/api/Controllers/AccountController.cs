@@ -125,20 +125,7 @@ public class AccountController : ControllerBase
         return Ok(new { message = "All accounts have been deleted from the Database" });
     }
 
-    [HttpPost("Withdraw")]
-    public ActionResult WithDraw([FromBody] WithdrawDTO dto)
-    {
-        if (dto == null) return BadRequest();
 
-        bool success = _accountService.WithDraw(dto.AccountId, dto.Amount);
-
-        if (!success)
-        {
-            return BadRequest(new { message = "Withdraw failed (insufficient funds or invalid request)" });
-        }
-
-        return Ok(new { message = "Withdraw successful" });
-    }
 
     [HttpGet("GetBalanceByAccount")]
     public ActionResult<decimal> GetBalanceByAccount([FromQuery] int accountId)
@@ -155,7 +142,7 @@ public class AccountController : ControllerBase
 
         var targetAccountId = dto.AccountId;
 
-        // If caller didn't provide an accountId, resolve it from the bank IBAN -> bank client email -> Vida account
+        // If caller didn't provide an accountId, resolve it from the bank IBAN -> BankuumTubo client email -> VidaLoca account
         if (targetAccountId == 0)
         {
             var bankClient = _accountService.GetBankClientByIban(dto.BankIban);
