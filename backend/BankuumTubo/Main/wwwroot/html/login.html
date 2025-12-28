@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bankuum Tubo</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+    <header>
+        <h1 class="site-logo"><a id="site-logo" href="/html/index.html">Bankuum Tubo</a></h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="auth-section">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>Welcome Back</h2>
+                    <p>Account to your Bankuum Tubo account</p>
+                </div>
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
+
+                <!-- Profile section (shown when user is already logged in) -->
+                <div id="profile-section" class="moved-inline-styles">
+                    <p id="profile-username"></p>
+                    <p id="profile-email"></p>
+                    <p id="profile-iban"></p>
+                    <p id="profile-balance"></p>
+                    <button id="logout-btn" class="btn-login">Logout</button>
+                </div>
+
+                <div id="signup-link" class="signup-link">
+                    Don't have an account? <a href="/html/register.html">Register</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Bankuum Tubo. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Handle Account form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-message');
+            const successMsg = document.getElementById('success-message');
+
+            // Hide previous messages
+            errorMsg.style.display = 'none';
+            errorMsg.textContent = '';
+            successMsg.style.display = 'none';
+            successMsg.textContent = '';
+
+            try {
+                const response = await fetch('/account/authenticate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    // Successful auth; store a username and client info in localStorage
+                    successMsg.textContent = 'Login successful! Redirecting...';
+                    successMsg.style.display = 'block';
+
+                    // Try to resolve username from Account/ShowAccounts
+                    try {
+                        const usersResp = await fetch('/account/ShowAccounts');
+                        if (usersResp.ok) {
+                            const users = await usersResp.json();
+                            const found = Array.isArray(users) ? users.find(u => (u.email || '').toLowerCase() === email.toLowerCase()) : null;
+                                if (found && found.username) {
+                                localStorage.setItem('BankuumTubo/loggedInUsername', found.username);
+                            }
+                        }
+                    } catch (err) {
+                        // ignore
+                    }
+
+                    // Save authenticated email for transactions (no other client data saved)
+                    localStorage.setItem('BankuumTubo/loggedInEmail', email);
+
+                    // Fallback username
+                    if (!localStorage.getItem('BankuumTubo/loggedInUsername')) {
+                        const fallback = (email || '').split('@')[0];
+                        if (fallback) localStorage.setItem('BankuumTubo/loggedInUsername', fallback);
+                    }
+
+                    // Redirect to home
+                    setTimeout(() => window.location.href = '/html/index.html', 1200);
+                } else {
+                    const error = await response.json();
+                    errorMsg.textContent = error.message || 'Invalid email or password';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                errorMsg.textContent = 'Network error. Please try again.';
+                errorMsg.style.display = 'block';
+            }
+        });
+        
+        // Profile display & logout handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileSection = document.getElementById('profile-section');
+            const profileUsername = document.getElementById('profile-username');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            const username = localStorage.getItem('BankuumTubo/loggedInUsername');
+            const email = localStorage.getItem('BankuumTubo/loggedInEmail');
+
+            const signupLink = document.getElementById('signup-link');
+
+            if (username) {
+                // Hide Account form and show profile info
+                const form = document.getElementById('login-form');
+                if (form) form.style.display = 'none';
+                profileUsername.textContent = `Logged in as ${username}`;
+                // Show email in profile; do not expose clientId or IBAN in localStorage
+                profileEmail.textContent = email ? `Email: ${email}` : '';
+                // Hide the signup link when logged in
+                if (signupLink) signupLink.style.display = 'none';
+                // Fetch client details from the backend to show iban and balance
+                (async () => {
+                    try {
+                        const resp = await fetch(`/client/GetClientByEmail?email=${encodeURIComponent(email)}`);
+                        if (resp.ok) {
+                            const client = await resp.json();
+                            if (client) {
+                                const ibanEl = document.getElementById('profile-iban');
+                                const balEl = document.getElementById('profile-balance');
+                                ibanEl.textContent = client.iban ? `IBAN: ${client.iban}` : '';
+                                balEl.textContent = `Balance: ${Number(client.balance).toFixed(2)} €`;
+                            }
+                        }
+                    } catch (err) {
+                        // ignore silently
+                    }
+                })();
+                profileSection.style.display = 'block';
+            }
+            else {
+                // Ensure signup link is visible when logged out
+                if (signupLink) signupLink.style.display = '';
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    // Clear only the username and email from localStorage
+                    localStorage.removeItem('BankuumTubo/loggedInUsername');
+                    localStorage.removeItem('BankuumTubo/loggedInEmail');
+                    // Redirect to home page
+                    window.location.href = '/html/index.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bankuum Tubo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="site-logo"><a id="site-logo" href="/html/index.html">Bankuum Tubo</a></h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
+    </header>
+    <main>
+        <section class="transaction-form">
+            <h2>Add New Transaction</h2>
+            <form id="addTransactionForm">
+                <label for="receiverIban">Receiver IBAN</label>
+                <input type="text" id="receiverIban" placeholder="Receiver IBAN" required>
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+                <label for="reason">Reason</label>
+                <input type="text" id="reason" placeholder="Reason" required>
+                <button type="submit">Add Transaction</button>
+            </form>
+            <div id="transaction-message"></div>
+        </section>
+        <section class="transaction-table">
+            <h2>All Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sender</th>
+                        <th>Receiver IBAN</th>
+                        <th>Amount</th>
+                        <th>Date/Time</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsBody">
+                    <!-- Transactions will appear here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Bankuum Tubo. All rights reserved.</p>
+    </footer>
+    <script>
+    // Load all transactions from backend
+    async function loadTransactions() {
+        try {
+            // Use absolute URL and disable caching to ensure fresh data
+            const response = await fetch('http://localhost:5027/Transaction/ShowTransactions', { cache: 'no-store' });
+            if (!response.ok) throw new Error('Failed to fetch transactions');
+            const transactions = await response.json();
+            const tbody = document.getElementById('transactionsBody');
+            tbody.innerHTML = '';
+            transactions.forEach(t => {
+                    const row = document.createElement('tr');
+                    // tolerate different JSON property names (camelCase or PascalCase)
+                    const idVal = t.transactionId || t.transactionID || t.TransactionId || t.TransactionID || '';
+                    const senderVal = t.sender || t.senderEmail || t.Sender || t.SenderEmail || '';
+                    const receiverVal = t.receiverIban || t.receiverIBAN || t.ReceiverIban || t.ReceiverIBAN || '';
+                    const amountVal = t.amount || t.Amount || 0;
+                    const dateVal = t.dateTime || t.DateTime || null;
+                    const reasonVal = t.reason || t.Reason || '';
+
+                    row.innerHTML = `
+                        <td>${idVal}</td>
+                        <td>${senderVal}</td>
+                        <td>${receiverVal}</td>
+                        <td>${amountVal}</td>
+                        <td>${dateVal ? new Date(dateVal).toLocaleString() : ''}</td>
+                        <td>${reasonVal}</td>
+                    `;
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            document.getElementById('transactionsBody').innerHTML = '<tr><td colspan="6">Error loading transactions</td></tr>';
+        }
+    }
+    // Initial load
+    loadTransactions();
+
+    // POST NEW TRANSACTION
+    const form = document.getElementById('addTransactionForm');
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Sender identifier extracted from localStorage: require loggedInEmail for transactions
+    const senderEmail = localStorage.getItem('BankuumTubo/loggedInEmail') || '';
+
+        // collect receiver IBAN
+        const receiverIban = document.getElementById('receiverIban').value.trim();
+        const amount = parseFloat(document.getElementById('amount').value);
+        const reason = document.getElementById('reason').value.trim();
+        const messageDiv = document.getElementById('transaction-message');
+        // Server will validate receiver existence; just show pending message
+        messageDiv.textContent = 'Submitting transaction...';
+        messageDiv.style.color = 'black';
+
+        if (!senderEmail) {
+            messageDiv.textContent = 'Error: No logged-in email found. Please log in.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+
+        if (!receiverIban) {
+            messageDiv.textContent = 'Error: Receiver IBAN is required.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+
+        if (Number.isNaN(amount) || amount <= 0) {
+            messageDiv.textContent = 'Error: Amount must be a positive number.';
+            messageDiv.style.color = 'red';
+            return;
+        }
+
+        // Build payload; only send SenderEmail (backend will resolve the sender client)
+        const transaction = {
+            SenderEmail: senderEmail,
+            ReceiverIban: receiverIban,
+            Amount: Math.round(amount),
+            Reason: reason
+        };
+
+        try {
+            const response = await fetch('http://localhost:5027/Transaction/InsertTransaction', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transaction)
+            });
+
+            if (!response.ok) {
+                let errMsg = 'Failed to add transaction';
+                try { const err = await response.json(); if (err && err.message) errMsg = err.message; } catch {}
+                throw new Error(errMsg);
+            }
+
+            let timestampMsg = '';
+            try {
+                const data = await response.json();
+                if (data && (data.dateTime || data.DateTime)) {
+                    const dt = data.dateTime || data.DateTime;
+                    timestampMsg = ` (Timestamp: ${new Date(dt).toLocaleString()})`;
+                }
+            } catch(e){}
+
+            messageDiv.textContent = 'Transaction added successfully!' + timestampMsg;
+            messageDiv.style.color = 'green';
+            form.reset();
+            // Await reload to ensure table updates immediately
+            await loadTransactions();
+        } catch (error) {
+            console.error('Transaction submission error:', error);
+            messageDiv.textContent = 'Error adding transaction: ' + (error && error.message ? error.message : 'Unknown error');
+            messageDiv.style.color = 'red';
+        }
+    });
+    </script>
+</body>
+</html>

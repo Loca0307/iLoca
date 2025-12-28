@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const username = localStorage.getItem("loggedInUsername");
-  const emailStored = localStorage.getItem("loggedInEmail");
+  const username = localStorage.getItem("BankuumTubo/loggedInUsername");
+  const emailStored = localStorage.getItem("BankuumTubo/loggedInEmail");
 
   const [statusMessage, setStatusMessage] = useState("");
   const [statusType, setStatusType] = useState(""); // "success" or "error"
@@ -44,7 +44,7 @@ export default function Login() {
     setStatusType("");
 
     try {
-      const response = await fetch("http://localhost:5027/login/authenticate", {
+      const response = await fetch("http://localhost:5027/account/authenticate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -59,17 +59,17 @@ export default function Login() {
 
       setStatusType("success");
       setStatusMessage("Login successful! Redirecting...");
-      localStorage.setItem("loggedInEmail", email);
+  localStorage.setItem("BankuumTubo/loggedInEmail", email);
 
       // Fetch username
       try {
         const res = await fetch(
-          `http://localhost:5027/login/GetUsernameByEmail?email=${encodeURIComponent(email)}`
+          `http://localhost:5027/account/GetUsernameByEmail?email=${encodeURIComponent(email)}`
         );
 
         if (res.ok) {
           const username = await res.text();
-          if (username) localStorage.setItem("loggedInUsername", username);
+          if (username) localStorage.setItem("BankuumTubo/loggedInUsername", username);
         }
       } catch {
         console.warn("Username fetch failed");
@@ -83,8 +83,8 @@ export default function Login() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("loggedInUsername");
-    localStorage.removeItem("loggedInEmail");
+  localStorage.removeItem("BankuumTubo/loggedInUsername");
+  localStorage.removeItem("BankuumTubo/loggedInEmail");
     navigate("/BankuumTubo");
   };
 

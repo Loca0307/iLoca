@@ -6,7 +6,7 @@
 services:
 
   backend:
-    build: ./backend/iLoca/BankuumTubo/Main
+    build: ./backend/BankuumTubo/Main
     # Load environment variables from .env file into backend service
     env_file:
       - .env

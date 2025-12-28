@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Bankuum Tubo</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="site-logo"><a id="site-logo" href="/html/index.html">Bankuum Tubo</a></h1>
+        <nav>
+            <a href="/html/index.html">Home</a>
+            <a href="/html/client.html">Clients</a>
+            <a href="/html/transaction.html">Transactions</a>
+            <a href="/html/login.html">Profile</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home-section" class="home-section">
+            <div class="home-card">
+                <h2 class="home-title">Welcome to Bankuum Tubo</h2>
+                <div id="user-info" class="home-user-info"></div>
+                <p class="home-subtitle">Your secure, modern banking dashboard.</p>
+                <div id="home-links" class="home-actions">
+                    <a href="/html/client.html" class="main-action-btn">View Clients</a>
+                    <a href="/html/transaction.html" class="main-action-btn">Transactions</a>
+                    <a href="/html/login.html" class="main-action-btn">Login</a>
+                    <a href="/html/login.html" class="main-action-btn">Profile</a>
+                </div>
+                <p class="home-footer-note">Manage your clients, view transactions, and more.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Bankuum Tubo. All rights reserved.</p>
+    </footer>
+<style>
+    .home-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .main-action-btn {
+        display: inline-block;
+        padding: 0.75em 2em;
+        font-size: 1.1rem;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #4CAF50 60%, #43a047 100%);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        border: none;
+    }
+    .main-action-btn:hover, .main-action-btn:focus {
+        background: linear-gradient(90deg, #43a047 60%, #388e3c 100%);
+        box-shadow: 0 4px 16px rgba(76,175,80,0.15);
+        transform: translateY(-2px) scale(1.03);
+        color: #fff;
+    }
+</style>
+</body>
+<script>
+// Check if user is logged in (by localStorage)
+document.addEventListener('DOMContentLoaded', function() {
+    const userInfoDiv = document.getElementById('user-info');
+    const homeLinks = document.getElementById('home-links');
+    // We'll use localStorage to store the username after login/registration
+    const loggedInUsername = localStorage.getItem('BankuumTubo/loggedInUsername');
+    // There are two anchors that point to /html/login.html in the home-actions:
+    // the first is the "Login" button, the second is the "Profile" button.
+    let loginLink = null;
+    let profileLink = null;
+    if (homeLinks) {
+        const loginAnchors = homeLinks.querySelectorAll('a[href="/html/login.html"]');
+        if (loginAnchors && loginAnchors.length > 0) {
+            loginLink = loginAnchors[0];
+            if (loginAnchors.length > 1) profileLink = loginAnchors[1];
+        }
+    }
+
+    if (loggedInUsername) {
+        // Show username and show Profile button, hide Login button
+        let infoHtml = `<p style="color: #333; font-size: 1.1rem; margin-bottom: 1rem;">Logged in as <strong>${loggedInUsername}</strong></p>`;
+        userInfoDiv.innerHTML = infoHtml;
+        if (loginLink) loginLink.style.display = 'none';
+        if (profileLink) profileLink.style.display = '';
+    } else {
+        // Not logged in: hide Profile button (if present) and ensure Login is visible
+        userInfoDiv.innerHTML = '';
+        if (profileLink) profileLink.style.display = 'none';
+        if (loginLink) loginLink.style.display = '';
+    }
+});
+</script>
+</html>

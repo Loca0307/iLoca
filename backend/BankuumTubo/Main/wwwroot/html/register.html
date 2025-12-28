@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bankuum Tubo</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<header>
+		<h1 class="site-logo"><a id="site-logo" href="/html/index.html">Bankuum Tubo</a></h1>
+		<nav>
+			<a href="/html/index.html">Home</a>
+			<a href="/html/client.html">Clients</a>
+			<a href="/html/login.html">Login</a>
+		</nav>
+	</header>
+
+	<main>
+		<section class="auth-section">
+			<div class="auth-container">
+				<div class="auth-header">
+					<h2>Create Account</h2>
+					<p>Register for a new Bankuum Tubo account</p>
+				</div>
+
+				<div id="error-message" class="error-message"></div>
+				<div id="success-message" class="success-message"></div>
+
+					   <form id="register-form">
+						   <div class="form-group">
+							   <label for="email">Email Address</label>
+							   <input 
+									   type="email" 
+									   id="email" 
+									   name="email" 
+									   placeholder="Enter your email"
+									   autocomplete="email"
+									   required
+								   >
+						   </div>
+
+						   <div class="form-group">
+							   <label for="username">Username</label>
+							   <input 
+								   type="text" 
+								   id="username" 
+								   name="username" 
+								   placeholder="Choose a username"
+								   autocomplete="username"
+								   required
+							   >
+						   </div>
+
+						   <div class="form-group">
+							   <label for="password">Password</label>
+							   <input 
+								   type="password" 
+								   id="password" 
+								   name="password" 
+								   placeholder="Create a password"
+								   autocomplete="new-password"
+								   required
+							   >
+						   </div>
+
+						   <button type="submit" class="btn-login">Register</button>
+					   </form>
+
+				<div class="signup-link">
+					Already have an account? <a href="/html/login.html">Login</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer>
+		<p>&copy; 2025 Bankuum Tubo. All rights reserved.</p>
+	</footer>
+
+	<script>
+		// Handle registration form submission
+		document.getElementById('register-form').addEventListener('submit', async function(e) {
+			e.preventDefault();
+            
+			// Read and trim fields
+			const username = (document.getElementById('username').value || '').trim();
+			const email = (document.getElementById('email').value || '').trim();
+			const password = (document.getElementById('password').value || '').trim();
+			const errorMsg = document.getElementById('error-message');
+			const successMsg = document.getElementById('success-message');
+            
+					
+			// Hide previous messages
+			errorMsg.style.display = 'none';
+			successMsg.style.display = 'none';
+			// Client-side validation: ensure required fields are provided
+			if (!username || !email || !password) {
+				errorMsg.textContent = 'Please fill in username, email and password.';
+				errorMsg.style.display = 'block';
+				return;
+			}
+            
+			   try {
+				   const response = await fetch('/account/InsertAccount', {
+					   method: 'POST',
+					   headers: {
+						   'Content-Type': 'application/json',
+					   },
+					   body: JSON.stringify({ email, password, username })
+				   });
+                
+				   if (response.ok) {
+					   successMsg.textContent = 'Registration successful! Redirecting to login...';
+					   successMsg.style.display = 'block';
+					   setTimeout(() => {
+						   window.location.href = '/html/login.html';
+					   }, 800);
+				   } else {
+					   const error = await response.json();
+					   errorMsg.textContent = error.message || 'Registration failed.';
+					   errorMsg.style.display = 'block';
+				   }
+			} catch (error) {
+				errorMsg.textContent = 'Network error. Please try again.';
+				errorMsg.style.display = 'block';
+			}
+		});
+	</script>
+</body>
+</html>

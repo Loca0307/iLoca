@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 
 export default function Home() {
-  const [username] = useState(() => localStorage.getItem("loggedInUsername"));
+  const [username] = useState(() => localStorage.getItem("BankuumTubo/loggedInUsername"));
 
   return (
     <div className="home-container">

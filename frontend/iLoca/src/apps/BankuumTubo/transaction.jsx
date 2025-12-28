@@ -27,7 +27,7 @@ export default function Transactions() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const senderEmail = localStorage.getItem("loggedInEmail") || "";
+  const senderEmail = localStorage.getItem("BankuumTubo/loggedInEmail") || "";
 
     if (!senderEmail) {
       setMessage("Error: No logged-in email found. Please log in.");
