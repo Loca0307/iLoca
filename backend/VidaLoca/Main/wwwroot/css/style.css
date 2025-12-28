@@ -258,6 +258,27 @@ h3 {
 .bet-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .bet-grid .bet-cell { min-height: 44px; }
 
+/* Balance display in games */
+.balance {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--text);
+  background: rgba(255,255,255,0.02);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.03);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.username {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
 .bet-cell {
   padding: 10px 12px;
   background: rgba(255,255,255,0.02);
