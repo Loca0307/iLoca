@@ -258,6 +258,38 @@ h3 {
 .bet-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .bet-grid .bet-cell { min-height: 44px; }
 
+/* Fourth column container: placed beside the numeric grid to form a complete 4-column table */
+.bet-column-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  /* make the column visually thinner; width controlled by container positioning */
+  width: 64px;
+}
+
+.bet-color-tall {
+  min-height: 160px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.04);
+  writing-mode: vertical-rl; /* vertical label for narrow buttons */
+  transform: rotate(180deg);
+}
+
+/* Layout: keep numeric bet squares in place; the bets-card remains a block and the vertical column sits to the right */
+.bets-card { display: block; }
+
+/* ensure the numeric grid uses 3 columns */
+.bet-grid { grid-template-columns: repeat(3, 1fr); }
+
+.bet-grid-wrap { display:flex; gap:8px; align-items:flex-start; }
+
 /* Balance display in games */
 .balance {
   display: block;
@@ -278,6 +310,10 @@ h3 {
   margin-bottom: 6px;
   text-align: center;
 }
+
+.bet-color-row { display:flex; gap:12px; justify-content:center; margin-top:8px; }
+.btn-red { background:#8b0000; color:#fff; border-radius:8px; padding:6px 10px; }
+.btn-black { background:#111; color:#fff; border-radius:8px; padding:6px 10px; }
 
 .bet-cell {
   padding: 10px 12px;
@@ -320,4 +356,7 @@ h3 {
   .roulette-wrap { grid-template-columns: 1fr; }
   .bets-card { max-width: 100%; }
   .bet-grid { grid-template-columns: repeat(3,1fr); }
+  .bets-card { grid-template-columns: 1fr; }
+  .bet-column-vertical { flex-direction: row; }
+  .bet-color-tall { min-height: 48px; flex: none; padding: 10px 12px; }
 }

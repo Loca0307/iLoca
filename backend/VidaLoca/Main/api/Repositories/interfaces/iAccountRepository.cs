@@ -19,4 +19,6 @@ public interface IAccountRepository
     public decimal? GetBalance(int accountId);
     public bool TransferFromBankToVida(int accountId, string bankIban, decimal amount);
     public BankClientInfo? GetBankClientByIban(string iban);
+
+    public bool UpdateBetMoney(double amount, bool operation, string email);
 }

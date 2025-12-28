@@ -98,5 +98,12 @@ public class AccountService : IAccountService
         if (string.IsNullOrEmpty(iban)) return null;
         return _accountRepository.GetBankClientByIban(iban);
     }
+
+    public bool UpdateBetMoney(double amount, bool operation, string email)
+    {
+        if (amount <= 0 || string.IsNullOrEmpty(email)) return false;
+        return _accountRepository.UpdateBetMoney(amount, operation, email);
+    }
+
     
 }

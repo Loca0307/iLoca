@@ -178,4 +178,15 @@ public class AccountController : ControllerBase
         if (info == null) return NotFound();
         return Ok(info);
     }
+
+    [HttpPost("UpdateBetMoney")]
+    public ActionResult UpdateBetMoney([FromBody] UpdateBetDTO dto)
+    {
+        if (dto == null || dto.Amount <= 0 || string.IsNullOrEmpty(dto.Email)) return BadRequest();
+
+        var success = _accountService.UpdateBetMoney(dto.Amount, dto.Operation, dto.Email);
+        if (!success) return BadRequest(new { message = "Account not found or update failed" });
+
+        return Ok(new { message = "Balance updated" });
+    }
 }

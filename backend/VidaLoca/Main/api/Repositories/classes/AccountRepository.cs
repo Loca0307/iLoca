@@ -241,4 +241,23 @@ public class AccountRepository : IAccountRepository
             Balance = reader.GetDecimal(5),
         };
     }
+
+
+    public bool UpdateBetMoney(double amount, bool operation, string email)
+    {
+        using var conn = _dbContext.GetConnection();
+        conn.Open();
+
+        var sql = operation
+            ? "UPDATE \"VidaLoca\".accounts SET balance = balance + @amount WHERE email = @email"
+            : "UPDATE \"VidaLoca\".accounts SET balance = balance - @amount WHERE email = @email";
+
+        using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("amount", amount);
+        cmd.Parameters.AddWithValue("email", email);
+
+        var affected = cmd.ExecuteNonQuery();
+        return affected > 0;
+    }
+
 }
