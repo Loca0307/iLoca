@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { verifyBankIban, vidaFetch } from '../../api';
+// Using direct backend endpoints (hardcoded to localhost:5112)
 
 export default function Transaction(){
   const [balance, setBalance] = useState('Loading...');
@@ -10,7 +10,7 @@ export default function Transaction(){
       try{
         const id = localStorage.getItem('accountId');
         if(!id){ setBalance('No account'); return; }
-        const res = await vidaFetch(`/Account/GetBalanceByAccount?accountId=${id}`);
+  const res = await fetch(`http://localhost:5112/Account/GetBalanceByAccount?accountId=${id}`);
         if(!res.ok){ setBalance('Error'); return; }
         const b = await res.json(); setBalance(Number(b).toFixed(2) + ' €');
     }catch{ setBalance('-'); }
@@ -29,7 +29,9 @@ export default function Transaction(){
     if(!bankIban){ msgEl.innerText = 'Enter bank IBAN'; return; }
 
     // verify IBAN
-    const v = await verifyBankIban(bankIban);
+  // verify IBAN using direct backend call
+  const v = await fetch(`http://localhost:5112/Account/VerifyBankIban?iban=${encodeURIComponent(bankIban)}`);
+  // maintain compatibility with previous helper which returned a fetch Response
     if(!v.ok){ msgEl.innerText = 'IBAN not found'; return; }
     const info = await v.json();
     setIbanInfo((info.firstName||'') + ' ' + (info.lastName||'') + (info.email ? ' ('+info.email+')' : ''));
@@ -39,11 +41,11 @@ export default function Transaction(){
 
     const payload = { accountId, amount, bankIban, IsDeposit: mode === 'deposit' };
     const endpoint = '/Account/WithdrawFromBank';
-    const res = await vidaFetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const res = await fetch(`http://localhost:5112${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     if(!res.ok){ msgEl.innerText = 'Transaction failed'; return; }
     msgEl.innerText = (mode === 'withdraw' ? 'Withdraw successful' : 'Deposit successful');
     // refresh balance
-    const fres = await vidaFetch(`/Account/GetBalanceByAccount?accountId=${accountId}`);
+  const fres = await fetch(`http://localhost:5112/Account/GetBalanceByAccount?accountId=${accountId}`);
     if(fres.ok){ const b = await fres.json(); setBalance(Number(b).toFixed(2) + ' €'); }
   }
 

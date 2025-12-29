@@ -18,7 +18,7 @@ export default function Login(){
     }
 
     try{
-      const res = await fetch('/account/Authenticate', {
+      const res = await fetch('http://localhost:5112/account/Authenticate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

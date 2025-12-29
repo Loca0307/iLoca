@@ -13,7 +13,7 @@ export default function Register(){
     setMsg('');
     if(!email || !username || !pwd){ setMsg('Please provide username, email and password'); return; }
     try{
-      const res = await fetch('/account/InsertAccount', {
+      const res = await fetch('http://localhost:5112/account/InsertAccount', {
         method: 'POST', headers: { 'Content-Type':'application/json' },
         body: JSON.stringify({ email, username, password: pwd })
       });

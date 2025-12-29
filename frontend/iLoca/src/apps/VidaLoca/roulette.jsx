@@ -140,7 +140,7 @@ export default function Roulette(){
 
     async function postUpdateBet(amount, operation, email){
       try{
-        const res = await fetch('/Account/UpdateBetMoney', {
+        const res = await fetch('http://localhost:5112/Account/UpdateBetMoney', {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify({ Amount: amount, Operation: operation, Email: email })
         });
