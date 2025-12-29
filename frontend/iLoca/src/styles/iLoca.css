@@ -1,0 +1,162 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #ffffff;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ---------- PAGE TITLE ---------- */
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* ---------- OUTER CENTERING ---------- */
+.device-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- PHONE BODY ---------- */
+.iphone-body {
+  width: 365px;
+  height: 760px;
+  background: #000;
+  border-radius: 48px;
+  position: relative;
+  border: 8px solid #000;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* subtle inner glossy feel */
+.iphone-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 48px;
+  box-shadow: inset 0 0 40px rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+
+/* ---------- TOP BEZEL ---------- */
+.iphone-top {
+  height: 14px;              /* thin bezel */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.speaker {
+  width: 70px;
+  height: 6px;
+  background: #0c0c0c;
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
+}
+
+/* ---------- SCREEN ---------- */
+.screen {
+  flex: 1;
+  background: #f7f7f7;   /* plain light screen */
+  border-radius: 32px;
+  margin: 0 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgba(0,0,0,0.28);
+}
+
+.phone-main {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.home-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  justify-items: center;
+}
+
+/* ---------- APP ICONS ---------- */
+.app-tile {
+  width: 90px;
+  height: 90px;
+  background: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+  transition: 0.15s ease;
+  text-decoration: none;
+}
+
+.app-tile:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 35px rgba(0,0,0,0.28);
+}
+
+.app-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.app-label {
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+}
+
+/* ---------- BOTTOM BEZEL + HOME BUTTON ---------- */
+.iphone-bottom {
+  height: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-button {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #f9f9f9, #d6d6d6 60%, #bdbdbd 100%);
+  box-shadow: inset 0 2px 8px rgba(255,255,255,0.9),
+              inset 0 -6px 12px rgba(0,0,0,0.3),
+              0 6px 14px rgba(0,0,0,0.35);
+  border: 3px solid rgba(255,255,255,0.7);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width: 400px) {
+  .iphone-body {
+    transform: scale(0.85);
+  }
+}

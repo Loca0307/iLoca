@@ -2,27 +2,47 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 import Phone from "./iLoca";
 
-import Home from "./apps/BankuumTubo/index";
-import Client from "./apps/BankuumTubo/client";
-import Transaction from "./apps/BankuumTubo/transaction";
-import Login from "./apps/BankuumTubo/login";
-import Register from "./apps/BankuumTubo/register";
+import BankuumHeader from "./apps/BankuumTubo/header";
+import BankuumFooter from "./apps/BankuumTubo/footer";
 
-import Header from "./apps/BankuumTubo/header";
-import Footer from "./apps/BankuumTubo/footer";
+import BankuumHome from "./apps/BankuumTubo/index";
+import BankuumClient from "./apps/BankuumTubo/client";
+import BankuumTransaction from "./apps/BankuumTubo/transaction";
+import BankuumLogin from "./apps/BankuumTubo/login";
+import BankuumRegister from "./apps/BankuumTubo/register";
+
+
+import VidaHeader from "./apps/VidaLoca/header";
+import VidaFooter from "./apps/VidaLoca/footer";
+
+import VidaHome from "./apps/VidaLoca/index";
+import VidaGames from "./apps/VidaLoca/games";
+import VidaRoulette from "./apps/VidaLoca/roulette";
+import VidaTransaction from "./apps/VidaLoca/transaction";
+import VidaLogin from "./apps/VidaLoca/login";
+import VidaRegister from "./apps/VidaLoca/register";
+
 
 // Layout used only for Bankuum Tubo routes
 const BankuumTuboLayout = () => {
   return (
     <div className="full-app-root">
-      <Header />
+      <BankuumHeader />
       <main className="site-main">
         <Outlet /> {/* Actual placeholder for the components*/}
       </main>
-      <Footer />
+      <BankuumFooter />
     </div>
   );
 };
+
+const VidaLocaLayout = () => (
+  <div className="full-app-root">
+    <VidaHeader />
+    <main className="site-main"><Outlet/></main>
+    <VidaFooter />
+  </div>
+);
 
 function App() {
   return (
@@ -34,11 +54,21 @@ function App() {
 
         {/* Bankuum Tubo app routes, with BankuumTubo as route prefix*/}
         <Route path="BankuumTubo" element={<BankuumTuboLayout />} >
-          <Route index element={<Home />} />
-          <Route path="clients" element={<Client />} />
-          <Route path="transactions" element={<Transaction/> } />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route index element={<BankuumHome />} />
+          <Route path="clients" element={<BankuumClient />} />
+          <Route path="transactions" element={<BankuumTransaction/> } />
+          <Route path="login" element={<BankuumLogin />} />
+          <Route path="register" element={<BankuumRegister />} />
+        </Route>
+
+        {/* VidaLoca routes */}
+        <Route path="vidaLoca" element={<VidaLocaLayout/>}>
+          <Route index element={<VidaHome/>} />
+          <Route path="games" element={<VidaGames/>} />
+          <Route path="roulette" element={<VidaRoulette/>} />
+          <Route path="transaction" element={<VidaTransaction/>} />
+          <Route path="login" element={<VidaLogin/>} />
+          <Route path="register" element={<VidaRegister/>} />
         </Route>
 
       </Routes>
