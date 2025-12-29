@@ -1,0 +1,35 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Layout container (footer always bottom) */
+.full-app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-main {
+  flex: 1 0 auto;
+}
+
+footer {    
+  flex-shrink: 0;
+}
+
+/* Full width header bar */
+.header-wrapper {
+  width: 100%;
+  background: #4CAF50;
+  color: white;
+}
+
+/* SMALL nice lateral padding only */
+.site-header {
+  padding: 0.75rem 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

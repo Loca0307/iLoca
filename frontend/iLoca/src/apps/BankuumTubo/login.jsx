@@ -97,16 +97,7 @@ export default function Login() {
 
       {/* STATUS MESSAGE LIKE REGISTER */}
       {statusMessage && (
-        <p
-          style={{
-            marginTop: "10px",
-            color: statusType === "success" ? "green" : "red",
-            fontWeight: "bold",
-            textAlign: "center"
-          }}
-        >
-          {statusMessage}
-        </p>
+        <p className={"auth-status " + (statusType === "success" ? "status-success" : "status-error")}>{statusMessage}</p>
       )}
 
       {!username ? (
@@ -139,11 +130,7 @@ export default function Login() {
             Balance: {clientData.balance.toFixed(2)} €
           </p>
 
-          <button className="btn-login"
-                  style={{ background: "#e53935" }}
-                  onClick={handleLogout}>
-            Logout
-          </button>
+          <button className="btn-login btn-logout" onClick={handleLogout}>Logout</button>
         </div>
       )}
     </div>

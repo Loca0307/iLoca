@@ -70,15 +70,7 @@ export default function Register() {
         <button type="submit" className="btn-login">Register</button>
 
         {statusMessage && (
-          <p
-            style={{
-              marginTop: "10px",
-              color: statusType === "success" ? "green" : "red",
-              fontWeight: "bold"
-            }}
-          >
-            {statusMessage}
-          </p>
+          <p className={"auth-status " + (statusType === "success" ? "status-success" : "status-error")}>{statusMessage}</p>
         )}
 
         <div className="signup-link">

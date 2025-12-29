@@ -3,7 +3,7 @@ import React from 'react';
 export default function Games(){
   return (
     <div className="container">
-      <header className="site-header center"><h1 className="site-title">VidaLoca</h1></header>
+      <header className="site-header center"><h1 className="site-title">Games</h1></header>
       <main>
         <div className="games-grid">
           <a className="game-card game-roulette" href="/vidaLoca/roulette">
