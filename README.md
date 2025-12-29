@@ -52,7 +52,8 @@ FOR FRONTEND:
 
 FOR BOTH(docker-compose):
 
-1) In the root folder, run `cp .env.example .env`
+1) In the root folder, run(on McOS): `cp .env.example .env`
+   If on windows, run : `copy .env.example .env`
  to create the .env file (db secrets file) from the .env.example file
 
 2) 'docker-compose up', to run the containers
