@@ -4,6 +4,20 @@
 # 3) Define the ports as host:container
 
 services:
+  # Docker setup for database with "new" access data
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    # Load environment variables from .env file into db service
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   bankuumtubo:
     build: ./backend/BankuumTubo/Main
     # Load environment variables from .env file into backend service
@@ -11,6 +25,8 @@ services:
       - .env
     ports:
       - "5027:5027"
+    depends_on:
+      - db
 
   vidaloca:
     build: ./backend/VidaLoca/Main
@@ -18,6 +34,8 @@ services:
       - .env
     ports:
       - "5112:5112"
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -40,3 +58,6 @@ services:
 networks:
   default:
     name: iloca_network
+
+volumes:
+  postgres_data:

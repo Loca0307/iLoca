@@ -51,9 +51,13 @@ FOR FRONTEND:
 
 
 FOR BOTH(docker-compose):
-1) 'docker-compose up', to run the containers
 
-2) 'docker-compose build --no-cache' to rebuild project without cache
+1) In the root folder, run `cp .env.example .env`
+ to create the .env file (db secrets file) from the .env.example file
+
+2) 'docker-compose up', to run the containers
+
+3) 'docker-compose build --no-cache' to rebuild project without cache
 # Postgre
 
 1) Install `PostGre` on your pc to use the database
