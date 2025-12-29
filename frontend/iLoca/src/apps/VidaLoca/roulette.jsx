@@ -42,8 +42,64 @@ export default function Roulette(){
       ctx.restore();
     }
 
-    // initial draw
-    drawWheel(0);
+  // initial draw
+  drawWheel(0);
+
+  // track the most recently fetched balance (not stored in code)
+
+    // Resolve accountId from localStorage or by calling GetAccountByEmail
+    async function resolveAccountId() {
+      const stored = localStorage.getItem('accountId');
+      if (stored) return Number(stored);
+      const email = localStorage.getItem('VidaLoca/loggedInEmail');
+      if (!email) return null;
+      try {
+        const resp = await fetch(`http://localhost:5112/Account/GetAccountByEmail?email=${encodeURIComponent(email)}`);
+        if (!resp.ok) return null;
+        const acct = await resp.json();
+        if (acct && acct.accountId) {
+          localStorage.setItem('accountId', String(acct.accountId));
+          if (acct.username) localStorage.setItem('VidaLoca/loggedInUsername', acct.username);
+          return Number(acct.accountId);
+        }
+  } catch { /* ignore */ }
+      return null;
+    }
+
+    // Show username and balance in the UI
+    async function showBalance(){
+      const id = await resolveAccountId();
+      const el = document.getElementById('balanceView');
+      const userEl = document.getElementById('usernameView');
+      const storedName = localStorage.getItem('VidaLoca/loggedInUsername');
+      const emailForRefresh = localStorage.getItem('VidaLoca/loggedInEmail');
+      if (userEl) {
+        userEl.innerText = storedName ? storedName : '';
+      }
+      if (emailForRefresh) {
+        try {
+          const aresp = await fetch(`http://localhost:5112/Account/GetAccountByEmail?email=${encodeURIComponent(emailForRefresh)}`);
+          if (aresp.ok) {
+            const acct = await aresp.json();
+            if (acct && acct.username) {
+              localStorage.setItem('VidaLoca/loggedInUsername', acct.username);
+              if (userEl) userEl.innerText = acct.username;
+            }
+          }
+  } catch { /* ignore */ }
+      }
+  if (!id) { if (el) el.innerText = 'Balance: - (not logged)'; return; }
+      try {
+        const res = await fetch(`http://localhost:5112/Account/GetBalanceByAccount?accountId=${id}`);
+        if (!res.ok) { if (el) el.innerText = 'Balance: -'; return; }
+        const b = await res.json();
+        if (el) el.innerText = 'Balance: ' + Number(b).toFixed(2) + ' €';
+  // balance fetched and shown above
+  } catch { if (el) el.innerText = 'Balance: -'; }
+    }
+
+    // populate initial user/balance info
+    showBalance();
 
     // Betting UI logic (port from backend static page)
     const betGrid = document.getElementById('betGrid');
