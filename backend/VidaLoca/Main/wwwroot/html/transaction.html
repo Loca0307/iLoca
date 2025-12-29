@@ -30,7 +30,6 @@
         <label for="bankIban">Bank IBAN</label>
         <input id="bankIban" type="text" placeholder="IT00..." />
         <div class="mt-1">
-          <button id="verifyIbanBtn" class="btn btn-ghost">Verify IBAN</button>
           <span id="ibanInfo" class="muted ml-1"></span>
         </div>
 
@@ -91,14 +90,7 @@
         } catch (e) { el.innerText = 'Balance: -'; }
       }
 
-      document.getElementById('verifyIbanBtn').addEventListener('click', async ()=>{
-        const iban = document.getElementById('bankIban').value.trim();
-        if (!iban) { document.getElementById('ibanInfo').innerText = 'Enter IBAN'; return; }
-        const res = await fetch(`/Account/VerifyBankIban?iban=${encodeURIComponent(iban)}`);
-        if (!res.ok) { document.getElementById('ibanInfo').innerText = 'Not found'; return; }
-        const info = await res.json();
-        document.getElementById('ibanInfo').innerText = info.firstName + ' ' + info.lastName + ' (' + info.email + ')';
-      });
+      // removed separate Verify button; verification happens when user confirms transact()
 
       function currentMode(){
         const r = document.querySelector('input[name="mode"]:checked');
@@ -122,6 +114,24 @@
         if (!accountId || isNaN(accountId)) { document.getElementById('msg').innerText = 'No account selected. Please log in.'; return; }
 
         const mode = currentMode();
+        // Verify IBAN first (backend will still validate on the request)
+        const ibanInfoEl = document.getElementById('ibanInfo');
+        ibanInfoEl.innerText = '';
+        try{
+          const vres = await fetch(`/Account/VerifyBankIban?iban=${encodeURIComponent(bankIban)}`);
+          if (!vres.ok) {
+            document.getElementById('msg').innerText = 'IBAN not found. Check the IBAN or try another.';
+            return;
+          }
+          const info = await vres.json();
+          if (info && (info.firstName || info.lastName || info.email)) {
+            ibanInfoEl.innerText = (info.firstName||'') + ' ' + (info.lastName||'') + (info.email ? ' ('+info.email+')' : '');
+          }
+        }catch(e){
+          document.getElementById('msg').innerText = 'Failed to verify IBAN: network or server error.';
+          return;
+        }
+
         // Use the unified endpoint on the server; include IsDeposit flag for deposits
         const payload = { accountId, amount, bankIban, IsDeposit: mode === 'deposit' };
         const endpoint = '/Account/WithdrawFromBank';

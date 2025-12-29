@@ -11,7 +11,6 @@ services:
       - .env
     ports:
       - "5027:5027"
-    restart: unless-stopped
 
   vidaloca:
     build: ./backend/VidaLoca/Main
@@ -19,7 +18,6 @@ services:
       - .env
     ports:
       - "5112:5112"
-    restart: unless-stopped
 
   frontend:
     build:
@@ -27,7 +25,12 @@ services:
     ports:
       - "3000:80"                 
     environment:
-      - REACT_APP_API_BASE=http://vidaloca:5112
+      # Provide both backend base URLs as environment variables so the frontend
+      # build can target either direct container addresses (not recommended for
+      # the browser) or be used for runtime config. Prefer using nginx proxy
+      # rules and calling the APIs via relative paths from the browser (no CORS).
+      - REACT_APP_VIDA_API=http://vidaloca:5112
+      - REACT_APP_BANK_API=http://bankuumtubo:5027
 
     depends_on:
       - bankuumtubo

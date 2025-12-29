@@ -80,6 +80,8 @@
     </footer>
     <script>
       // Simple roulette wheel logic (visual + basic bets)
+      // track the most recently fetched balance (null when unknown)
+      let currentBalance = null;
 
       // Resolve accountId from localStorage or by calling GetAccountByEmail using the logged-in email
       async function resolveAccountId() {
@@ -122,12 +124,13 @@
             }
           } catch (e) { /* ignore refresh errors and keep storedName */ }
         }
-        if (!id) { if (el) el.innerText = 'Balance: - (not logged)'; return; }
+          if (!id) { currentBalance = null; if (el) el.innerText = 'Balance: - (not logged)'; return; }
         try {
           const res = await fetch(`/Account/GetBalanceByAccount?accountId=${id}`);
           if (!res.ok) { if (el) el.innerText = 'Balance: -'; return; }
           const b = await res.json();
-          if (el) el.innerText = 'Balance: ' + Number(b).toFixed(2) + ' €';
+            if (el) el.innerText = 'Balance: ' + Number(b).toFixed(2) + ' €';
+            currentBalance = Number(b);
         } catch (e) { if (el) el.innerText = 'Balance: -'; }
       }
       (function(){
@@ -136,6 +139,8 @@
         const size = Math.min(canvas.width, canvas.height);
         const center = { x: canvas.width/2, y: canvas.height/2 };
         const radius = size/2 - 6;
+          // track the most recently fetched balance (null when unknown)
+          let currentBalance = null;
 
         // Roulette sequence 
         const numbers = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -329,8 +334,17 @@
             return;
           }
 
-          // if there's a stake, subtract it before spinning
+          // if there's a stake, ensure the player has enough balance before attempting
           if(totalStake > 0) {
+            // refresh balance to get the latest value
+            if (typeof showBalance === 'function') await showBalance();
+            // if we could read the balance, validate locally and show a helpful message
+            if (currentBalance !== null && totalStake > currentBalance) {
+              document.getElementById('result').innerText = 'Insufficient balance — please add funds to play more.';
+              return;
+            }
+2
+            // attempt to subtract the stake on the server (server will also prevent overdraft)
             const ok = await postUpdateBet(totalStake, false, email);
             if(!ok){
               document.getElementById('result').innerText = 'Bet failed: insufficient funds or server error.';
