@@ -27,6 +27,13 @@ services:
       - "5027:5027"
     depends_on:
       - db
+    environment:
+      # Ensures the backend connects to the DB container correctly
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
 
   vidaloca:
     build: ./backend/VidaLoca/Main
@@ -36,6 +43,13 @@ services:
       - "5112:5112"
     depends_on:
       - db
+    environment:
+      # Ensures the backend connects to the DB container correctly
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
 
   frontend:
     build:
@@ -49,7 +63,6 @@ services:
       # rules and calling the APIs via relative paths from the browser (no CORS).
       - REACT_APP_VIDA_API=http://vidaloca:5112
       - REACT_APP_BANK_API=http://bankuumtubo:5027
-
     depends_on:
       - bankuumtubo
       - vidaloca

@@ -42,7 +42,7 @@ app.UseStaticFiles();
 
 // CORS, Routing and Authorization
 app.UseRouting();
-app.UseCors("DefaultCorsPolicy");
+app.UseCors("VidaLocaCors");
 app.UseAuthorization();
 
 // Map controllers

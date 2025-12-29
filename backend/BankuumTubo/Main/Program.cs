@@ -44,7 +44,7 @@ app.UseStaticFiles();
 
 // CORS, Routing and Authorization
 app.UseRouting();
-app.UseCors("DefaultCorsPolicy");
+app.UseCors("BankuumTuboCors");
 app.UseAuthorization();
 
 // Map controllers
